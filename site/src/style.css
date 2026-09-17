@@ -88,3 +88,8 @@ form[class*="inputs"] { max-width: 100%; }
 .ico-hdr { gap: 2px; }
 .ico-q { font-size: 10px; font-weight: 600; letter-spacing: 0; line-height: 1; color: var(--theme-foreground-muted); }
 .ico-hdr:hover .ico-q { color: var(--theme-foreground); }
+
+/* pills and badges: text vertically centred */
+.badge, .pill { display: inline-flex; align-items: center; justify-content: center; line-height: 1; height: 20px; padding: 0 8px; box-sizing: border-box; }
+.badges { align-items: center; }
+.badges .gem-mark { height: 22px; width: 22px; }
