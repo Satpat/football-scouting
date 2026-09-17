@@ -29,7 +29,3 @@ There are **no assists, shots, expected goals, passes, tackles, positions or age
 - Playing time is a coach's opinion mixed with availability and injury, not a measure of ability.
 - Everything is entered by club volunteers after the match. Expect some misattributed goals, missing subs and unflagged goalkeepers.
 - The numbers build a list of players to go and watch. They don't replace watching.
-
-## Refreshing
-
-Run the browser extraction (`extract_browser.js`), merge the dumps (`merge_dumps.py`), rebuild the tables (`build_scouting.py`) and export the site data (`build_site_data.py`), then commit `site/src/data` and push — the site rebuilds automatically.
