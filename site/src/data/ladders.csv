@@ -1,0 +1,117 @@
+league,grade,division,is_finals,position,team_id,team,club,played,won,drawn,lost,goals_for,goals_against,goal_difference,points
+HPG Homes State League 1,SEN,SL1,False,1,jdyeg5X3d5,Adelaide Croatia Raiders Senior Men's SL1,Adelaide Croatia Raiders,22,15,2,5,56,26,30,47
+HPG Homes State League 1,SEN,SL1,False,2,bd9Xa4GeK4,Modbury Jets Senior Men's SL1,Modbury Jets,22,13,5,4,46,20,26,44
+HPG Homes State League 1,SEN,SL1,False,3,gdMvq09OmE,Adelaide Olympic Senior Men's SL1,Adelaide Olympic,22,14,1,7,42,25,17,43
+HPG Homes State League 1,SEN,SL1,False,4,vmZwqYXGNq,Fulham United Senior Men's SL1,Fulham United,22,11,4,7,42,31,11,37
+HPG Homes State League 1,SEN,SL1,False,5,jmaVQk4VNR,Adelaide Blue Eagles Senior Men's SL1,Adelaide Blue Eagles,22,10,6,6,36,29,7,36
+HPG Homes State League 1,SEN,SL1,False,6,Ome0kzBPd0,Adelaide Atletico VSC Senior Men's SL1,Adelaide Atletico VSC,22,11,3,8,40,34,6,36
+HPG Homes State League 1,SEN,SL1,False,7,nmYyqOLpmz,Cumberland United Senior Men's SL1,Cumberland United,22,11,1,10,36,28,8,34
+HPG Homes State League 1,SEN,SL1,False,8,nmYyqOv3mz,Cove FC Senior Men's SL1,Cove FC,22,7,5,10,29,36,-7,26
+HPG Homes State League 1,SEN,SL1,False,9,am1qaeWrmw,Eastern United Senior Men's SL1,Eastern United,22,6,4,12,25,44,-19,22
+HPG Homes State League 1,SEN,SL1,False,10,pmvzBJg6mv,Adelaide Cobras FC Senior Men's SL1,Adelaide Cobras FC,22,6,2,14,22,45,-23,20
+HPG Homes State League 1,SEN,SL1,False,11,gdMvq0WZmE,Salisbury United Senior Men's SL1,Salisbury United,22,5,2,15,28,48,-20,17
+HPG Homes State League 1,SEN,SL1,False,12,lNb3nlRgKx,South Adelaide Senior Men's SL1,South Adelaide,22,4,3,15,26,62,-36,15
+HPG Homes State League 1 Reserves,RES,SL1,False,1,emA12Z7QmB,Adelaide Olympic Men's Reserves SL1,Adelaide Olympic,22,15,2,5,65,32,33,47
+HPG Homes State League 1 Reserves,RES,SL1,False,2,Ome0kLe7d0,Cumberland United Men's Reserves SL1,Cumberland United,22,12,6,4,63,33,30,42
+HPG Homes State League 1 Reserves,RES,SL1,False,3,nmYyq183mz,Modbury Jets Men's Reserves SL1,Modbury Jets,22,12,6,4,49,29,20,42
+HPG Homes State League 1 Reserves,RES,SL1,False,4,ld4Oa6j0KW,Cove FC Men's Reserves SL1,Cove FC,22,10,8,4,33,26,7,38
+HPG Homes State League 1 Reserves,RES,SL1,False,5,EN2OabYBKq,Adelaide Blue Eagles Men's Reserves SL1,Adelaide Blue Eagles,22,11,4,7,43,35,8,37
+HPG Homes State League 1 Reserves,RES,SL1,False,6,1K3YaOqGmQ,Adelaide Croatia Raiders Men's Reserves SL1,Adelaide Croatia Raiders,22,11,4,7,49,42,7,37
+HPG Homes State League 1 Reserves,RES,SL1,False,7,PmrkxoAjNo,South Adelaide Men's Reserves SL1,South Adelaide,22,8,5,9,36,32,4,29
+HPG Homes State League 1 Reserves,RES,SL1,False,8,8NODqEZ1KZ,Adelaide Cobras FC Men's Reserves SL1,Adelaide Cobras FC,22,9,2,11,32,38,-6,29
+HPG Homes State League 1 Reserves,RES,SL1,False,9,pN6OaoWbK0,Adelaide Atletico VSC Men's Reserves SL1,Adelaide Atletico VSC,22,7,5,10,43,47,-4,26
+HPG Homes State League 1 Reserves,RES,SL1,False,10,ld4OaEkrKW,Eastern United Men's Reserves SL1,Eastern United,22,4,7,11,39,66,-27,19
+HPG Homes State League 1 Reserves,RES,SL1,False,11,4KLnq5e7mq,Fulham United Men's Reserves SL1,Fulham United,22,5,3,14,33,53,-20,18
+HPG Homes State League 1 Reserves,RES,SL1,False,12,pN6OaE2nK0,Salisbury United Men's Reserves SL1,Salisbury United,22,2,0,20,20,72,-52,6
+HPG Homes State League 1 Under 18's,U18,SL1,False,1,Ome0kLk0d0,Adelaide Olympic Under 18's SL1,Adelaide Olympic,22,20,1,1,85,23,62,61
+HPG Homes State League 1 Under 18's,U18,SL1,False,2,4KLnq5q0mq,South Adelaide Under 18's SL1,South Adelaide,22,14,5,3,83,34,49,47
+HPG Homes State League 1 Under 18's,U18,SL1,False,3,bd9Xa658K4,Fulham United Under 18's SL1,Fulham United,22,13,2,7,53,38,15,41
+HPG Homes State League 1 Under 18's,U18,SL1,False,4,BdD1qZqwmb,Cumberland United Under 18's SL1,Cumberland United,22,12,3,7,57,43,14,39
+HPG Homes State League 1 Under 18's,U18,SL1,False,5,pN6OaEaAK0,Adelaide Blue Eagles Under 18's SL1,Adelaide Blue Eagles,22,12,2,8,55,41,14,38
+HPG Homes State League 1 Under 18's,U18,SL1,False,6,8NODqeQ2KZ,Adelaide Croatia Raiders Under 18's SL1,Adelaide Croatia Raiders,22,11,3,8,47,38,9,36
+HPG Homes State League 1 Under 18's,U18,SL1,False,7,ld4OaGVAKW,Modbury Jets Under 18's SL1,Modbury Jets,22,11,2,9,36,35,1,35
+HPG Homes State League 1 Under 18's,U18,SL1,False,8,2Kpv3r39mY,Adelaide Cobras FC Under 18's SL1,Adelaide Cobras FC,22,7,1,14,45,68,-23,22
+HPG Homes State League 1 Under 18's,U18,SL1,False,9,1K3Ya6vRmQ,Adelaide Atletico VSC Under 18's SL1,Adelaide Atletico VSC,22,6,3,13,39,61,-22,21
+HPG Homes State League 1 Under 18's,U18,SL1,False,10,lNb3nvaDKx,Eastern United Under 18's SL1,Eastern United,22,5,2,15,35,90,-55,17
+HPG Homes State League 1 Under 18's,U18,SL1,False,11,ld4Oa6wAKW,Cove FC Under 18's SL1,Cove FC,22,4,3,15,27,49,-22,15
+HPG Homes State League 1 Under 18's,U18,SL1,False,12,1K3YarwOmQ,Salisbury United Under 18's SL1,Salisbury United,22,1,5,16,29,71,-42,8
+HPG Homes State League 2 (18s) Final Series,U18,SL2,True,1,Ome0kl07d0,Modbury Vista Under 18's SL2,Modbury Vista,0,0,0,0,0,0,0,0
+HPG Homes State League 2 (18s) Final Series,U18,SL2,True,2,bd9XawWeK4,Salisbury Inter Under 18's SL2,Salisbury Inter,0,0,0,0,0,0,0,0
+HPG Homes State League 2 (18s) Final Series,U18,SL2,True,3,pN6OaMOnK0,Port Adelaide Under 18's SL2,Port Adelaide,0,0,0,0,0,0,0,0
+HPG Homes State League 2 (18s) Final Series,U18,SL2,True,4,am1qagw6mw,Vipers FC Under 18's SL2,Vipers FC,0,0,0,0,0,0,0,0
+HPG Homes State League 2 (18s) Final Series,U18,SL2,True,5,MNGoqzW2NA,Western Strikers Under 18's SL2,Western Strikers,0,0,0,0,0,0,0,0
+HPG Homes State League 2 (18s) Final Series,U18,SL2,True,6,ld4OaEYxKW,Adelaide Hills Hawks Under 18's SL2,Adelaide Hills Hawks,0,0,0,0,0,0,0,0
+HPG Homes State League 2 (Reserves) Final Series,RES,SL2,True,1,vmZwqYkRNq,Pontian Eagles Men's Reserves SL2,Pontian Eagles,0,0,0,0,0,0,0,0
+HPG Homes State League 2 (Reserves) Final Series,RES,SL2,True,2,emA126jgmB,Modbury Vista Men's Reserves SL2,Modbury Vista,0,0,0,0,0,0,0,0
+HPG Homes State League 2 (Reserves) Final Series,RES,SL2,True,3,EN2OazROKq,Port Adelaide Men's Reserves SL2,Port Adelaide,0,0,0,0,0,0,0,0
+HPG Homes State League 2 (Reserves) Final Series,RES,SL2,True,4,BdD1qZrxmb,Vipers FC Men's Reserves SL2,Vipers FC,0,0,0,0,0,0,0,0
+HPG Homes State League 2 (Reserves) Final Series,RES,SL2,True,5,1K3Ya6lYmQ,Noarlunga United Men's Reserves SL2,Noarlunga United,0,0,0,0,0,0,0,0
+HPG Homes State League 2 (Reserves) Final Series,RES,SL2,True,6,2Kpv3ozqmY,Western Strikers Men's Reserves SL2,Western Strikers,0,0,0,0,0,0,0,0
+HPG Homes State League 2 (Seniors) Finals Series,SEN,SL2,True,1,lNb3n7JgKx,Modbury Vista Senior Men's SL2,Modbury Vista,0,0,0,0,0,0,0,0
+HPG Homes State League 2 (Seniors) Finals Series,SEN,SL2,True,2,8NODqOo2KZ,Salisbury Inter Senior Men's SL2,Salisbury Inter,0,0,0,0,0,0,0,0
+HPG Homes State League 2 (Seniors) Finals Series,SEN,SL2,True,3,vmZ9lvE2dq,Elizabeth Downs Soccer Club Senior Men's SL2,Elizabeth Downs Soccer Club,0,0,0,0,0,0,0,0
+HPG Homes State League 2 (Seniors) Finals Series,SEN,SL2,True,4,8NODqEqkKZ,Pontian Eagles Senior Men's SL2,Pontian Eagles,0,0,0,0,0,0,0,0
+HPG Homes State League 2 (Seniors) Finals Series,SEN,SL2,True,5,lNb3nlepKx,Vipers FC Senior Men's SL2,Vipers FC,0,0,0,0,0,0,0,0
+HPG Homes State League 2 (Seniors) Finals Series,SEN,SL2,True,6,pmvzB9X6mv,Ghan United Senior Men's SL2,Ghan United,0,0,0,0,0,0,0,0
+HPG Homes State League 2 (Seniors) Finals Series,SEN,SL2,True,7,pmvzB9Prmv,Seaford Rangers Senior Men's SL2,Seaford Rangers,0,0,0,0,0,0,0,0
+HPG Homes State League 2 (Seniors) Finals Series,SEN,SL2,True,8,bd9XabEDK4,Western Strikers Senior Men's SL2,Western Strikers,0,0,0,0,0,0,0,0
+HPG Homes State League 2 North,SEN,SL2,False,1,8NODqEqkKZ,Pontian Eagles Senior Men's SL2,Pontian Eagles,18,13,2,3,51,19,32,41
+HPG Homes State League 2 North,SEN,SL2,False,2,8NODqOo2KZ,Salisbury Inter Senior Men's SL2,Salisbury Inter,18,12,3,3,35,20,15,39
+HPG Homes State League 2 North,SEN,SL2,False,3,lNb3n7JgKx,Modbury Vista Senior Men's SL2,Modbury Vista,18,12,2,4,64,21,43,38
+HPG Homes State League 2 North,SEN,SL2,False,4,vmZ9lvE2dq,Elizabeth Downs Soccer Club Senior Men's SL2,Elizabeth Downs Soccer Club,18,9,4,5,41,31,10,31
+HPG Homes State League 2 North,SEN,SL2,False,5,gdMvqkyOmE,Northern Demons Senior Men's SL2,Northern Demons,18,8,5,5,34,27,7,29
+HPG Homes State League 2 North,SEN,SL2,False,6,jmaVQgyVNR,Port Adelaide Senior Men's SL2,Port Adelaide,18,6,4,8,21,35,-14,22
+HPG Homes State League 2 North,SEN,SL2,False,7,am1QPnyqmw,Angle Vale Senior Men's SL2,Angle Vale,18,5,2,11,22,44,-22,17
+HPG Homes State League 2 North,SEN,SL2,False,8,vmZwqxpRNq,Gawler Eagles Senior Men's SL2,Gawler Eagles,18,4,4,10,23,38,-15,16
+HPG Homes State League 2 North,SEN,SL2,False,9,nmYyqoVpmz,Elizabeth Grove Senior Men's SL2,Elizabeth Grove,18,3,5,10,18,35,-17,14
+HPG Homes State League 2 North,SEN,SL2,False,10,pN6OWJnnK0,Barossa United Senior Men's SL2,Barossa United,18,1,3,14,20,59,-39,6
+HPG Homes State League 2 North - Reserves,RES,SL2,False,1,vmZwqYkRNq,Pontian Eagles Men's Reserves SL2,Pontian Eagles,18,15,2,1,59,15,44,47
+HPG Homes State League 2 North - Reserves,RES,SL2,False,2,EN2OazROKq,Port Adelaide Men's Reserves SL2,Port Adelaide,18,13,2,3,68,22,46,41
+HPG Homes State League 2 North - Reserves,RES,SL2,False,3,emA126jgmB,Modbury Vista Men's Reserves SL2,Modbury Vista,18,9,3,6,56,29,27,30
+HPG Homes State League 2 North - Reserves,RES,SL2,False,4,Ome0kzEGd0,Elizabeth Grove Men's Reserves SL2,Elizabeth Grove,18,9,3,6,40,38,2,30
+HPG Homes State League 2 North - Reserves,RES,SL2,False,5,lNbj0pqyNx,Elizabeth Downs Soccer Club Men's Reserves SL2,Elizabeth Downs Soccer Club,18,7,3,8,42,35,7,24
+HPG Homes State League 2 North - Reserves,RES,SL2,False,6,PmjnVGxQmZ,Gawler Eagles Men's Reserves SL2,Gawler Eagles,18,7,1,10,29,43,-14,22
+HPG Homes State League 2 North - Reserves,RES,SL2,False,7,PmrkxOe5No,Northern Demons Men's Reserves SL2,Northern Demons,18,6,3,9,31,34,-3,21
+HPG Homes State League 2 North - Reserves,RES,SL2,False,8,4KLnq4B2mq,Salisbury Inter Men's Reserves SL2,Salisbury Inter,18,6,3,9,25,36,-11,21
+HPG Homes State League 2 North - Reserves,RES,SL2,False,9,MNGxQvVXKA,Angle Vale Men's Reserves SL2,Angle Vale,18,6,2,10,29,52,-23,20
+HPG Homes State League 2 North - Reserves,RES,SL2,False,10,2KpvY62WmY,Barossa United Men's Reserves SL2,Barossa United,18,0,2,16,18,93,-75,2
+HPG Homes State League 2 North - Under 18's,U18,SL2,False,1,Ome0kl07d0,Modbury Vista Under 18's SL2,Modbury Vista,18,17,1,0,122,13,109,52
+HPG Homes State League 2 North - Under 18's,U18,SL2,False,2,bd9XawWeK4,Salisbury Inter Under 18's SL2,Salisbury Inter,18,14,2,2,80,24,56,44
+HPG Homes State League 2 North - Under 18's,U18,SL2,False,3,pN6OaMOnK0,Port Adelaide Under 18's SL2,Port Adelaide,18,12,1,5,56,30,26,37
+HPG Homes State League 2 North - Under 18's,U18,SL2,False,4,gdMEOX7bdE,Elizabeth Downs Soccer Club Under 18's SL2,Elizabeth Downs Soccer Club,18,11,3,4,68,24,44,36
+HPG Homes State League 2 North - Under 18's,U18,SL2,False,5,2Kpv3ovWmY,Elizabeth Grove Under 18's SL2,Elizabeth Grove,18,8,3,7,51,55,-4,27
+HPG Homes State League 2 North - Under 18's,U18,SL2,False,6,pmvzBJe5mv,Pontian Eagles Under 18's SL2,Pontian Eagles,18,6,3,9,44,45,-1,21
+HPG Homes State League 2 North - Under 18's,U18,SL2,False,7,4KLnqon7mq,Northern Demons Under 18's SL2,Northern Demons,18,7,0,11,48,54,-6,21
+HPG Homes State League 2 North - Under 18's,U18,SL2,False,8,8NODqbD1KZ,Gawler Eagles Under 18's SL2,Gawler Eagles,18,3,1,14,23,81,-58,10
+HPG Homes State League 2 North - Under 18's,U18,SL2,False,9,BdD1lzexmb,Barossa United Under 18's SL2,Barossa United,18,3,0,15,39,92,-53,9
+HPG Homes State League 2 North - Under 18's,U18,SL2,False,10,ld44kpP2dW,Angle Vale Under 18's SL2,Angle Vale,18,1,2,15,16,129,-113,5
+HPG Homes State League 2 South,SEN,SL2,False,1,lNb3nlepKx,Vipers FC Senior Men's SL2,Vipers FC,18,13,1,4,35,19,16,40
+HPG Homes State League 2 South,SEN,SL2,False,2,pmvzB9X6mv,Ghan United Senior Men's SL2,Ghan United,18,13,0,5,44,27,17,39
+HPG Homes State League 2 South,SEN,SL2,False,3,pmvzB9Prmv,Seaford Rangers Senior Men's SL2,Seaford Rangers,18,12,2,4,50,26,24,38
+HPG Homes State League 2 South,SEN,SL2,False,4,bd9XabEDK4,Western Strikers Senior Men's SL2,Western Strikers,18,12,0,6,59,37,22,36
+HPG Homes State League 2 South,SEN,SL2,False,5,jdyeg09Ad5,Adelaide University Senior Men's SL2,Adelaide University,18,10,3,5,47,22,25,33
+HPG Homes State League 2 South,SEN,SL2,False,6,ld4OaZlpKW,Noarlunga United Senior Men's SL2,Noarlunga United,18,8,3,7,33,22,11,27
+HPG Homes State League 2 South,SEN,SL2,False,7,nmYyqoQrmz,Adelaide Titans Football Club Senior Men's SL2,Adelaide Titans Football Club,18,6,1,11,27,36,-9,19
+HPG Homes State League 2 South,SEN,SL2,False,8,1K3Ya0L3mQ,Adelaide Hills Hawks Senior Men's SL2,Adelaide Hills Hawks,18,4,0,14,32,48,-16,12
+HPG Homes State League 2 South,SEN,SL2,False,9,MNGoqGnbNA,Mount Barker United Senior Men's SL2,Mount Barker United,18,3,2,13,21,60,-39,11
+HPG Homes State League 2 South,SEN,SL2,False,10,Pmrq5JxRdo,Plympton FC Senior Men's SL2,Plympton FC,18,3,0,15,20,71,-51,9
+HPG Homes State League 2 South - Reserves,RES,SL2,False,1,BdD1qZrxmb,Vipers FC Men's Reserves SL2,Vipers FC,18,15,1,2,70,18,52,46
+HPG Homes State League 2 South - Reserves,RES,SL2,False,2,2Kpv3ozqmY,Western Strikers Men's Reserves SL2,Western Strikers,18,15,0,3,51,15,36,45
+HPG Homes State League 2 South - Reserves,RES,SL2,False,3,1K3Ya6lYmQ,Noarlunga United Men's Reserves SL2,Noarlunga United,18,13,1,4,46,29,17,40
+HPG Homes State League 2 South - Reserves,RES,SL2,False,4,bd9XawzRK4,Mount Barker United Men's Reserves SL2,Mount Barker United,18,11,0,7,49,41,8,33
+HPG Homes State League 2 South - Reserves,RES,SL2,False,5,BdD1qXkgmb,Adelaide Hills Hawks Men's Reserves SL2,Adelaide Hills Hawks,18,9,0,9,40,43,-3,27
+HPG Homes State League 2 South - Reserves,RES,SL2,False,6,MNGoqzQENA,Adelaide University Men's Reserves SL2,Adelaide University,18,6,3,9,34,41,-7,21
+HPG Homes State League 2 South - Reserves,RES,SL2,False,7,EN2nvPa3Nq,Plympton FC Men's Reserves SL2,Plympton FC,18,6,3,9,22,43,-21,21
+HPG Homes State League 2 South - Reserves,RES,SL2,False,8,am1qa7lAmw,Adelaide Titans Football Club Men's Reserves SL2,Adelaide Titans Football Club,18,4,1,13,22,41,-19,13
+HPG Homes State League 2 South - Reserves,RES,SL2,False,9,jdyegzo6d5,Seaford Rangers Men's Reserves SL2,Seaford Rangers,18,3,1,14,28,70,-42,10
+HPG Homes State League 2 South - Reserves,RES,SL2,False,10,8NODqO6BKZ,Ghan United Men's Reserves SL2,Ghan United,18,2,2,14,20,41,-21,8
+HPG Homes State League 2 South - Under 18's,U18,SL2,False,1,am1qagw6mw,Vipers FC Under 18's SL2,Vipers FC,18,16,0,2,82,21,61,48
+HPG Homes State League 2 South - Under 18's,U18,SL2,False,2,ld4OaEYxKW,Adelaide Hills Hawks Under 18's SL2,Adelaide Hills Hawks,18,13,2,3,67,23,44,41
+HPG Homes State League 2 South - Under 18's,U18,SL2,False,3,MNGoqzW2NA,Western Strikers Under 18's SL2,Western Strikers,18,12,2,4,60,27,33,38
+HPG Homes State League 2 South - Under 18's,U18,SL2,False,4,pmvzBL0Lmv,Seaford Rangers Under 18's SL2,Seaford Rangers,18,11,3,4,59,25,34,36
+HPG Homes State League 2 South - Under 18's,U18,SL2,False,5,8NOXko2aKZ,Plympton FC Under 18's SL2,Plympton FC,18,11,1,6,49,22,27,34
+HPG Homes State League 2 South - Under 18's,U18,SL2,False,6,vmZwqMJJNq,Adelaide University Under 18's SL2,Adelaide University,18,8,3,7,44,37,7,27
+HPG Homes State League 2 South - Under 18's,U18,SL2,False,7,jmaVQnpYNR,Noarlunga United Under 18's SL2,Noarlunga United,18,4,1,13,22,52,-30,13
+HPG Homes State League 2 South - Under 18's,U18,SL2,False,8,nmYyqPJbmz,Adelaide Titans Football Club Under 18's SL2,Adelaide Titans Football Club,18,3,2,13,24,70,-46,11
+HPG Homes State League 2 South - Under 18's,U18,SL2,False,9,BdD1qX9xmb,Ghan United Under 18's SL2,Ghan United,18,3,0,15,26,83,-57,9
+HPG Homes State League 2 South - Under 18's,U18,SL2,False,10,gdMvqxbQmE,Mount Barker United Under 18's SL2,Mount Barker United,18,2,0,16,23,96,-73,6

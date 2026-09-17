@@ -1,0 +1,98 @@
+[
+ {
+  "league": "HPG Homes State League 1",
+  "division": "SL1",
+  "grade": "SEN",
+  "region": "",
+  "is_finals": false,
+  "short": "SL1"
+ },
+ {
+  "league": "HPG Homes State League 1 Reserves",
+  "division": "SL1",
+  "grade": "RES",
+  "region": "",
+  "is_finals": false,
+  "short": "SL1 Reserves"
+ },
+ {
+  "league": "HPG Homes State League 1 Under 18's",
+  "division": "SL1",
+  "grade": "U18",
+  "region": "",
+  "is_finals": false,
+  "short": "SL1 U18"
+ },
+ {
+  "league": "HPG Homes State League 2 North",
+  "division": "SL2",
+  "grade": "SEN",
+  "region": "North",
+  "is_finals": false,
+  "short": "SL2 North"
+ },
+ {
+  "league": "HPG Homes State League 2 North - Reserves",
+  "division": "SL2",
+  "grade": "RES",
+  "region": "North",
+  "is_finals": false,
+  "short": "SL2 North Reserves"
+ },
+ {
+  "league": "HPG Homes State League 2 North - Under 18's",
+  "division": "SL2",
+  "grade": "U18",
+  "region": "North",
+  "is_finals": false,
+  "short": "SL2 North U18"
+ },
+ {
+  "league": "HPG Homes State League 2 South",
+  "division": "SL2",
+  "grade": "SEN",
+  "region": "South",
+  "is_finals": false,
+  "short": "SL2 South"
+ },
+ {
+  "league": "HPG Homes State League 2 South - Reserves",
+  "division": "SL2",
+  "grade": "RES",
+  "region": "South",
+  "is_finals": false,
+  "short": "SL2 South Reserves"
+ },
+ {
+  "league": "HPG Homes State League 2 South - Under 18's",
+  "division": "SL2",
+  "grade": "U18",
+  "region": "South",
+  "is_finals": false,
+  "short": "SL2 South U18"
+ },
+ {
+  "league": "HPG Homes State League 2 (Seniors) Finals Series",
+  "division": "SL2",
+  "grade": "SEN",
+  "region": "",
+  "is_finals": true,
+  "short": "SL2 (Seniors) Finals"
+ },
+ {
+  "league": "HPG Homes State League 2 (Reserves) Final Series",
+  "division": "SL2",
+  "grade": "RES",
+  "region": "",
+  "is_finals": true,
+  "short": "SL2 (Reserves) Finals"
+ },
+ {
+  "league": "HPG Homes State League 2 (18s) Final Series",
+  "division": "SL2",
+  "grade": "U18",
+  "region": "",
+  "is_finals": true,
+  "short": "SL2 (18s) Finals"
+ }
+]

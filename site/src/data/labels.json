@@ -1,0 +1,1026 @@
+{
+ "player_id": {
+  "label": "Player ID",
+  "short": "Player ID",
+  "desc": "DRIBL user hash id",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "player_name": {
+  "label": "Player",
+  "short": "Player",
+  "desc": "Player name as recorded in DRIBL",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "club": {
+  "label": "Club",
+  "short": "Club",
+  "desc": "Club",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "team": {
+  "label": "Team",
+  "short": "Team",
+  "desc": "Team (club + grade)",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "team_id": {
+  "label": "Team ID",
+  "short": "Team ID",
+  "desc": "DRIBL team hash id",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "league": {
+  "label": "League",
+  "short": "League",
+  "desc": "League the row belongs to",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "primary_league": {
+  "label": "League",
+  "short": "League",
+  "desc": "Regular-season league",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "grade": {
+  "label": "Grade",
+  "short": "Grade",
+  "desc": "SEN = Seniors, RES = Reserves, U18 = Under 18s",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "division": {
+  "label": "Division",
+  "short": "Division",
+  "desc": "SL1 = State League 1, SL2 = State League 2",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "role": {
+  "label": "Role",
+  "short": "Role",
+  "desc": "Goalkeeper or outfield (DRIBL records no other positions)",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "jersey": {
+  "label": "Jersey",
+  "short": "#",
+  "desc": "Most common shirt number",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "is_finals": {
+  "label": "Finals",
+  "short": "Finals",
+  "desc": "Finals-series match",
+  "fmt": "bool",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "match_hash_id": {
+  "label": "Match ID",
+  "short": "Match ID",
+  "desc": "DRIBL match hash id",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "date_local": {
+  "label": "Date",
+  "short": "Date",
+  "desc": "Kick-off (Adelaide time)",
+  "fmt": "date",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "round": {
+  "label": "Round",
+  "short": "Round",
+  "desc": "Round label",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "venue": {
+  "label": "Venue",
+  "short": "Venue",
+  "desc": "Ground",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "opponent": {
+  "label": "Opponent",
+  "short": "Opponent",
+  "desc": "Opposing team",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "home_away": {
+  "label": "H/A",
+  "short": "H/A",
+  "desc": "Home or away",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "result": {
+  "label": "Result",
+  "short": "Result",
+  "desc": "W / D / L for the player's team",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "team_gf": {
+  "label": "Team goals",
+  "short": "Team GF",
+  "desc": "Goals the player's team scored in the match",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": false
+ },
+ "team_ga": {
+  "label": "Team conceded",
+  "short": "Team GA",
+  "desc": "Goals the player's team conceded in the match",
+  "fmt": "int",
+  "higher_is_better": false,
+  "metric": false
+ },
+ "home_team": {
+  "label": "Home team",
+  "short": "Home",
+  "desc": "Home team",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "away_team": {
+  "label": "Away team",
+  "short": "Away",
+  "desc": "Away team",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "home_club": {
+  "label": "Home club",
+  "short": "Home club",
+  "desc": "Home club",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "away_club": {
+  "label": "Away club",
+  "short": "Away club",
+  "desc": "Away club",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "home_score": {
+  "label": "Home score",
+  "short": "Home",
+  "desc": "Full-time home score",
+  "fmt": "int",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "away_score": {
+  "label": "Away score",
+  "short": "Away",
+  "desc": "Full-time away score",
+  "fmt": "int",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "home_score_ht": {
+  "label": "Home HT",
+  "short": "Home HT",
+  "desc": "Half-time home score",
+  "fmt": "int",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "away_score_ht": {
+  "label": "Away HT",
+  "short": "Away HT",
+  "desc": "Half-time away score",
+  "fmt": "int",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "home_score_pens": {
+  "label": "Home pens",
+  "short": "Home pens",
+  "desc": "Penalty shootout score (home)",
+  "fmt": "int",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "away_score_pens": {
+  "label": "Away pens",
+  "short": "Away pens",
+  "desc": "Penalty shootout score (away)",
+  "fmt": "int",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "win_status": {
+  "label": "Outcome",
+  "short": "Outcome",
+  "desc": "home-win / away-win / draw",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "match_len": {
+  "label": "Match length",
+  "short": "Length",
+  "desc": "90, or 120 with extra time",
+  "fmt": "int",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "position": {
+  "label": "Ladder position",
+  "short": "Pos",
+  "desc": "League ladder position",
+  "fmt": "int",
+  "higher_is_better": false,
+  "metric": false
+ },
+ "played": {
+  "label": "Played",
+  "short": "P",
+  "desc": "Matches played",
+  "fmt": "int",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "won": {
+  "label": "Won",
+  "short": "W",
+  "desc": "Wins",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": false
+ },
+ "drawn": {
+  "label": "Drawn",
+  "short": "D",
+  "desc": "Draws",
+  "fmt": "int",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "lost": {
+  "label": "Lost",
+  "short": "L",
+  "desc": "Losses",
+  "fmt": "int",
+  "higher_is_better": false,
+  "metric": false
+ },
+ "goals_for": {
+  "label": "Goals for",
+  "short": "GF",
+  "desc": "Goals scored",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": false
+ },
+ "goals_against": {
+  "label": "Goals against",
+  "short": "GA",
+  "desc": "Goals conceded",
+  "fmt": "int",
+  "higher_is_better": false,
+  "metric": false
+ },
+ "goal_difference": {
+  "label": "Goal difference",
+  "short": "GD",
+  "desc": "Goals for minus against",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": false
+ },
+ "points": {
+  "label": "Points",
+  "short": "Pts",
+  "desc": "Ladder points",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": false
+ },
+ "apps": {
+  "label": "Appearances",
+  "short": "Apps",
+  "desc": "Matches actually played",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "starts": {
+  "label": "Starts",
+  "short": "Starts",
+  "desc": "Matches started",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "sub_apps": {
+  "label": "Sub appearances",
+  "short": "Sub apps",
+  "desc": "Matches entered from the bench",
+  "fmt": "int",
+  "higher_is_better": null,
+  "metric": true
+ },
+ "bench_unused": {
+  "label": "Bench (unused)",
+  "short": "Unused",
+  "desc": "Named in the squad but did not play",
+  "fmt": "int",
+  "higher_is_better": false,
+  "metric": true
+ },
+ "squad_named": {
+  "label": "Squad selections",
+  "short": "Named",
+  "desc": "Matches named in the squad (played or not)",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": false
+ },
+ "minutes": {
+  "label": "Minutes played",
+  "short": "Minutes",
+  "desc": "Derived from start/sub/red-card minutes; U18 minutes are often estimated",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "minutes_est_apps": {
+  "label": "Apps with estimated minutes",
+  "short": "Est. apps",
+  "desc": "Appearances where sub minutes were not recorded (mostly U18)",
+  "fmt": "int",
+  "higher_is_better": false,
+  "metric": false
+ },
+ "minutes_estimated": {
+  "label": "Minutes estimated",
+  "short": "Est.",
+  "desc": "Minutes for this match are estimated (subs not recorded)",
+  "fmt": "bool",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "minutes_share_pct": {
+  "label": "Share of team minutes",
+  "short": "Min share %",
+  "desc": "Player minutes as % of all minutes the team could have given one player",
+  "fmt": "pct",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "availability_pct": {
+  "label": "Availability",
+  "short": "Avail %",
+  "desc": "Squad selections as % of team matches",
+  "fmt": "pct",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "start_rate_pct": {
+  "label": "Start rate",
+  "short": "Start %",
+  "desc": "Starts as % of appearances",
+  "fmt": "pct",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "finals_apps": {
+  "label": "Finals appearances",
+  "short": "Finals apps",
+  "desc": "Appearances in finals matches",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": false
+ },
+ "starting": {
+  "label": "Started",
+  "short": "Start",
+  "desc": "Started the match",
+  "fmt": "bool",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "sub_on_min": {
+  "label": "Sub on",
+  "short": "On",
+  "desc": "Minute substituted on",
+  "fmt": "int",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "sub_off_min": {
+  "label": "Sub off",
+  "short": "Off",
+  "desc": "Minute substituted off",
+  "fmt": "int",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "goals": {
+  "label": "Goals",
+  "short": "Goals",
+  "desc": "Goals scored (own goals excluded)",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "goals_open_play": {
+  "label": "Non-penalty goals",
+  "short": "NP goals",
+  "desc": "Goals excluding penalties and own goals",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "goals_penalty": {
+  "label": "Penalty goals",
+  "short": "Pens",
+  "desc": "Goals from penalty kicks",
+  "fmt": "int",
+  "higher_is_better": null,
+  "metric": true
+ },
+ "own_goals": {
+  "label": "Own goals",
+  "short": "OG",
+  "desc": "Own goals conceded",
+  "fmt": "int",
+  "higher_is_better": false,
+  "metric": true
+ },
+ "goals_per90": {
+  "label": "Goals per 90",
+  "short": "Goals/90",
+  "desc": "Goals per 90 minutes",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "npg_per90": {
+  "label": "Non-penalty goals per 90",
+  "short": "NP goals/90",
+  "desc": "Non-penalty goals per 90 minutes",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "npg_per90_adj": {
+  "label": "Non-penalty goals per 90 (adjusted)",
+  "short": "NP goals/90 adj",
+  "desc": "Shrunk toward the league average to discount short bursts",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "team_goal_share_pct": {
+  "label": "Share of team goals",
+  "short": "Team goal %",
+  "desc": "Player goals as % of all goals the team scored",
+  "fmt": "pct",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "goals_equaliser": {
+  "label": "Equalisers",
+  "short": "Equalisers",
+  "desc": "Goals that levelled the match",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "goals_go_ahead": {
+  "label": "Go-ahead goals",
+  "short": "Go-ahead",
+  "desc": "Goals that put the team in front",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "goals_winner": {
+  "label": "Winning goals",
+  "short": "Winners",
+  "desc": "Go-ahead goals after which the team never fell level, in a win",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "goals_late": {
+  "label": "Late goals (75'+)",
+  "short": "Late goals",
+  "desc": "Goals from the 75th minute on",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "goals_consolation": {
+  "label": "Consolation goals",
+  "short": "Consolation",
+  "desc": "Goals scored while two or more behind",
+  "fmt": "int",
+  "higher_is_better": null,
+  "metric": true
+ },
+ "goals_away": {
+  "label": "Away goals",
+  "short": "Away goals",
+  "desc": "Goals scored away from home",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "goals_vs_top_half": {
+  "label": "Goals vs top-half teams",
+  "short": "Goals vs top half",
+  "desc": "Goals against opponents that finished in the top half",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "goals_as_sub": {
+  "label": "Goals as substitute",
+  "short": "Sub goals",
+  "desc": "Goals scored after coming off the bench",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "goals_per_sub_90": {
+  "label": "Goals per 90 as substitute",
+  "short": "Sub goals/90",
+  "desc": "Goals per 90 minutes of substitute time",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "votes": {
+  "label": "Best-on-ground votes",
+  "short": "Votes",
+  "desc": "3-2-1 votes recorded per match in DRIBL",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "votes_3": {
+  "label": "Best-on-ground (3 votes)",
+  "short": "3-vote games",
+  "desc": "Matches with the maximum 3 votes",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "votes_per_app": {
+  "label": "Votes per appearance",
+  "short": "Votes/app",
+  "desc": "Best-on-ground votes per appearance",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "votes_per_app_adj": {
+  "label": "Votes per appearance (adjusted)",
+  "short": "Votes/app adj",
+  "desc": "Shrunk toward the league average",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "captain_apps": {
+  "label": "Captain appearances",
+  "short": "Captain",
+  "desc": "Matches as captain",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "borrowed_apps": {
+  "label": "Borrowed appearances",
+  "short": "Borrowed",
+  "desc": "Matches flagged as borrowed from another team in the club",
+  "fmt": "int",
+  "higher_is_better": null,
+  "metric": true
+ },
+ "borrowed": {
+  "label": "Borrowed",
+  "short": "Borrowed",
+  "desc": "Borrowed from another team in the club for this match",
+  "fmt": "bool",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "is_captain": {
+  "label": "Captain",
+  "short": "Capt",
+  "desc": "Captain in this match",
+  "fmt": "bool",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "is_goalkeeper": {
+  "label": "Goalkeeper",
+  "short": "GK",
+  "desc": "Played as goalkeeper",
+  "fmt": "bool",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "gf_on_pitch": {
+  "label": "Team goals while on pitch",
+  "short": "GF on",
+  "desc": "Goals the team scored while the player was on",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "ga_on_pitch": {
+  "label": "Goals conceded while on pitch",
+  "short": "GA on",
+  "desc": "Goals the team conceded while the player was on",
+  "fmt": "int",
+  "higher_is_better": false,
+  "metric": true
+ },
+ "gd_on_pitch_per90": {
+  "label": "Team goal difference per 90 on pitch",
+  "short": "GD/90 on",
+  "desc": "Team goal difference per 90 while the player was on",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "gd_on_pitch_vs_team": {
+  "label": "On-pitch goal difference vs team",
+  "short": "GD vs team",
+  "desc": "GD/90 with the player on, minus the team's regular-season GD per match",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "ga_on_pitch_per90": {
+  "label": "Goals conceded per 90 on pitch",
+  "short": "GA/90 on",
+  "desc": "Goals conceded per 90 while on",
+  "fmt": "dec",
+  "higher_is_better": false,
+  "metric": true
+ },
+ "ga_on_pitch_vs_team": {
+  "label": "Goals conceded vs team average",
+  "short": "GA vs team",
+  "desc": "GA/90 with the player on, minus the team's GA per match",
+  "fmt": "dec",
+  "higher_is_better": false,
+  "metric": true
+ },
+ "clean_sheets": {
+  "label": "Clean sheets",
+  "short": "Clean sheets",
+  "desc": "Full matches with no goal conceded while on (GK and outfield)",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "clean_sheet": {
+  "label": "Clean sheet",
+  "short": "CS",
+  "desc": "No goals conceded while on, full match",
+  "fmt": "bool",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "full_matches": {
+  "label": "Full matches",
+  "short": "Full",
+  "desc": "Matches played start to finish",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "clean_sheet_pct": {
+  "label": "Clean sheet rate",
+  "short": "CS %",
+  "desc": "Clean sheets as % of full matches",
+  "fmt": "pct",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "yellow_cards": {
+  "label": "Yellow cards",
+  "short": "Yellows",
+  "desc": "Yellow cards",
+  "fmt": "int",
+  "higher_is_better": false,
+  "metric": true
+ },
+ "red_cards": {
+  "label": "Red cards",
+  "short": "Reds",
+  "desc": "Red cards",
+  "fmt": "int",
+  "higher_is_better": false,
+  "metric": true
+ },
+ "yellows_per90": {
+  "label": "Yellow cards per 90",
+  "short": "Yellows/90",
+  "desc": "Yellow cards per 90 minutes",
+  "fmt": "dec",
+  "higher_is_better": false,
+  "metric": true
+ },
+ "ppg_when_playing": {
+  "label": "Team points per game when playing",
+  "short": "PPG playing",
+  "desc": "Team points per game in matches the player played",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "ppg_start_diff": {
+  "label": "Team PPG: starts vs not",
+  "short": "PPG diff",
+  "desc": "Team points per game when the player starts minus when they don't (regular season, min 3 each)",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "team_ladder_pos": {
+  "label": "Team ladder position",
+  "short": "Team pos",
+  "desc": "Team's regular-season ladder position",
+  "fmt": "int",
+  "higher_is_better": false,
+  "metric": true
+ },
+ "ladder_teams": {
+  "label": "Teams in league",
+  "short": "Teams",
+  "desc": "Number of teams in the league",
+  "fmt": "int",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "team_ppg": {
+  "label": "Team points per game",
+  "short": "Team PPG",
+  "desc": "Team's regular-season points per game",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "team_matches": {
+  "label": "Team matches",
+  "short": "Team matches",
+  "desc": "Matches the team played",
+  "fmt": "int",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "grades_played": {
+  "label": "Grades played",
+  "short": "Grades",
+  "desc": "All grades the player appeared in this season",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "highest_grade": {
+  "label": "Highest grade",
+  "short": "Highest",
+  "desc": "Highest grade played this season",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "u18_player": {
+  "label": "U18 player",
+  "short": "U18",
+  "desc": "Appeared in an Under 18 league (only age signal available)",
+  "fmt": "bool",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "hidden_gem": {
+  "label": "Hidden gem",
+  "short": "Gem",
+  "desc": "Reserves/U18 row with zero senior minutes all season",
+  "fmt": "bool",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "sen_minutes": {
+  "label": "Senior minutes (all teams)",
+  "short": "Senior min",
+  "desc": "Minutes at senior grade across all teams",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "res_minutes": {
+  "label": "Reserves minutes (all teams)",
+  "short": "Res min",
+  "desc": "Minutes at reserves grade across all teams",
+  "fmt": "int",
+  "higher_is_better": null,
+  "metric": true
+ },
+ "u18_minutes": {
+  "label": "U18 minutes (all teams)",
+  "short": "U18 min",
+  "desc": "Minutes at U18 grade across all teams",
+  "fmt": "int",
+  "higher_is_better": null,
+  "metric": true
+ },
+ "sen_apps": {
+  "label": "Senior appearances",
+  "short": "Senior apps",
+  "desc": "Appearances at senior grade",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "n_teams": {
+  "label": "Teams played for",
+  "short": "Teams",
+  "desc": "Distinct teams this season",
+  "fmt": "int",
+  "higher_is_better": null,
+  "metric": true
+ },
+ "borrowed_apps_all": {
+  "label": "Borrowed appearances (all teams)",
+  "short": "Borrowed all",
+  "desc": "Borrowed flags across all teams",
+  "fmt": "int",
+  "higher_is_better": null,
+  "metric": true
+ },
+ "rank_in_role": {
+  "label": "Rank",
+  "short": "Rank",
+  "desc": "Rank within role by gem score",
+  "fmt": "int",
+  "higher_is_better": false,
+  "metric": false
+ },
+ "gem_score": {
+  "label": "Gem score",
+  "short": "Gem score",
+  "desc": "Scout score plus bonuses for no senior minutes and U18",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "scout_score": {
+  "label": "Scout score",
+  "short": "Scout score",
+  "desc": "League-adjusted composite of output, votes, on-pitch effect and minutes",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "why_flagged": {
+  "label": "Why flagged",
+  "short": "Why",
+  "desc": "Plain-English reasons this player stands out",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "matches": {
+  "label": "Matches",
+  "short": "Matches",
+  "desc": "Matches played (incl. finals)",
+  "fmt": "int",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "rr_matches": {
+  "label": "Regular-season matches",
+  "short": "RR matches",
+  "desc": "Regular-season matches",
+  "fmt": "int",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "ppg": {
+  "label": "Points per game",
+  "short": "PPG",
+  "desc": "Regular-season points per game",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "gf_per_match": {
+  "label": "Goals for per match",
+  "short": "GF/match",
+  "desc": "Regular-season goals scored per match",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "ga_per_match": {
+  "label": "Goals against per match",
+  "short": "GA/match",
+  "desc": "Regular-season goals conceded per match",
+  "fmt": "dec",
+  "higher_is_better": false,
+  "metric": true
+ },
+ "gd_per_match": {
+  "label": "Goal difference per match",
+  "short": "GD/match",
+  "desc": "Regular-season goal difference per match",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "ladder_pos": {
+  "label": "Ladder position",
+  "short": "Pos",
+  "desc": "Regular-season ladder position",
+  "fmt": "int",
+  "higher_is_better": false,
+  "metric": true
+ },
+ "players_used": {
+  "label": "Players used",
+  "short": "Used",
+  "desc": "Distinct players who played",
+  "fmt": "int",
+  "higher_is_better": null,
+  "metric": true
+ },
+ "borrowed_in_apps": {
+  "label": "Borrowed-in appearances",
+  "short": "Borrowed in",
+  "desc": "Appearances by players borrowed from other teams in the club",
+  "fmt": "int",
+  "higher_is_better": null,
+  "metric": true
+ },
+ "borrowed_in_players": {
+  "label": "Borrowed-in players",
+  "short": "Borrowed players",
+  "desc": "Distinct borrowed players",
+  "fmt": "int",
+  "higher_is_better": null,
+  "metric": true
+ },
+ "gf": {
+  "label": "Goals for",
+  "short": "GF",
+  "desc": "Goals scored (all matches)",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": false
+ },
+ "ga": {
+  "label": "Goals against",
+  "short": "GA",
+  "desc": "Goals conceded (all matches)",
+  "fmt": "int",
+  "higher_is_better": false,
+  "metric": false
+ }
+}

@@ -1,0 +1,19 @@
+@import url("observablehq:default.css");
+@import url("observablehq:theme-air.css");
+
+:root { --gem: #b8860b; }
+
+.filters form { margin: 0; }
+.filters label { font-size: 13px; }
+.filters .card { padding: 0.75rem 1rem; }
+.card h2 { margin-top: 0; }
+.kpi { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 0.5rem 1rem; }
+.kpi .v { font-size: 1.5rem; font-weight: 600; line-height: 1.1; }
+.kpi .l { font-size: 11px; color: var(--theme-foreground-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+.badge { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; margin-right: 4px; }
+.badge.gem { background: var(--gem); color: white; }
+.badge.grade { background: var(--theme-foreground-fainter); }
+.badge.est { background: #eee; color: #555; }
+.muted { color: var(--theme-foreground-muted); font-size: 13px; }
+.why { font-size: 13px; white-space: normal; }
+form[class*="inputs"] { max-width: none; }

@@ -1,0 +1,17 @@
+// See https://observablehq.com/framework/config for documentation.
+export default {
+  title: "SA State League Scouting 2026",
+  root: "src",
+  pages: [
+    {name: "Explorer", path: "/"},
+    {name: "Shortlist", path: "/shortlist"},
+    {name: "Teams & ladders", path: "/teams"},
+    {name: "About the data", path: "/about"},
+  ],
+  head: '<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚽</text></svg>">',
+  toc: false,
+  pager: false,
+  sidebar: true,
+  footer: "Data: Football SA DRIBL match centre, 2026 season (State League 1 & 2). Goals, cards, subs and votes only — no assists, shots or positions are recorded.",
+  style: "style.css",
+};

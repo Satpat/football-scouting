@@ -1,0 +1,21 @@
+# python
+.venv/
+__pycache__/
+*.pyc
+.env
+
+# raw extraction dumps and generated workbooks (tens of MB; regenerate with the scripts)
+output/
+
+# scraped reference page
+view-source_*.html
+
+# observable framework
+site/dist/
+site/node_modules/
+site/src/.observablehq/cache/
+site/.observablehq/
+
+# os / editor
+.DS_Store
+.claude/
