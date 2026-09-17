@@ -163,7 +163,11 @@ details summary { cursor: pointer; margin: 0.5rem 0; }
 .mtitle h2 { margin-bottom: 0.25rem; }
 .mtitle form { margin: 0; width: auto; }
 .mlist { font-size: 13px; overflow-x: auto; }
+/* width:auto + min-width:100% (not table.stats's own width:100%) so a table in a tight
+   column grows past its wrapper and scrolls instead of compressing nowrap cells until their
+   content overlaps the next cell — table.stats's width:100% alone defeats overflow-x:auto here. */
 .table-scroll { overflow-x: auto; }
+.table-scroll table { width: auto; min-width: 100%; }
 /* career table: each season is a rule-topped group; its league/grade rows are indented under it with no stats of their own */
 .career-table td:first-child { white-space: nowrap; }
 .career-table tr.season-row td { border-top: 1px solid var(--theme-foreground-faintest); border-bottom: none; padding-top: 8px; }

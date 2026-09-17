@@ -108,7 +108,7 @@ const profileCard = () => p ? html`<div class="card">
       ${p.role === "GK" ? tile("ga_on_pitch_per90", p.ga_on_pitch_per90) : tile("ppg_start_diff", p.ppg_start_diff)}
     </div>
     ${p.minutes_est_apps > 0 ? html`<p class="muted">${p.minutes_est_apps} of ${p.apps} appearances have estimated minutes (subs not recorded).</p>` : ""}
-    ${rowsFor.filter((r) => r.apps > 0).length > 1 ? html`<details><summary class="muted">All teams this season</summary>${seasonTable(rowsFor.filter((r) => r.apps > 0).sort((a, b) => b.minutes - a.minutes))}</details>` : ""}
+    ${rowsFor.filter((r) => r.apps > 0).length > 1 ? html`<details><summary class="muted">All teams this season</summary><div class="table-scroll">${seasonTable(rowsFor.filter((r) => r.apps > 0).sort((a, b) => b.minutes - a.minutes))}</div></details>` : ""}
     </div>
   </div>
 </div>` : null;
@@ -188,7 +188,7 @@ const matchList = html`<div class="mlist">
 
 ```js
 const careerRows = p ? careers.filter((c) => c.player_id === p.player_id).sort((a, b) => d3.descending(a.season, b.season)) : [];
-const careerStatCols = ["played", "started", "minutes", "goals", "votes", "yellow_cards", "red_cards", "clean_sheets", "was_goalkeeper"];
+const careerStatCols = ["played", "started", "minutes", "goals", "votes", "yellow_cards", "red_cards", "clean_sheets"];
 const leaguesOf = (c) => String(c.leagues ?? "").split("; ").filter(Boolean);
 const careerTable = html`<table class="stats career-table"><thead><tr><th>Season</th><th>Club</th>${careerStatCols.map((c) => html`<th>${isNumericCol(c) ? iconHeader(c, label(c)) : label(c)}</th>`)}</tr></thead>
   <tbody>${careerRows.flatMap((c) => [
