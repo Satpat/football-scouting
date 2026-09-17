@@ -3,13 +3,13 @@ title: Explorer
 theme: dashboard
 toc: false
 sql:
-  appearances: ./data/appearances.csv
+  appearances: ./data/appearances.parquet
 ---
 
 # Player explorer
 
 ```js
-import {labels, label, short, describe, fmt, headers, formats, metricOptions, GRADES, GRADE_NAME, GRADE_COLORS} from "./components/labels.js";
+import {labels, label, short, describe, fmt, fmtDate, headers, formats, metricOptions, crest, GRADES, GRADE_NAME, GRADE_COLORS} from "./components/labels.js";
 const players = await FileAttachment("./data/players.csv").csv({typed: true});
 const leagues = await FileAttachment("./data/leagues.json").json();
 const meta = await FileAttachment("./data/meta.json").json();
@@ -77,7 +77,7 @@ const setSelected = (d) => (selected.value = d);
 ```
 
 ```js
-const tipChannels = {Player: "player_name", Club: "club", Team: "team", League: "league", Apps: "apps", Minutes: "minutes",
+const tipChannels = {Player: "player_name", Club: "club", Team: "team", League: "league", Age: "age", Apps: "apps", Minutes: "minutes",
   Goals: "goals", "NP goals/90": "npg_per90", Votes: "votes", "Senior mins": "sen_minutes"};
 function chart(width) {
   const p = Plot.plot({
@@ -122,9 +122,11 @@ function chart(width) {
 function detail(d) {
   const k = (col) => html`<div><div class="v">${fmt(col, d[col])}</div><div class="l">${short(col)}</div></div>`;
   const gk = d.role === "GK";
-  return html`<h2>${d.player_name}</h2>
-  <p>${d.club} · ${d.team}<br><span class="badge grade">${GRADE_NAME[d.grade]} · ${d.division}</span>${d.hidden_gem ? html`<span class="badge gem">hidden gem</span>` : ""}${d.u18_player ? html`<span class="badge grade">U18 player</span>` : ""}${d.minutes_est_apps > 0 ? html`<span class="badge est" title="${describe("minutes_est_apps")}">${d.minutes_est_apps} apps est. minutes</span>` : ""}</p>
-  <div class="kpi">${k("apps")}${k("starts")}${k("minutes")}${gk ? k("clean_sheets") : k("goals")}${gk ? k("ga_on_pitch_per90") : k("npg_per90")}${k("votes")}${k("team_goal_share_pct")}${k("gd_on_pitch_vs_team")}${k("yellow_cards")}${k("captain_apps")}${k("borrowed_apps")}${k("sen_minutes")}</div>
+  return html`<h2 style="display:flex;align-items:center;gap:8px">${crest(d.club, 28)} <a href="./player?id=${d.player_id}&team=${d.team_id}">${d.player_name}</a></h2>
+  <p>${d.club} · ${d.team} · age ${d.age ?? "–"}</p>
+  <div class="badges"><span class="badge grade">${GRADE_NAME[d.grade]} · ${d.division}</span>${d.hidden_gem ? html`<span class="badge gem">hidden gem</span>` : ""}${d.u18_player ? html`<span class="badge grade">U18 player</span>` : ""}${d.minutes_est_apps > 0 ? html`<span class="badge est" title="${describe("minutes_est_apps")}">${d.minutes_est_apps} apps est. minutes</span>` : ""}</div>
+  <p><a href="./player?id=${d.player_id}&team=${d.team_id}"><b>Open full profile →</b></a> · <a href="${d.dribl_url}" target="_blank" rel="noopener">DRIBL ↗</a></p>
+  <div class="kpi">${k("age")}${k("apps")}${k("starts")}${k("minutes")}${gk ? k("clean_sheets") : k("goals")}${gk ? k("ga_on_pitch_per90") : k("npg_per90")}${k("votes")}${k("team_goal_share_pct")}${k("gd_on_pitch_vs_team")}${k("yellow_cards")}${k("captain_apps")}${k("borrowed_apps")}${k("sen_minutes")}</div>
   <p class="muted" style="margin-top:0.75rem">Grades played: ${d.grades_played} · highest: ${GRADE_NAME[d.highest_grade]} · ${d.n_teams} team${d.n_teams === 1 ? "" : "s"} · team finished ${d.team_ladder_pos ?? "–"}/${d.ladder_teams ?? "–"} (${fmt("team_ppg", d.team_ppg)} PPG)</p>
   <p class="muted">${d.goals_go_ahead} go-ahead · ${d.goals_winner} winners · ${d.goals_equaliser} equalisers · ${d.goals_late} late goals · ${d.goals_penalty} pens · team PPG when starting vs not: ${fmt("ppg_start_diff", d.ppg_start_diff)}</p>`;
 }
@@ -144,17 +146,17 @@ const matchCols = ["date_local", "round", "opponent", "home_away", "result", "te
 <div class="grid grid-cols-3" style="grid-auto-rows: auto;">
   <div class="card grid-colspan-2">
     <h2>${selected ? `${selected.player_name} — match by match` : "Match by match"}</h2>
-    ${selected ? Inputs.table(matchRows, {columns: matchCols, header: headers(matchCols), format: formats(matchCols), rows: 12, select: false, width: {opponent: 220}}) : html`<p class="muted">Select a player to see every appearance, queried live with SQL from the appearances file.</p>`}
+    ${selected ? Inputs.table(matchRows, {columns: matchCols, header: headers(matchCols), format: {...formats(matchCols), date_local: fmtDate}, rows: 12, select: false, width: {opponent: 220}}) : html`<p class="muted">Select a player to see every appearance, queried live with SQL from the appearances file.</p>`}
   </div>
   <div class="card">
     <h2>Season so far</h2>
     ${selected && matchRows.length ? resize((width) => {
       let g = 0, m = 0;
-      const cum = matchRows.map((r, i) => ({i: i + 1, date: r.date_local, goals: (g += r.goals), minutes: (m += r.minutes), opp: r.opponent, result: r.result}));
+      const cum = matchRows.map((r, i) => ({i: i + 1, date: fmtDate(r.date_local), goals: (g += r.goals), minutes: (m += r.minutes), opp: r.opponent, result: r.result}));
       return Plot.plot({width, height: 220, marginLeft: 40, x: {label: "Appearance →"}, y: {label: "↑ Cumulative goals", grid: true},
         marks: [Plot.lineY(cum, {x: "i", y: "goals", stroke: "#e6550d", curve: "step-after"}),
-                Plot.dot(matchRows, {x: (d, i) => i + 1, y: () => 0, fill: (d) => d.result === "W" ? "#2ca02c" : d.result === "D" ? "#999" : "#d62728", r: 4,
-                  channels: {Opponent: "opponent", Result: "result", Minutes: "minutes"}, tip: true})]});
+                Plot.dot(cum, {x: "i", y: () => 0, fill: (d) => d.result === "W" ? "#2ca02c" : d.result === "D" ? "#999" : "#d62728", r: 4,
+                  channels: {Date: "date", Opponent: "opp", Result: "result", Minutes: "minutes"}, tip: {format: {x: false, y: false}}})]});
     }) : html`<p class="muted">Cumulative goals by appearance; dots show W/D/L.</p>`}
   </div>
 </div>
@@ -162,12 +164,12 @@ const matchCols = ["date_local", "round", "opponent", "home_away", "result", "te
 ## Players shown
 
 ```js
-const tableCols = ["player_name", "club", "league", "grade", "role", "apps", "starts", "minutes", "goals", "goals_open_play", "npg_per90", "team_goal_share_pct", "votes", "votes_per_app", "gd_on_pitch_vs_team", "clean_sheets", "yellow_cards", "red_cards", "captain_apps", "borrowed_apps", "sen_minutes", "hidden_gem"];
+const tableCols = ["player_name", "club", "league", "grade", "age", "role", "apps", "starts", "minutes", "goals", "goals_open_play", "npg_per90", "team_goal_share_pct", "votes", "votes_per_app", "gd_on_pitch_vs_team", "clean_sheets", "yellow_cards", "red_cards", "captain_apps", "borrowed_apps", "sen_minutes", "hidden_gem"];
 const searched = view(Inputs.search(filtered, {placeholder: "Search player, club or team…", columns: ["player_name", "club", "team"]}));
 ```
 
 ```js
-const picked = view(Inputs.table(searched, {columns: tableCols, header: headers(tableCols), format: formats(tableCols), rows: 18, multiple: false,
+const picked = view(Inputs.table(searched, {columns: tableCols, header: headers(tableCols), format: {...formats(tableCols), player_name: (v, i) => html`<a href="./player?id=${searched[i].player_id}&team=${searched[i].team_id}">${v}</a>`, club: (v) => { const s = document.createElement("span"); s.className = "club-cell"; s.append(crest(v, 16), document.createTextNode(" " + v)); return s; }}, rows: 18, multiple: false,
   sort: ys, reverse: true, width: {player_name: 170, club: 150, league: 170}}));
 ```
 

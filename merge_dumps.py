@@ -16,7 +16,7 @@ from pathlib import Path
 def unwrap(path: Path) -> dict:
     dec = json.JSONDecoder()
     data = path.read_text()
-    while not isinstance(data, dict) or "part" not in data and "fixtures" not in data:
+    while not isinstance(data, dict) or ("part" not in data and "fixtures" not in data):
         if isinstance(data, str):
             data, _ = dec.raw_decode(data.lstrip())
         elif isinstance(data, list):
@@ -34,7 +34,8 @@ def main():
     ap.add_argument("-o", "--out", type=Path, default=Path("output/dribl_raw_2026_v2.json"))
     args = ap.parse_args()
 
-    merged = {"leagues": [], "fixtures": [], "mc": {}, "members": {}, "ladders": {}, "errors": []}
+    merged = {"leagues": [], "fixtures": [], "mc": {}, "members": {}, "ladders": {},
+              "profiles": {}, "careers": {}, "member_matches": {}, "errors": []}
     for f in args.files:
         d = unwrap(f)
         part = d.get("part", "all")
@@ -44,16 +45,19 @@ def main():
         for k in ("leagues", "fixtures", "errors"):
             if d.get(k):
                 merged[k] = d[k] if k != "errors" else merged[k] + d[k]
-        for k in ("mc", "members", "ladders"):
+        for k in ("mc", "members", "ladders", "profiles", "careers", "member_matches"):
             if d.get(k):
                 merged[k].update(d[k])
-        print(f"{f.name}: part={part} " + ", ".join(f"{k}={len(d[k])}" for k in ("leagues", "fixtures", "mc", "members", "ladders") if k in d))
+        print(f"{f.name}: part={part} " + ", ".join(f"{k}={len(d[k])}" for k in ("leagues", "fixtures", "mc", "members", "ladders", "profiles", "careers", "member_matches") if k in d))
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
     with open(args.out, "w") as fh:
         json.dump(merged, fh)
     print(f"merged -> {args.out}: fixtures={len(merged['fixtures'])} mc={len(merged['mc'])} members={len(merged['members'])} "
-          f"ladders={len(merged['ladders'])} errors={len(merged['errors'])} ({args.out.stat().st_size/1e6:.1f} MB)")
+          f"ladders={len(merged['ladders'])} profiles={len(merged['profiles'])} careers={len(merged['careers'])} "
+          f"member_matches={len(merged['member_matches'])} errors={len(merged['errors'])} ({args.out.stat().st_size/1e6:.1f} MB)")
+    if not merged["fixtures"]:
+        return
     missing_mc = [f["match_hash_id"] for f in merged["fixtures"] if f["match_hash_id"] not in merged["mc"]]
     missing_mem = [f["match_hash_id"] for f in merged["fixtures"] for s in ("home", "away") if f"{f['match_hash_id']}:{s}" not in merged["members"]]
     print(f"fixtures missing matchcentre: {len(missing_mc)}, missing lineups: {len(missing_mem)}")

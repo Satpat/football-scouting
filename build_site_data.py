@@ -17,6 +17,9 @@ import pandas as pd
 import build_scouting
 
 SITE_DATA = Path("site/src/data")
+PROFILES = Path("output/dribl_profiles_2026.json")
+CLUBS_CSV = SITE_DATA / "clubs.csv"
+DRIBL_PROFILE = "https://fsa.dribl.com/memberprofile?date_range=default&m={id}&season=7MNGzMbmAz&timezone=Australia%2FAdelaide"
 
 # column -> (label, short axis label, description, fmt, higher_is_better, offer as chart metric)
 # fmt: int | dec | pct | str | bool | date
@@ -141,6 +144,30 @@ LABELS = {
     "sen_apps": ("Senior appearances", "Senior apps", "Appearances at senior grade", "int", True, True),
     "n_teams": ("Teams played for", "Teams", "Distinct teams this season", "int", None, True),
     "borrowed_apps_all": ("Borrowed appearances (all teams)", "Borrowed all", "Borrowed flags across all teams", "int", None, True),
+    # profile
+    "age": ("Age", "Age", "Age as shown on the DRIBL member profile at extraction time", "int", None, True),
+    "nationality": ("Nationality", "Nat.", "Nationality recorded in DRIBL", "str", None, False),
+    "headshot": ("Photo", "Photo", "DRIBL profile photo URL", "str", None, False),
+    "dribl_url": ("DRIBL profile", "DRIBL", "Link to the player's public DRIBL member profile", "str", None, False),
+    "club_slug": ("Club key", "Club key", "Crest file key", "str", None, False),
+    "club_color": ("Club colour", "Colour", "Primary club colour from DRIBL", "str", None, False),
+    "club_accent": ("Club accent", "Accent", "Accent club colour from DRIBL", "str", None, False),
+    "season": ("Season", "Season", "Season name", "str", None, False),
+    "clubs": ("Clubs", "Clubs", "Clubs that season", "str", None, False),
+    "leagues": ("Leagues", "Leagues", "Leagues / competitions that season", "str", None, False),
+    "started": ("Started", "Started", "Matches started", "int", True, False),
+    "was_goalkeeper": ("Goalkeeper", "GK", "Played as goalkeeper that season", "bool", None, False),
+    "date": ("Date", "Date", "Match date (Adelaide)", "date", None, False),
+    "comp": ("Competition", "Comp", "Competition name", "str", None, False),
+    "full_round": ("Round", "Round", "Round label", "str", None, False),
+    "side": ("Side", "Side", "home or away", "str", None, False),
+    "score": ("Score", "Score", "Home – away full-time score", "str", None, False),
+    "did_play": ("Played", "Played", "Took part in the match", "bool", None, False),
+    "in_dataset": ("In SL dataset", "In SL", "Match is one of the SL1/SL2 fixtures in this site's dataset", "bool", None, False),
+    "code": ("Club code", "Code", "DRIBL club code", "str", None, False),
+    "slug": ("Club key", "Key", "Crest file key", "str", None, False),
+    "crest": ("Crest", "Crest", "Crest image path", "str", None, False),
+    "logo_url": ("Crest URL", "Crest URL", "Source crest URL on DRIBL", "str", None, False),
     # shortlist
     "rank_in_role": ("Rank", "Rank", "Rank within role by gem score", "int", False, False),
     "gem_score": ("Gem score", "Gem score", "Scout score plus bonuses for no senior minutes and U18", "dec", True, True),
@@ -172,9 +199,15 @@ PLAYER_COLS = ["player_id", "player_name", "club", "team", "team_id", "league", 
                "clean_sheets", "full_matches", "clean_sheet_pct", "yellow_cards", "red_cards", "yellows_per90",
                "ppg_when_playing", "ppg_start_diff", "team_ladder_pos", "ladder_teams", "team_ppg", "team_matches",
                "grades_played", "highest_grade", "u18_player", "hidden_gem", "sen_minutes", "res_minutes", "u18_minutes",
-               "sen_apps", "n_teams", "borrowed_apps_all"]
+               "sen_apps", "n_teams", "borrowed_apps_all",
+               "age", "nationality", "headshot", "dribl_url", "club_slug", "club_color", "club_accent"]
+CAREER_COLS = ["player_id", "season", "clubs", "leagues", "played", "started", "minutes", "goals", "yellow_cards", "red_cards",
+               "votes", "clean_sheets", "was_goalkeeper"]
+MEMBER_MATCH_COLS = ["player_id", "date", "comp", "league", "full_round", "home_team", "away_team", "home_club", "away_club",
+                     "home_score", "away_score", "score", "side", "result", "did_play", "starting", "minutes", "goals",
+                     "yellow_cards", "red_cards", "votes", "is_captain", "is_goalkeeper", "clean_sheet", "match_hash_id", "in_dataset"]
 SHORTLIST_COLS = ["rank_in_role", "role", "player_id", "team_id", "player_name", "club", "team", "league", "grade", "division",
-                  "u18_player", "highest_grade", "hidden_gem", "gem_score", "scout_score", "why_flagged",
+                  "u18_player", "highest_grade", "hidden_gem", "gem_score", "scout_score", "why_flagged", "age",
                   "apps", "starts", "minutes", "minutes_share_pct", "goals", "goals_open_play", "npg_per90", "npg_per90_adj",
                   "team_goal_share_pct", "goals_go_ahead", "goals_winner", "goals_late", "votes", "votes_per_app",
                   "votes_per_app_adj", "gd_on_pitch_vs_team", "ga_on_pitch_per90", "clean_sheets", "clean_sheet_pct",
@@ -195,10 +228,14 @@ LADDER_COLS = ["league", "grade", "division", "is_finals", "position", "team_id"
 GRADE_ORDER = {"SEN": 0, "RES": 1, "U18": 2}
 
 
-def tidy(df: pd.DataFrame, cols: list) -> pd.DataFrame:
+def tidy(df: pd.DataFrame, cols: list, bool_as_text: bool = True) -> pd.DataFrame:
     out = df[cols].copy()
     for c in out.columns:
-        if out[c].dtype == bool:
+        if out[c].dtype == bool or LABELS.get(c, (None,) * 4)[3] == "bool":
+            if not bool_as_text:
+                out[c] = out[c].map(lambda v: None if v is None or (isinstance(v, float) and np.isnan(v)) else bool(v))
+                continue
+            out[c] = out[c].map(lambda v: "" if v is None or (isinstance(v, float) and np.isnan(v)) else ("true" if v else "false"))
             continue
         if out[c].dtype.kind == "f":
             fmt = LABELS[c][3]
@@ -224,8 +261,70 @@ def league_order(leagues: pd.DataFrame) -> list:
     return rows
 
 
+def slugify(name: str) -> str:
+    import re
+    return re.sub(r"[^a-z0-9]+", "-", str(name).lower()).strip("-")
+
+
+def load_profiles():
+    if not PROFILES.exists():
+        print(f"WARNING: {PROFILES} not found — ages, headshots, careers and cup matches will be empty")
+        return {}, {}, {}
+    d = json.load(open(PROFILES))
+    return d.get("profiles", {}), d.get("careers", {}), d.get("member_matches", {})
+
+
+def profile_frame(profiles: dict) -> pd.DataFrame:
+    rows = []
+    for pid, p in profiles.items():
+        clubs = p.get("player_clubs") or []
+        rows.append({"player_id": pid, "age": p.get("age"), "nationality": p.get("nationality"), "headshot": p.get("image"),
+                     "dribl_url": DRIBL_PROFILE.format(id=pid),
+                     "_club_colors": {c.get("name"): (c.get("color"), c.get("accent")) for c in clubs}})
+    return pd.DataFrame(rows)
+
+
+def career_frame(careers: dict) -> pd.DataFrame:
+    rows = []
+    for pid, seasons in careers.items():
+        for c in seasons:
+            rows.append({"player_id": pid, "season": c.get("season_name"), "clubs": "; ".join(c.get("club_names") or []),
+                         "leagues": "; ".join(dict.fromkeys(str(l.get("league_name")) for l in (c.get("leagues") or []))),
+                         "played": c.get("played"), "started": c.get("started"), "minutes": c.get("minutes"), "goals": c.get("goals"),
+                         "yellow_cards": c.get("yellow_cards"), "red_cards": c.get("red_cards"), "votes": c.get("votes"),
+                         "clean_sheets": c.get("clean_sheets"), "was_goalkeeper": bool(c.get("was_goalkeeper"))})
+    return pd.DataFrame(rows).sort_values(["player_id", "season"])
+
+
+def member_match_frame(member_matches: dict, known_matches: set) -> pd.DataFrame:
+    rows = []
+    strip = lambda t: str(t or "").replace(" Male", "").replace(" Female", "")
+    for pid, ms in member_matches.items():
+        for m in ms:
+            hs, as_ = m.get("home_score"), m.get("away_score")
+            side = m.get("side")
+            if hs is None or as_ is None or side not in ("home", "away"):
+                result = ""
+            else:
+                own, opp = (hs, as_) if side == "home" else (as_, hs)
+                result = "W" if own > opp else "D" if own == opp else "L"
+            date = pd.to_datetime(m.get("date"), utc=True, errors="coerce")
+            rows.append({"player_id": pid, "date": date.tz_convert("Australia/Adelaide").strftime("%Y-%m-%d %H:%M") if pd.notna(date) else "",
+                         "comp": m.get("comp_name"), "league": m.get("league_name"), "full_round": m.get("full_round") or m.get("round"),
+                         "home_team": strip(m.get("home_team_name")), "away_team": strip(m.get("away_team_name")),
+                         "home_club": m.get("home_club_name"), "away_club": m.get("away_club_name"),
+                         "home_score": hs, "away_score": as_, "score": f"{hs}–{as_}" if hs is not None and as_ is not None else "",
+                         "side": side, "result": result, "did_play": bool(m.get("played")), "starting": bool(m.get("started")),
+                         "minutes": m.get("minutes"), "goals": m.get("goals"), "yellow_cards": m.get("yellow_card_count"),
+                         "red_cards": m.get("red_card_count"), "votes": m.get("votes"), "is_captain": bool(m.get("is_captain")),
+                         "is_goalkeeper": bool(m.get("is_goalkeeper")), "clean_sheet": bool(m.get("clean_sheet")),
+                         "match_hash_id": m.get("match_hash_id"), "in_dataset": m.get("match_hash_id") in known_matches})
+    return pd.DataFrame(rows).sort_values(["player_id", "date"])
+
+
 def main():
     tables = build_scouting.compute()
+    profiles, careers, member_matches = load_profiles()
     season, shortlist, app = tables["Player Season"], tables["Shortlist"], tables["Appearances"]
     matches, ctx, ladders = tables["Matches"], tables["Team Context"], tables["Ladders"]
 
@@ -234,19 +333,40 @@ def main():
     season["role"] = season.role.fillna("Outfield")
     app_play = app[app.playing]
 
+    # profile fields: age, nationality, headshot, DRIBL link, club colours; crest key from clubs.csv
+    for c in ("age", "nationality", "headshot", "dribl_url", "club_color", "club_accent"):
+        season[c] = None
+    if profiles:
+        pf = profile_frame(profiles).set_index("player_id")
+        season = season.join(pf.drop(columns=["_club_colors"]), on="player_id", rsuffix="_p")
+        for c in ("age", "nationality", "headshot", "dribl_url"):
+            season[c] = season.pop(f"{c}_p")
+        colors = season.apply(lambda r: (pf.loc[r.player_id, "_club_colors"].get(r.club) if r.player_id in pf.index else None) or (None, None), axis=1)
+        season["club_color"] = [c[0] for c in colors]
+        season["club_accent"] = [c[1] for c in colors]
+    season["club_slug"] = season.club.map(slugify)
+    shortlist = shortlist.merge(season[["player_id", "team_id", "age"]], on=["player_id", "team_id"], how="left")
+
     SITE_DATA.mkdir(parents=True, exist_ok=True)
     exports = {
         "players.csv": tidy(season, PLAYER_COLS),
         "shortlist.csv": tidy(shortlist, SHORTLIST_COLS),
-        "appearances.csv": tidy(app_play, APPEARANCE_COLS),
+        "appearances.parquet": tidy(app_play, APPEARANCE_COLS, bool_as_text=False),
         "matches.csv": tidy(matches, MATCH_COLS),
         "teams.csv": tidy(ctx, TEAM_COLS),
         "ladders.csv": tidy(ladders, LADDER_COLS),
     }
+    if careers:
+        exports["careers.csv"] = tidy(career_frame(careers), CAREER_COLS)
+    if member_matches:
+        exports["member_matches.parquet"] = tidy(member_match_frame(member_matches, set(matches.match_hash_id)), MEMBER_MATCH_COLS, bool_as_text=False)
     for name, df in exports.items():
         missing = [c for c in df.columns if c not in LABELS]
         assert not missing, f"{name}: no LABELS entry for {missing}"
-        df.to_csv(SITE_DATA / name, index=False)
+        if name.endswith(".parquet"):
+            df.to_parquet(SITE_DATA / name, index=False)
+        else:
+            df.to_csv(SITE_DATA / name, index=False)
         print(f"{name}: {len(df)} rows x {len(df.columns)} cols, {(SITE_DATA / name).stat().st_size / 1e6:.2f} MB")
 
     labels = {c: {"label": v[0], "short": v[1], "desc": v[2], "fmt": v[3], "higher_is_better": v[4], "metric": v[5]}
@@ -258,6 +378,7 @@ def main():
     (SITE_DATA / "leagues.json").write_text(json.dumps(league_order(leagues), indent=1))
     (SITE_DATA / "notes.json").write_text(json.dumps([{"topic": t, "note": n} for t, n in build_scouting.NOTES], indent=1))
     meta = {"extracted_at": tables["raw"].get("extracted_at"), "season": "2026", "matches": len(matches),
+            "profiles": len(profiles), "with_age": int(season.age.notna().sum()) if "age" in season else 0,
             "players": int(season.player_id.nunique()), "player_seasons": len(season), "teams": len(ctx),
             "appearances": len(app_play), "leagues": len(leagues)}
     (SITE_DATA / "meta.json").write_text(json.dumps(meta, indent=1))

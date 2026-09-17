@@ -895,6 +895,190 @@
   "higher_is_better": null,
   "metric": true
  },
+ "age": {
+  "label": "Age",
+  "short": "Age",
+  "desc": "Age as shown on the DRIBL member profile at extraction time",
+  "fmt": "int",
+  "higher_is_better": null,
+  "metric": true
+ },
+ "nationality": {
+  "label": "Nationality",
+  "short": "Nat.",
+  "desc": "Nationality recorded in DRIBL",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "headshot": {
+  "label": "Photo",
+  "short": "Photo",
+  "desc": "DRIBL profile photo URL",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "dribl_url": {
+  "label": "DRIBL profile",
+  "short": "DRIBL",
+  "desc": "Link to the player's public DRIBL member profile",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "club_slug": {
+  "label": "Club key",
+  "short": "Club key",
+  "desc": "Crest file key",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "club_color": {
+  "label": "Club colour",
+  "short": "Colour",
+  "desc": "Primary club colour from DRIBL",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "club_accent": {
+  "label": "Club accent",
+  "short": "Accent",
+  "desc": "Accent club colour from DRIBL",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "season": {
+  "label": "Season",
+  "short": "Season",
+  "desc": "Season name",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "clubs": {
+  "label": "Clubs",
+  "short": "Clubs",
+  "desc": "Clubs that season",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "leagues": {
+  "label": "Leagues",
+  "short": "Leagues",
+  "desc": "Leagues / competitions that season",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "started": {
+  "label": "Started",
+  "short": "Started",
+  "desc": "Matches started",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": false
+ },
+ "was_goalkeeper": {
+  "label": "Goalkeeper",
+  "short": "GK",
+  "desc": "Played as goalkeeper that season",
+  "fmt": "bool",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "date": {
+  "label": "Date",
+  "short": "Date",
+  "desc": "Match date (Adelaide)",
+  "fmt": "date",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "comp": {
+  "label": "Competition",
+  "short": "Comp",
+  "desc": "Competition name",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "full_round": {
+  "label": "Round",
+  "short": "Round",
+  "desc": "Round label",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "side": {
+  "label": "Side",
+  "short": "Side",
+  "desc": "home or away",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "score": {
+  "label": "Score",
+  "short": "Score",
+  "desc": "Home \u2013 away full-time score",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "did_play": {
+  "label": "Played",
+  "short": "Played",
+  "desc": "Took part in the match",
+  "fmt": "bool",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "in_dataset": {
+  "label": "In SL dataset",
+  "short": "In SL",
+  "desc": "Match is one of the SL1/SL2 fixtures in this site's dataset",
+  "fmt": "bool",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "code": {
+  "label": "Club code",
+  "short": "Code",
+  "desc": "DRIBL club code",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "slug": {
+  "label": "Club key",
+  "short": "Key",
+  "desc": "Crest file key",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "crest": {
+  "label": "Crest",
+  "short": "Crest",
+  "desc": "Crest image path",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "logo_url": {
+  "label": "Crest URL",
+  "short": "Crest URL",
+  "desc": "Source crest URL on DRIBL",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
  "rank_in_role": {
   "label": "Rank",
   "short": "Rank",

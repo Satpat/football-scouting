@@ -386,3 +386,44 @@ Scoring: rates shrunk toward the league mean (prior 450 min / 5 apps), z-scored 
 - Data is entered by club volunteers: goal attribution, sub minutes and GK flags can be missing or wrong.
 - Playing time reflects the coach's opinion, injuries and availability, not just ability.
 - Refresh is manual via the browser pane while Cloudflare blocks the Python client.
+
+---
+
+## 12. Interactive site — Observable Framework on GitHub Pages (2026-09-17, session 2)
+
+**Goal:** let a coach explore the stats interactively: any-metric scatter (e.g. goals vs minutes, one point per player), toggles for division / grade / each of the 12 leagues / role, click-through to a player's match-by-match record.
+
+**Stack decision (after research):** Observable Framework 1.13 — static-site generator bundling Observable Plot 0.6.17 (charts with built-in tips), Inputs (toggles, tables, search) and client-side DuckDB-WASM SQL. Alternatives considered: vanilla + Plot (lighter, more hand-coding), Apache ECharts 6.1 (heavier, canvas), Plotly (common in Python football analytics, not needed here). Football-specific JS libs (d3-soccer, rabonajs) only draw pitches/event data DRIBL doesn't have.
+
+**Data strategy:** the raw dump (42 MB) is git-ignored and unavailable in CI, so `build_site_data.py` exports compact static files into `site/src/data/` that are committed: `players.csv` (3,233 × 70, 1.1 MB), `shortlist.csv`, `appearances.csv` (29,591 playing rows, 5.8 MB — registered as a DuckDB table and queried per player with `sql\`…\``), `matches.csv`, `teams.csv`, `ladders.csv`, plus `labels.json` (raw column → friendly label / short label / description / format), `leagues.json` (toggle order), `notes.json`, `meta.json`. All column naming for the front end lives in the `LABELS` dict in `build_site_data.py`; the script asserts every exported column has an entry.
+
+**Pages (`site/src/`):** `index.md` Explorer (filters → in-memory filter of players → `Plot.dot` with tip channels, medians, top-N labels, club highlight, click-to-pin via `Mutable`; detail card; SQL match table; cumulative-goals mini chart; searchable table; `?player=&team=` deep link), `shortlist.md`, `teams.md`, `about.md`. Shared helpers in `components/labels.js`.
+
+**Deploy:** repo `Satpat/football-scouting` (public), `.github/workflows/deploy.yml` builds `site/` with Node 22 and publishes `site/dist` via `actions/deploy-pages`. Framework emits relative links so the `/football-scouting/` subpath needs no config.
+
+**Fixes found while building:** bench-only player-seasons were labelled GK (NaN → True); `leagues.json` had 15 entries because SL1 finals share the regular league name (now unique by name).
+
+**Local dev:** `cd site && npm run dev` (or the `site` entry in `.claude/launch.json`).
+
+---
+
+## 13. Player profiles, ages, crests, DD/MM/YYYY (2026-09-17, session 2)
+
+**Member profile endpoints (found via the Performance API on `fsa.dribl.com/memberprofile?m=<user_hash_id>`):**
+
+| Endpoint | Returns |
+|---|---|
+| `memberprofile/{user_hash_id}?tenant&season` | `age`, `nationality`, `image` (headshot), `player_clubs[]` (club `image`, `color`, `accent`) |
+| `memberprofile-careers/member/{id}/tenant/{tenant}?member&season` | per-season rows back to 2023: clubs, leagues, played, started, minutes, goals, cards, votes, clean_sheets, was_goalkeeper |
+| `memberprofile-matches/member/{id}?member&tenant&date_range=default&season` | every match this season incl. cups/trials, with DRIBL's own `minutes`, `played`, `started`, goals, cards, votes, logos, `match_hash_id` |
+
+**Age is available for every player** (2,132 / 2,132). Distribution peaks at 16–18. Alexander Goetz (Reserves only, 18 goals) is 17 — a hidden gem the U18-league proxy missed. `extract_profiles.js` runs the three endpoints for every id in `players.csv` (≈6,400 calls, ~2 min at 15 concurrent) → `merge_dumps.py -o output/dribl_profiles_2026.json`.
+
+**Crests:** ladder rows carry `club_logo` (ocean.dribl.com PNG, ~270 px) and it is *not* behind Cloudflare, so `download_crests.py` fetches all 32 into `site/src/assets/crests/<slug>.png`, writes `clubs.csv`, and generates `site/src/components/crests.js` — one literal `FileAttachment(...)` per crest, because Framework only serves/copies files it can see statically (a dynamic `<img src>` 404s in preview and is dropped from the build).
+
+**Site changes:**
+- New `player.md` (FotMob-style): header band in club accent with crest + headshot, facts (age, nationality, shirt, role, grade, league, pathway), season tiles per team, percentile "traits" bars vs same league + role (450+ min), cumulative-goals chart, match table across all competitions with a competition filter and opponent crests, career table, "View on DRIBL" and "Open in Explorer" buttons. Driven by `?id=&team=`; shows a search box with no id.
+- Explorer/Shortlist/Teams: names link to the profile, crests next to clubs, age column and tip, DD/MM/YYYY everywhere (`fmtDate` in `labels.js` accepts Date, Arrow epoch-ms, or ISO strings).
+- Big tables moved to Parquet: `appearances.parquet` 0.2 MB (was 5.8 MB CSV) and `member_matches.parquet` 0.6 MB (42,308 rows).
+
+**Bugs fixed:** booleans exported as `True/False` were truthy strings in the browser (hidden-gem toggles didn't filter, every player showed a U18 badge) — now `true/false`; badges had no spacing; SQL dates rendered as epoch milliseconds; `view()` inside a ternary does not unwrap the input value (team selector), so it is a top-level cell now.

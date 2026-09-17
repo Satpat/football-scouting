@@ -17,3 +17,29 @@
 .muted { color: var(--theme-foreground-muted); font-size: 13px; }
 .why { font-size: 13px; white-space: normal; }
 form[class*="inputs"] { max-width: none; }
+
+.badges { display: flex; flex-wrap: wrap; gap: 4px; margin: 4px 0; }
+.crest { vertical-align: middle; border-radius: 3px; object-fit: contain; }
+.crest-empty { display: inline-block; vertical-align: middle; }
+.club-cell { white-space: nowrap; }
+.pill { display: inline-block; min-width: 20px; text-align: center; padding: 1px 6px; border-radius: 4px; font-weight: 700; font-size: 12px; color: white; }
+.pill.W { background: #2ca02c; } .pill.D { background: #888; } .pill.L { background: #d62728; }
+.profile-head { display: flex; align-items: center; gap: 1.25rem; padding: 1.25rem 1.5rem; border-radius: 8px; color: white; }
+.profile-head img.headshot { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; border: 3px solid rgba(255,255,255,0.7); background: #fff; }
+.profile-head .crest { width: 56px; height: 56px; background: rgba(255,255,255,0.85); padding: 4px; border-radius: 8px; }
+.profile-head h1 { margin: 0; color: white; font-size: 2rem; }
+.profile-head .sub { opacity: 0.9; }
+.profile-head .actions { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
+.profile-head .actions a { background: white; color: #222; padding: 6px 12px; border-radius: 999px; font-weight: 600; text-decoration: none; font-size: 13px; }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.75rem 1rem; }
+.facts .v { font-size: 1.1rem; font-weight: 600; }
+.facts .l { font-size: 11px; color: var(--theme-foreground-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); gap: 0.75rem; }
+.tiles .t { text-align: center; padding: 0.5rem 0; border-radius: 6px; background: var(--theme-background-alt); }
+.tiles .v { font-size: 1.6rem; font-weight: 700; line-height: 1.1; }
+.tiles .l { font-size: 11px; color: var(--theme-foreground-muted); }
+.trait { display: grid; grid-template-columns: 180px 1fr 48px; align-items: center; gap: 8px; margin: 6px 0; font-size: 13px; }
+.trait .bar { height: 10px; background: var(--theme-background-alt); border-radius: 5px; overflow: hidden; }
+.trait .bar > div { height: 100%; border-radius: 5px; }
+.trait .pct { text-align: right; font-weight: 600; }
+@media (max-width: 640px) { .profile-head { flex-wrap: wrap; } .profile-head .actions { margin-left: 0; } }

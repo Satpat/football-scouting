@@ -5,6 +5,7 @@ export default {
   pages: [
     {name: "Explorer", path: "/"},
     {name: "Shortlist", path: "/shortlist"},
+    {name: "Player profile", path: "/player"},
     {name: "Teams & ladders", path: "/teams"},
     {name: "About the data", path: "/about"},
   ],

@@ -7,7 +7,8 @@ toc: false
 # Teams & ladders
 
 ```js
-import {label, fmt, headers, formats, GRADE_NAME, GRADE_COLORS} from "./components/labels.js";
+import {label, fmt, headers, formats, crest, GRADE_NAME, GRADE_COLORS} from "./components/labels.js";
+const clubFmt = (v) => { const s = document.createElement("span"); s.className = "club-cell"; s.append(crest(v, 18), document.createTextNode(" " + v)); return s; };
 const teams = await FileAttachment("./data/teams.csv").csv({typed: true});
 const ladders = await FileAttachment("./data/ladders.csv").csv({typed: true});
 const leagues = await FileAttachment("./data/leagues.json").json();
@@ -27,7 +28,7 @@ const teamRows = teams.filter((d) => d.primary_league === league);
 <div class="grid grid-cols-2" style="grid-auto-rows: auto;">
   <div class="card">
     <h2>${leagueChoices.entries().find(([, v]) => v === league)?.[0] ?? league} ladder</h2>
-    ${Inputs.table(ladder, {columns: ladderCols, header: headers(ladderCols), format: formats(ladderCols), rows: 14, select: false})}
+    ${Inputs.table(ladder, {columns: ladderCols, header: headers(ladderCols), format: {...formats(ladderCols), club: clubFmt}, rows: 14, select: false, width: {team: 260}})}
   </div>
   <div class="card">
     <h2>Attack vs defence (regular season)</h2>
@@ -48,6 +49,6 @@ const teamCols = ["team", "club", "primary_league", "grade", "division", "ladder
 ```
 
 <div class="card">
-  ${Inputs.table(teams, {columns: teamCols, header: headers(teamCols), format: formats(teamCols), rows: 20, select: false, sort: "ppg", reverse: true, width: {team: 260, primary_league: 200}})}
+  ${Inputs.table(teams, {columns: teamCols, header: headers(teamCols), format: {...formats(teamCols), club: clubFmt}, rows: 20, select: false, sort: "ppg", reverse: true, width: {team: 260, primary_league: 200}})}
   <p class="muted">"Borrowed in" counts appearances by players DRIBL flags as borrowed from another team in the same club — a high number means the team leans on players from other grades.</p>
 </div>
