@@ -7,7 +7,7 @@ sql:
 ---
 
 ```js
-import {label, short, describe, fmt, fmtDate, headers, formats, crest, clubCell, clubInfo, percentile, shortLeague, GRADE_NAME} from "./components/labels.js";
+import {label, short, describe, fmt, fmtDate, toDate, headers, formats, crest, clubCell, clubInfo, percentile, shortLeague, GRADE_NAME} from "./components/labels.js";
 import {radar} from "./components/radar.js";
 import {icon, iconHeader, iconLabel, gemMark, COL_ICONS, COL_SUFFIX} from "./components/icons.js";
 const players = await FileAttachment("./data/players.csv").csv({typed: true});
@@ -67,32 +67,49 @@ const primary = p?.club_color || "#ffffff";
 </div>` : ""}</div>
 
 ```js
-const kv = (rows) => html`<table class="kv"><tbody>${rows.map(([col, k, v]) => html`<tr><th>${iconLabel(col, k)}</th><td>${v ?? "–"}</td></tr>`)}</tbody></table>`;
+const fact = (col, labelText, value) => html`<div class="fact"><div class="fv">${value ?? "–"}</div><div class="fl">${icon(COL_ICONS[col] ?? "hash", {size: 12, title: labelText})} ${labelText}</div></div>`;
+const tile = (col, value, extra) => html`<div class="tile"><div class="tv">${extra ?? ""}${fmt(col, value)}</div><div class="tl">${label(col)}</div></div>`;
+const cardGlyph = (kind) => html`<span class="card-glyph ${kind}"></span>`;
 const seasonCols = ["apps", "starts", "minutes", "goals", "goals_open_play", "goals_penalty", "votes", "yellow_cards", "red_cards", "clean_sheets", "goals_go_ahead", "goals_winner", "captain_apps", "borrowed_apps"];
+const rateCols = ["npg_per90", "goals_per90", "votes_per_app", "team_goal_share_pct", "minutes_share_pct", "start_rate_pct", "gd_on_pitch_vs_team", "ga_on_pitch_per90", "clean_sheet_pct", "yellows_per90", "ppg_when_playing", "ppg_start_diff"];
 const seasonTable = (rows) => html`<table class="stats"><thead><tr><th>Team</th><th>League</th>${seasonCols.map((c) => html`<th>${iconHeader(c, `${label(c)} — ${describe(c)}`)}</th>`)}</tr></thead>
   <tbody>${rows.map((r) => html`<tr class="${r.team_id === p?.team_id ? "sel" : ""}"><td>${r.team}</td><td>${shortLeague(r.league)}</td>${seasonCols.map((c) => html`<td>${fmt(c, r[c])}</td>`)}</tr>`)}</tbody></table>`;
-const rateCols = ["npg_per90", "goals_per90", "votes_per_app", "team_goal_share_pct", "minutes_share_pct", "start_rate_pct", "gd_on_pitch_vs_team", "ga_on_pitch_per90", "clean_sheet_pct", "yellows_per90", "ppg_when_playing", "ppg_start_diff"];
 ```
 
 <div class="grid grid-cols-3" style="grid-auto-rows: auto;">
   <div class="card">
     <h2>Profile</h2>
-    ${p ? kv([
-      ["age", "Age", p.age], ["nationality", "Nationality", p.flag ? html`<span title="${p.nationality}" style="font-size:1.3em;cursor:help">${p.flag}</span>` : p.nationality], ["jersey", "Shirt", p.jersey], ["role", "Role", p.role],
-      ["grade", "Grade", GRADE_NAME[p.grade]], ["league", "League", p.league], ["n_teams", "Teams this season", p.n_teams],
-      ["grades_played", "Grades played", p.grades_played], ["highest_grade", "Highest grade", GRADE_NAME[p.highest_grade]],
-      ["sen_minutes", "Senior minutes", fmt("sen_minutes", p.sen_minutes)],
-      ["team_ladder_pos", "Team ladder position", p.team_ladder_pos ? `${p.team_ladder_pos} / ${p.ladder_teams}` : "–"],
-      ["team_ppg", "Team points per game", fmt("team_ppg", p.team_ppg)],
-    ]) : ""}
+    ${p ? html`<div class="facts2">
+      ${fact("age", "Age", p.age)}
+      ${fact("nationality", "Nationality", p.flag ? html`<span class="flag" title="${p.nationality}">${p.flag}</span> ${p.nationality}` : p.nationality)}
+      ${fact("jersey", "Shirt", p.jersey)}
+      ${fact("role", "Role", p.role)}
+      ${fact("grade", "Grade", GRADE_NAME[p.grade])}
+      ${fact("league", "League", shortLeague(p.league))}
+      ${fact("grades_played", "Grades played", p.grades_played)}
+      ${fact("highest_grade", "Highest grade", GRADE_NAME[p.highest_grade])}
+      ${fact("sen_minutes", "Senior minutes", fmt("sen_minutes", p.sen_minutes))}
+      ${fact("team_ladder_pos", "Team finished", p.team_ladder_pos ? `${p.team_ladder_pos} of ${p.ladder_teams}` : "–")}
+      ${fact("team_ppg", "Team points per game", fmt("team_ppg", p.team_ppg))}
+      ${fact("n_teams", "Teams this season", p.n_teams)}
+    </div>` : ""}
   </div>
   <div class="card grid-colspan-2">
-    <h2>Season 2026 by team</h2>
-    ${p ? seasonTable(rowsFor.slice().sort((a, b) => b.minutes - a.minutes)) : ""}
-    <h3 style="margin-top:1rem">Rates — ${p?.team ?? ""}</h3>
-    ${p ? html`<table class="stats"><thead><tr>${rateCols.map((c) => html`<th>${iconHeader(c, `${label(c)} — ${describe(c)}`)}</th>`)}</tr></thead><tbody><tr>${rateCols.map((c) => html`<td>${fmt(c, p[c])}</td>`)}</tr></tbody></table>` : ""}
-    <div class="icon-key">${[...new Set([...seasonCols, ...rateCols])].map((c) => html`<span>${iconHeader(c, label(c), {size: 13})} ${label(c)}</span>`)}</div>
-    <p class="muted" style="margin-top:0.5rem">Hover a column icon for its full name and definition. ${p?.minutes_est_apps > 0 ? `${p.minutes_est_apps} of ${p.apps} appearances have estimated minutes (subs not recorded).` : ""}</p>
+    <h2><span class="h2-crest">${p ? crest(p.club, 22) : ""}</span> ${p ? shortLeague(p.league) : "Season"} 2026 <span class="muted">— ${p?.team ?? ""}</span></h2>
+    ${p ? html`<div class="tiles2">
+      ${tile("apps", p.apps)}${tile("starts", p.starts)}${tile("minutes", p.minutes)}${tile("goals", p.goals)}
+      ${tile("goals_open_play", p.goals_open_play)}${tile("goals_penalty", p.goals_penalty)}${tile("votes", p.votes)}
+      ${tile("yellow_cards", p.yellow_cards, cardGlyph("y"))}${tile("red_cards", p.red_cards, cardGlyph("r"))}
+      ${p.role === "GK" ? tile("clean_sheets", p.clean_sheets) : tile("goals_go_ahead", p.goals_go_ahead)}
+      ${tile("goals_winner", p.goals_winner)}${tile("captain_apps", p.captain_apps)}
+    </div>
+    <div class="tiles2 rates">
+      ${tile("npg_per90", p.npg_per90)}${tile("votes_per_app", p.votes_per_app)}${tile("team_goal_share_pct", p.team_goal_share_pct)}
+      ${tile("minutes_share_pct", p.minutes_share_pct)}${tile("gd_on_pitch_vs_team", p.gd_on_pitch_vs_team)}
+      ${p.role === "GK" ? tile("ga_on_pitch_per90", p.ga_on_pitch_per90) : tile("ppg_start_diff", p.ppg_start_diff)}
+    </div>
+    ${p.minutes_est_apps > 0 ? html`<p class="muted">${p.minutes_est_apps} of ${p.apps} appearances have estimated minutes (subs not recorded).</p>` : ""}
+    ${rowsFor.filter((r) => r.apps > 0).length > 1 ? html`<details><summary class="muted">All teams this season</summary>${seasonTable(rowsFor.filter((r) => r.apps > 0).sort((a, b) => b.minutes - a.minutes))}</details>` : ""}` : ""}
   </div>
 </div>
 
@@ -108,10 +125,9 @@ const traits = p ? (p.role === "GK" ? GK_TRAITS : TRAITS).map(([col, invert]) =>
 
 <div class="grid grid-cols-3" style="grid-auto-rows: auto;">
   <div class="card">
-    <h2>Player traits <span class="muted">— percentile vs ${peers.length} ${p?.role === "GK" ? "goalkeepers" : "outfield players"} in this league (450+ min)</span></h2>
-    ${p ? html`<div class="radar-wrap">${radar(traits.map((t) => ({...t, label: short(t.col)})), {size: 340, accent})}
-      <table class="radar-legend"><tbody>${traits.map((t) => html`<tr><th title="${describe(t.col)}">${label(t.col)}</th><td>${fmt(t.col, t.value)}</td><td><b>${t.pct == null ? "–" : t.pct + "%"}</b></td></tr>`)}</tbody></table></div>` : ""}
-    <p class="muted">Higher is better on every axis; conceded goals and yellow cards are inverted. DRIBL records no positions, so peers are all ${p?.role === "GK" ? "goalkeepers" : "outfield players"}.</p>
+    <h2>Player traits</h2>
+    <p class="muted" style="margin-top:-0.5rem">Percentile vs ${peers.length} ${p?.role === "GK" ? "goalkeepers" : "outfield players"} in this league with 450+ minutes. Cards and goals conceded are inverted.</p>
+    ${p ? html`<div class="radar-wrap">${radar(traits.map((t) => ({...t, label: label(t.col).replace(" per 90", "/90").replace("Best-on-ground ", "").replace("On-pitch goal difference vs team", "GD vs team").replace("Share of team ", "Team ")})), {size: 360, accent, levels: 3})}</div>` : ""}
   </div>
   <div class="card grid-colspan-2">
     <h2>Season so far</h2>
@@ -136,25 +152,58 @@ const compChoices = new Map([["All competitions", "All competitions"], ...[...ne
 ```
 
 ```js
-const compSel = view(Inputs.select(compChoices, {value: "All competitions", label: "Competition"}));
+const compInput = Inputs.select(compChoices, {value: "All competitions", label: ""});
+const compSel = Generators.input(compInput);
 ```
 
 ```js
-const matchRows = allMatches.filter((r) => r.did_play).filter((r) => compSel === "All competitions" || r.league === compSel).map((r) => ({...r, opponent: r.side === "home" ? r.away_team : r.side === "away" ? r.home_team : `${r.home_team} v ${r.away_team}`, opponent_club: r.side === "home" ? r.away_club : r.side === "away" ? r.home_club : null, ha: r.side === "home" ? "H" : r.side === "away" ? "A" : "–"}));
-const matchCols = ["date", "league", "opponent", "ha", "result", "score", "starting", "minutes", "goals", "votes", "yellow_cards", "red_cards", "is_captain", "clean_sheet", "borrowed_side"];
-const matchLabels = {...headers(matchCols), ha: "Home / away", opponent: "Opponent", full_round: "Round", did_play: "Played", borrowed_side: "Borrowed for this match"};
-const matchAlign = Object.fromEntries(matchCols.filter((c) => !["league", "opponent"].includes(c)).map((c) => [c, "center"]));
-const matchHdr = Object.fromEntries(matchCols.map((c) => [c, iconHeader(c, matchLabels[c])]));
-const matchFmt = {...formats(matchCols), date: fmtDate, league: shortLeague,
-  opponent: (v, i) => { const s = document.createElement("span"); s.className = "club-cell"; s.append(crest(matchRows[i].opponent_club, 18), document.createTextNode(" " + v)); return s; },
-  result: (v) => v ? html`<span class="pill ${v}">${v}</span>` : "", ha: (v) => v};
+const matchRows = allMatches.filter((r) => r.did_play).filter((r) => compSel === "All competitions" || r.league === compSel)
+  .sort((a, b) => d3.descending(toDate(a.date), toDate(b.date)))
+  .map((r) => ({...r, opponent: r.side === "home" ? r.away_team : r.side === "away" ? r.home_team : `${r.home_team} v ${r.away_team}`,
+    opponent_club: r.side === "home" ? r.away_club : r.side === "away" ? r.home_club : null,
+    own: r.side === "home" ? r.home_score : r.away_score, opp: r.side === "home" ? r.away_score : r.home_score,
+    ha: r.side === "home" ? "H" : r.side === "away" ? "A" : "–", cup: !/State League/.test(r.league)}));
+const PAGE = 10;
+```
+
+```js
+const page = Mutable(0);
+const setPage = (n) => (page.value = Math.max(0, Math.min(n, Math.ceil(matchRows.length / PAGE) - 1)));
+```
+
+```js
+const pageRows = matchRows.slice(page * PAGE, page * PAGE + PAGE);
+const shortDate = (v) => { const d = toDate(v); return d ? d3.timeFormat("%-d %b")(d) : "–"; };
+const voteBadge = (v) => v > 0 ? html`<span class="vote v${v}">${v}</span>` : html`<span class="muted">–</span>`;
+const matchList = html`<div class="mlist">
+  <div class="mrow mhead">
+    <span></span><span></span><span>Opponent</span><span></span>
+    ${["minutes", "goals", "votes", "yellow_cards", "red_cards", "is_captain"].map((c) => html`<span>${iconHeader(c, label(c))}</span>`)}
+  </div>
+  ${pageRows.map((r) => html`<div class="mrow">
+    <span class="mcomp" title="${shortLeague(r.league)}">${icon(r.cup ? "trophy" : "ball", {size: 14, title: shortLeague(r.league)})}</span>
+    <span class="mdate">${shortDate(r.date)} <small>${r.ha}</small></span>
+    <span class="mopp">${crest(r.opponent_club, 20)} ${r.opponent}</span>
+    <span class="mres">${r.result ? html`<span class="pill ${r.result}">${r.result}</span>` : ""} <span class="score"><b class="${r.own >= r.opp ? "hi" : ""}">${r.own ?? "–"}</b> - <b class="${r.opp >= r.own ? "hi" : ""}">${r.opp ?? "–"}</b></span>${r.borrowed_side ? html`<span class="brw" title="Borrowed for this match">${icon("handshake", {size: 12})}</span>` : ""}</span>
+    <span>${fmt("minutes", r.minutes)}</span>
+    <span>${r.goals || "0"}</span>
+    <span>${voteBadge(r.votes ?? 0)}</span>
+    <span>${r.yellow_cards ? html`${cardGlyph("y")} ${r.yellow_cards}` : "0"}</span>
+    <span>${r.red_cards ? html`${cardGlyph("r")} ${r.red_cards}` : "0"}</span>
+    <span>${r.is_captain ? icon("captain", {size: 14, title: "Captain"}) : ""}</span>
+  </div>`)}
+  <div class="mnav">
+    <button class="mbtn" disabled=${page === 0 ? true : null} onclick=${() => setPage(page - 1)}>‹ Previous</button>
+    <span class="muted">${matchRows.length ? `${page * PAGE + 1}–${Math.min((page + 1) * PAGE, matchRows.length)} of ${matchRows.length}` : "No matches"}</span>
+    <button class="mbtn" disabled=${(page + 1) * PAGE >= matchRows.length ? true : null} onclick=${() => setPage(page + 1)}>Next ›</button>
+  </div>
+</div>`;
 ```
 
 <div class="card">
-  <h2>Match stats <span class="muted">— ${matchRows.length} matches played${compSel === "All competitions" ? " in all competitions" : ""}</span></h2>
-  ${p ? Inputs.table(matchRows, {columns: matchCols, header: matchHdr, format: matchFmt, align: matchAlign, rows: 30, select: false, width: {opponent: 260, league: 150}, layout: "auto"}) : ""}
-  <div class="icon-key">${matchCols.map((c) => html`<span>${iconHeader(c, matchLabels[c], {size: 13})} ${matchLabels[c]}</span>`)}</div>
-  <p class="muted">All matches DRIBL lists for this player this season, including cups and trial matches. Minutes here are DRIBL's own figures.</p>
+  <div class="mtitle"><h2>Match stats</h2>${p ? compInput : ""}</div>
+  ${p ? matchList : ""}
+  <p class="muted">Every match DRIBL lists for this player this season, cups and trials included. Minutes are DRIBL's own. Votes are the 3-2-1 best-on-ground votes for that match.</p>
 </div>
 
 ```js
