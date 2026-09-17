@@ -26,14 +26,14 @@ const searched = pid ? [] : view(Inputs.search(players, {placeholder: "Search a 
 ```js
 if (!pid) display(html`<h1>Player profile</h1><p class="muted">Pick a player to open their profile.</p>`);
 if (!pid) display(Inputs.table(searched, {columns: ["player_name", "club", "team", "league", "age", "apps", "goals", "minutes"], header: iconHeaders(["player_name", "club", "team", "league", "age", "apps", "goals", "minutes"]),
-  format: {...formats(["age", "apps", "goals", "minutes"]), player_name: (v, i) => html`<a href="./player?id=${searched[i].player_id}&team=${searched[i].team_id}">${v}</a>`}, rows: 20, select: false}));
+  format: {...formats(["age", "apps", "goals", "minutes"]), player_name: (v, i) => html`<a href="./player?id=${searched[i].player_id}&team=${searched[i].team_id}">${v}</a>`, league: shortLeague}, rows: 20, select: false}));
 if (pid && !rowsFor.length) display(html`<h1>Player not found</h1><p class="muted">No player with id <code>${pid}</code>. <a href="./player">Search instead</a>.</p>`);
 ```
 
 ```js
 const teamRows = (rowsFor.some((r) => r.apps > 0) ? rowsFor.filter((r) => r.apps > 0) : rowsFor).slice().sort((a, b) => b.minutes - a.minutes);
 const defaultTeam = teamRows.find((r) => r.team_id === tidParam)?.team_id ?? teamRows[0]?.team_id;
-const teamSel = view(Inputs.radio(new Map(teamRows.map((r) => [`${r.club} · ${GRADE_NAME[r.grade]} · ${shortLeague(r.league)} — ${r.apps} apps`, r.team_id])), {value: defaultTeam, label: rowsFor.length ? "Team" : ""}));
+const teamSel = view(Inputs.radio(new Map(teamRows.map((r) => [`${r.club} · ${GRADE_NAME[r.grade]} · ${shortLeagueOnly(r.league)} — ${r.apps} apps`, r.team_id])), {value: defaultTeam, label: rowsFor.length ? "Team" : ""}));
 ```
 
 ```js
@@ -70,8 +70,7 @@ const primary = p?.club_color || "#ffffff";
 const fact = (labelText, value) => html`<div class="fact"><div class="fv">${value ?? "–"}</div><div class="fl">${labelText}</div></div>`;
 const tile = (col, value, extra) => html`<div class="tile"><div class="tv">${extra ?? ""}${fmt(col, value)}</div><div class="tl">${label(col)}</div></div>`;
 const cardGlyph = (kind) => html`<span class="card-glyph ${kind}"></span>`;
-const seasonCols = ["apps", "starts", "minutes", "goals", "goals_open_play", "goals_penalty", "votes", "yellow_cards", "red_cards", "clean_sheets", "goals_go_ahead", "goals_winner", "captain_apps", "borrowed_apps"];
-const rateCols = ["npg_per90", "goals_per90", "votes_per_app", "team_goal_share_pct", "minutes_share_pct", "start_rate_pct", "gd_on_pitch_vs_team", "ga_on_pitch_per90", "clean_sheet_pct", "yellows_per90", "ppg_when_playing", "ppg_start_diff"];
+const seasonCols = ["apps", "starts", "minutes", "goals", "votes", "yellow_cards", "red_cards", "clean_sheets"];
 const seasonTable = (rows) => html`<table class="stats"><thead><tr><th>Club</th><th>Grade</th><th>League</th>${seasonCols.map((c) => html`<th>${iconHeader(c, `${label(c)} — ${describe(c)}`)}</th>`)}</tr></thead>
   <tbody>${rows.map((r) => html`<tr class="${r.team_id === p?.team_id ? "sel" : ""}"><td>${clubCell(r.club, 16)}</td><td>${GRADE_NAME[r.grade]}</td><td>${shortLeagueOnly(r.league)}</td>${seasonCols.map((c) => html`<td>${fmt(c, r[c])}</td>`)}</tr>`)}</tbody></table>`;
 const profileCard = () => p ? html`<div class="card">
@@ -84,7 +83,7 @@ const profileCard = () => p ? html`<div class="card">
       ${fact("Shirt", p.jersey)}
       ${fact("Role", p.role)}
       ${fact("Grade", GRADE_NAME[p.grade])}
-      ${fact("League", shortLeague(p.league))}
+      ${fact("League", shortLeagueOnly(p.league))}
       ${fact("Grades played", p.grades_played)}
       ${fact("Highest grade", GRADE_NAME[p.highest_grade])}
       ${fact("Senior minutes", fmt("sen_minutes", p.sen_minutes))}

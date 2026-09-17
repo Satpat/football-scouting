@@ -131,16 +131,28 @@ export function groupMetricSelect(form) {
   return form;
 }
 
-// Compact league / competition names for tables
+// Compact league / competition names for tables. Strips sponsor names (grounds-naming-rights
+// sponsors change and a player's match history can include junior grades that carry a
+// different sponsor than the senior State League competitions — HPG Homes, Nova, RAA and
+// Carl's Jr. all appear in the real data) and normalises every "Under N's" / "UN's" spelling
+// to "UN" so it lines up with the Grade column's own values.
 export function shortLeague(name) {
   return String(name ?? "")
-    .replace("HPG Homes State League ", "SL").replace(" - ", " ").replace("Under 18's", "U18").replace("(18s)", "U18")
-    .replace("(Seniors)", "").replace("(Reserves)", "Res").replace("Reserves", "Res").replace("Finals Series", "Finals").replace("Final Series", "Finals")
-    .replace("Federation Cup", "Fed Cup").replace("Hahn Australia Cup and ", "").replace("Senior Men's Trial Matches", "Trials").replace("Trial Matches", "Trials")
+    .replace(/^(HPG Homes|Nova|RAA)\s+/, "")
+    .replace(/Carl['’]s Jr\.?\s*/i, "")
+    .replace("State League ", "SL")
+    .replace(" - ", " ")
+    .replace(/\((\d+)s\)/, "U$1")
+    .replace(/Under (\d+)'?s?/g, "U$1")
+    .replace(/\bU(\d+)'s\b/g, "U$1")
+    .replace("(Seniors)", "").replace("(Reserves)", "Res").replace("Reserves", "Res")
+    .replace("Finals Series", "Finals").replace("Final Series", "Finals")
+    .replace("Federation Cup", "Fed Cup").replace("Hahn Australia Cup", "Cup")
+    .replace(/Senior Men'?s\s*/, "").replace("Trial Matches", "Trials")
     .replace(/\s+/g, " ").trim();
 }
-// shortLeague(), minus the trailing grade token — for use next to a Grade column, where repeating "U18"/"Res" is redundant.
+// shortLeague(), minus the trailing grade token — for use next to a Grade column, where repeating "U14"-"U18"/"Res" is redundant.
 export function shortLeagueOnly(name) {
   const s = shortLeague(name);
-  return s.replace(/\s*(U18'?s?|Res)$/, "").trim() || s;
+  return s.replace(/\s*(U1[4-8]|Res)$/, "").trim() || s;
 }

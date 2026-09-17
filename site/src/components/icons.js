@@ -39,6 +39,9 @@ const P = {
   yellowcard: '<rect x="6" y="3" width="12" height="18" rx="2" fill="#f2c200" stroke="#f2c200"/>',
   gem: '<path d="M6 3h12l4 6-10 12L2 9l4-6z"/><path d="M2 9h20M9 3l3 6 3-6M6 9l6 12M18 9l-6 12"/>',
   whistle: '<circle cx="9" cy="14" r="5"/><path d="M13 12l8-4v3l-7 3"/><path d="M9 9V6"/>',
+  // rate/per-90 gauge: distinct from the raw-count icons it sits beside, so a rate column
+  // reads as "a rate" at a glance without needing to parse the suffix text first
+  gauge: '<path d="M4 18a8 8 0 1 1 16 0"/><path d="M12 18 16.5 10.5"/><circle cx="12" cy="18" r="1.3" fill="currentColor" stroke="none"/>',
 };
 
 export const COL_ICONS = {
@@ -51,9 +54,9 @@ export const COL_ICONS = {
   goals_go_ahead: "trending", goals_winner: "zap", goals_equaliser: "swap", goals_late: "clock",
   team_gf: "plus", team_ga: "minus", age: "cake", nationality: "globe", jersey: "shirt", role: "user", grade: "layers",
   n_teams: "users", grades_played: "route", highest_grade: "trending", sen_minutes: "clock", team_ladder_pos: "ladder",
-  team_ppg: "chart", npg_per90: "ball", goals_per90: "ball", votes_per_app: "star", team_goal_share_pct: "percent",
-  minutes_share_pct: "percent", start_rate_pct: "play", gd_on_pitch_vs_team: "chart", ga_on_pitch_per90: "minus",
-  yellows_per90: "yellowcard", ppg_when_playing: "chart", ppg_start_diff: "chart", team: "shield", season: "calendar",
+  team_ppg: "chart", npg_per90: "gauge", goals_per90: "gauge", votes_per_app: "star", team_goal_share_pct: "percent",
+  minutes_share_pct: "percent", start_rate_pct: "play", gd_on_pitch_vs_team: "chart", ga_on_pitch_per90: "gauge",
+  yellows_per90: "gauge", ppg_when_playing: "chart", ppg_start_diff: "chart", team: "shield", season: "calendar",
   clubs: "shield", leagues: "trophy", played: "list", started: "play", was_goalkeeper: "gloves",
 };
 
@@ -61,7 +64,7 @@ export const COL_ICONS = {
 export const COL_SUFFIX = {
   goals_open_play: "NP", goals_per90: "/90", npg_per90: "NP/90", goals_penalty: "pen", own_goals: "OG",
   team_goal_share_pct: "goals", minutes_share_pct: "min", start_rate_pct: "%", clean_sheet_pct: "%",
-  gd_on_pitch_vs_team: "GD", ga_on_pitch_per90: "GA/90", yellows_per90: "/90", ppg_when_playing: "PPG", ppg_start_diff: "±PPG",
+  gd_on_pitch_vs_team: "GD", ga_on_pitch_per90: "GA/90", yellows_per90: "/90", votes_per_app: "/app", ppg_when_playing: "PPG", ppg_start_diff: "±PPG",
   goals_late: "75'", goals_equaliser: "=", goals_go_ahead: "lead", goals_winner: "win", sen_minutes: "SEN", team_gf: "GF", team_ga: "GA",
   sub_apps: "sub", captain_apps: "C", borrowed_apps: "brw", n_teams: "", highest_grade: "top",
 };

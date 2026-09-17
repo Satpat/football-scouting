@@ -8,7 +8,7 @@ sql:
 # Player explorer
 
 ```js
-import {labels, label, short, describe, fmt, fmtDate, iconHeaders, formats, metricOptions, groupMetricSelect, crest, clubCell, shortLeague, GRADES, GRADE_NAME, GRADE_COLORS} from "./components/labels.js";
+import {labels, label, short, describe, fmt, fmtDate, iconHeaders, formats, metricOptions, groupMetricSelect, crest, clubCell, shortLeague, shortLeagueOnly, GRADES, GRADE_NAME, GRADE_COLORS} from "./components/labels.js";
 import {gemMark} from "./components/icons.js";
 const players = await FileAttachment("./data/players.csv").csv({typed: true});
 const leagues = await FileAttachment("./data/leagues.json").json();
@@ -99,6 +99,9 @@ const setSelected = (d) => (selected.value = d);
 ```js
 const tipChannels = {Player: "player_name", Club: "club", Team: "team", League: "league", Age: "age", Apps: "apps", Minutes: "minutes",
   Goals: "goals", "NP goals/90": "npg_per90", Votes: "votes", "Senior mins": "sen_minutes"};
+const tipFormat = {x: (v) => fmt(xs, v), y: (v) => fmt(ys, v), fill: (g) => GRADE_NAME[g], stroke: false, strokeWidth: false,
+  League: shortLeague, Minutes: (v) => fmt("minutes", v), Apps: (v) => fmt("apps", v), Goals: (v) => fmt("goals", v),
+  "NP goals/90": (v) => fmt("npg_per90", v), Votes: (v) => fmt("votes", v), "Senior mins": (v) => fmt("sen_minutes", v)};
 function chart(width) {
   const p = Plot.plot({
     width, height: 560, grid: true, inset: 12, marginLeft: 50,
@@ -113,9 +116,7 @@ function chart(width) {
         x: xs, y: ys, fill: "grade", r: 4.5, fillOpacity: 0.65,
         stroke: (d) => (d.hidden_gem ? "#b8860b" : "white"), strokeWidth: (d) => (d.hidden_gem ? 1.5 : 0.5),
         channels: tipChannels,
-        tip: {format: {x: (v) => fmt(xs, v), y: (v) => fmt(ys, v), fill: (g) => GRADE_NAME[g], stroke: false, strokeWidth: false,
-          Minutes: (v) => fmt("minutes", v), Apps: (v) => fmt("apps", v), Goals: (v) => fmt("goals", v),
-          "NP goals/90": (v) => fmt("npg_per90", v), Votes: (v) => fmt("votes", v), "Senior mins": (v) => fmt("sen_minutes", v)}},
+        tip: {format: tipFormat},
       }),
       club === "(none)" ? null : Plot.dot(withXY.filter((d) => d.club === club), {x: xs, y: ys, r: 8, stroke: "red", strokeWidth: 2, fill: "none"}),
       Plot.text(topN, {x: xs, y: ys, text: "player_name", dy: -9, fontSize: 10, fill: "currentColor", stroke: "var(--theme-background)", strokeWidth: 3}),
@@ -130,7 +131,9 @@ function chart(width) {
 <div class="grid grid-cols-3" style="grid-auto-rows: auto;">
   <div class="card grid-colspan-2">
     <h2>${label(ys)} vs ${label(xs)} <span class="muted">— ${withXY.length.toLocaleString()} players shown${gemsOnly ? " (hidden gems only)" : ""}</span></h2>
-    <p class="muted">${describe(ys)}. ${describe(xs)}. Dashed lines are medians of the players shown. Gold outline = hidden gem (no senior minutes).${yReversed ? " Axis flipped so the top shows the best performers." : ""} Each point is one player-season (a player who played for two teams appears twice). Hover for details, click to pin a player.</p>
+    <p class="muted">${describe(ys)}. ${describe(xs)}.</p>
+    <p class="muted">Dashed lines are medians of the players shown. Gold outline = hidden gem (no senior minutes).${yReversed ? " Axis flipped so the top shows the best performers." : ""}</p>
+    <p class="muted">Each point is one player-season (a player who played for two teams appears twice). Hover for details, click to pin a player.</p>
     <div style="min-height: 560px">${resize(chart)}</div>
   </div>
   <div class="card">
@@ -184,12 +187,12 @@ const matchCols = ["date_local", "round", "opponent", "home_away", "result", "te
 ## Players shown
 
 ```js
-const tableCols = ["player_name", "club", "league", "grade", "age", "role", "apps", "starts", "minutes", "goals", "goals_open_play", "npg_per90", "team_goal_share_pct", "votes", "votes_per_app", "gd_on_pitch_vs_team", "clean_sheets", "ga_on_pitch_per90", "yellow_cards", "red_cards", "captain_apps", "borrowed_apps", "sen_minutes", "hidden_gem"];
+const tableCols = ["player_name", "club", "league", "grade", "age", "role", "apps", "starts", "minutes", "goals", "npg_per90", "team_goal_share_pct", "votes", "votes_per_app", "gd_on_pitch_vs_team", "clean_sheets", "ga_on_pitch_per90", "yellow_cards", "red_cards", "captain_apps", "borrowed_apps", "sen_minutes", "hidden_gem"];
 const searched = view(Inputs.search(filtered, {placeholder: "Search player, club or team…", columns: ["player_name", "club", "team"]}));
 ```
 
 ```js
-const picked = view(Inputs.table(searched, {columns: tableCols, header: iconHeaders(tableCols), format: {...formats(tableCols), player_name: (v, i) => html`<a href="./player?id=${searched[i].player_id}&team=${searched[i].team_id}">${v}</a>`, club: (v) => clubCell(v, 16)}, rows: 18, multiple: false,
+const picked = view(Inputs.table(searched, {columns: tableCols, header: iconHeaders(tableCols), format: {...formats(tableCols), player_name: (v, i) => html`<a href="./player?id=${searched[i].player_id}&team=${searched[i].team_id}">${v}</a>`, club: (v) => clubCell(v, 16), league: shortLeagueOnly}, rows: 18, multiple: false,
   sort: ys, reverse: labels[ys]?.higher_is_better !== false, width: {player_name: 170, club: 150, league: 170}}));
 ```
 

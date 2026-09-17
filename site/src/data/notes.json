@@ -13,7 +13,7 @@
  },
  {
   "topic": "Minutes estimated",
-  "note": "Under 18 leagues almost never record sub minutes. Subs without a recorded minute are assumed on at 70'. Starters on a team-side that logged no subs are assumed to play the full match. Flagged in minutes_estimated / minutes_est_apps."
+  "note": "U18 leagues rarely record sub minutes. When missing, we assume a sub came on at 70', and a starter on a side with no recorded subs played the full match. Flagged in minutes_estimated / minutes_est_apps."
  },
  {
   "topic": "Goals",
@@ -29,19 +29,19 @@
  },
  {
   "topic": "Votes",
-  "note": "Per-match 3-2-1 votes recorded in DRIBL (likely best-on-ground). Not shown publicly. ~249 of 294 matches have votes."
+  "note": "Per-match 3-2-1 votes from DRIBL, likely best-on-ground — not shown publicly elsewhere. Recorded for about 249 of 294 matches."
  },
  {
   "topic": "Borrowed",
-  "note": "DRIBL flag: player borrowed from another team in the club for that match. Direct 'playing up/down' signal."
+  "note": "DRIBL's flag for a player borrowed from another team in the club that match — a direct playing up/down signal."
  },
  {
   "topic": "Pathway",
-  "note": "sen/res/u18 minutes summed across all the player's teams. hidden_gem = not a senior-grade row and zero senior minutes all season."
+  "note": "Senior, reserves and U18 minutes summed across all the player's teams. A hidden gem is a non-senior row with zero senior minutes all season."
  },
  {
   "topic": "Shortlist score",
-  "note": "Players with >= 450 minutes and >= 5 apps. Rates ending in _adj are shrunk toward the league mean (prior = 450 minutes / 5 apps) so short bursts don't top the list. z-scores within league. Outfield weights: {'npg_per90_adj': 0.35, 'votes_per_app_adj': 0.25, 'gd_on_pitch_vs_team': 0.2, 'team_goal_share_pct': 0.1, 'minutes_share_pct': 0.1}. GK weights: {'ga_abs_neg': 0.25, 'ga_rel_neg': 0.15, 'clean_sheet_pct': 0.3, 'votes_per_app_adj': 0.2, 'minutes_share_pct': 0.1} (ga_abs_neg = -GA/90 on pitch, ga_rel_neg = -(GA/90 on pitch minus team GA/match)). gem_score = scout_score + 0.3 if hidden_gem + 0.15 if U18 player."
+  "note": "Eligible: 450+ minutes and 5+ apps. Rates are shrunk toward the league mean, as if starting from 450 minutes / 5 apps, so short bursts don't top the list — then compared as z-scores within league. Outfield weights: non-penalty goals/90 35%, votes/app 25%, on-pitch goal difference 20%, share of team goals 10%, share of team minutes 10%. Goalkeeper weights: goals conceded/90 (inverted) 25%, goals conceded vs team rate (inverted) 15%, clean sheet rate 30%, votes/app 20%, share of team minutes 10%. Hidden gems get +0.3, U18 players +0.15."
  },
  {
   "topic": "Ladder / opponent strength",

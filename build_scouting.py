@@ -507,6 +507,18 @@ def build_player_season(app: pd.DataFrame, ctx: pd.DataFrame, matches: pd.DataFr
 OUTFIELD_WEIGHTS = {"npg_per90_adj": 0.35, "votes_per_app_adj": 0.25, "gd_on_pitch_vs_team": 0.20, "team_goal_share_pct": 0.10, "minutes_share_pct": 0.10}
 GK_WEIGHTS = {"ga_abs_neg": 0.25, "ga_rel_neg": 0.15, "clean_sheet_pct": 0.30, "votes_per_app_adj": 0.20, "minutes_share_pct": 0.10}
 
+# Plain-English labels for the weight keys above, used only when rendering the "Shortlist score" note.
+WEIGHT_LABELS = {
+    "npg_per90_adj": "non-penalty goals/90", "votes_per_app_adj": "votes/app",
+    "gd_on_pitch_vs_team": "on-pitch goal difference", "team_goal_share_pct": "share of team goals",
+    "minutes_share_pct": "share of team minutes", "ga_abs_neg": "goals conceded/90 (inverted)",
+    "ga_rel_neg": "goals conceded vs team rate (inverted)", "clean_sheet_pct": "clean sheet rate",
+}
+
+
+def _weights_str(weights):
+    return ", ".join(f"{WEIGHT_LABELS.get(k, k)} {v:.0%}" for k, v in weights.items())
+
 
 def shrink_rate(events: pd.Series, exposure: pd.Series, prior_rate: float, prior_exposure: float) -> pd.Series:
     """Bayesian-style shrinkage: (events + prior) / (exposure + prior_exposure). Small samples move toward the league rate."""
@@ -599,18 +611,18 @@ NOTES = [
     ("Source", "DRIBL match centre API (fsa.dribl.com), 2026 season, SL1 + SL2 all grades. Extracted with extract_browser.js."),
     ("Positions", "DRIBL does not record positions or formations for these leagues (1 player of ~530 sampled). Only GK vs outfield is known."),
     ("Minutes", "Starters: sub-off minute (or red card) else match length. Subs: match length minus sub-on minute. Bench unused: 0."),
-    ("Minutes estimated", "Under 18 leagues almost never record sub minutes. Subs without a recorded minute are assumed on at 70'. "
-                          "Starters on a team-side that logged no subs are assumed to play the full match. Flagged in minutes_estimated / minutes_est_apps."),
+    ("Minutes estimated", "U18 leagues rarely record sub minutes. When missing, we assume a sub came on at 70', and a starter on a "
+                          "side with no recorded subs played the full match. Flagged in minutes_estimated / minutes_est_apps."),
     ("Goals", "From the lineup goals list. Own goals excluded from 'goals'; penalties split out. Non-pen goals per 90 = goals_open_play / minutes * 90."),
     ("Game state", "Reconstructed from the match-centre goal timeline. equaliser = level after; go_ahead = takes lead; winner = go-ahead goal after which the team never fell level, in a match it won; late = 75'+."),
     ("On-pitch GD", "Goals for/against while the player was on (using the minute window). gd_on_pitch_vs_team subtracts the team's regular-season GD per match."),
-    ("Votes", "Per-match 3-2-1 votes recorded in DRIBL (likely best-on-ground). Not shown publicly. ~249 of 294 matches have votes."),
-    ("Borrowed", "DRIBL flag: player borrowed from another team in the club for that match. Direct 'playing up/down' signal."),
-    ("Pathway", "sen/res/u18 minutes summed across all the player's teams. hidden_gem = not a senior-grade row and zero senior minutes all season."),
-    ("Shortlist score", f"Players with >= {MIN_MINUTES} minutes and >= {MIN_APPS} apps. Rates ending in _adj are shrunk toward the league mean "
-                        f"(prior = {PRIOR_MINUTES} minutes / {PRIOR_APPS} apps) so short bursts don't top the list. z-scores within league. "
-                        f"Outfield weights: {OUTFIELD_WEIGHTS}. GK weights: {GK_WEIGHTS} (ga_abs_neg = -GA/90 on pitch, ga_rel_neg = -(GA/90 on pitch minus team GA/match)). "
-                        f"gem_score = scout_score + {HIDDEN_GEM_BONUS} if hidden_gem + {U18_BONUS} if U18 player."),
+    ("Votes", "Per-match 3-2-1 votes from DRIBL, likely best-on-ground — not shown publicly elsewhere. Recorded for about 249 of 294 matches."),
+    ("Borrowed", "DRIBL's flag for a player borrowed from another team in the club that match — a direct playing up/down signal."),
+    ("Pathway", "Senior, reserves and U18 minutes summed across all the player's teams. A hidden gem is a non-senior row with zero senior minutes all season."),
+    ("Shortlist score", f"Eligible: {MIN_MINUTES}+ minutes and {MIN_APPS}+ apps. Rates are shrunk toward the league mean, as if starting from "
+                        f"{PRIOR_MINUTES} minutes / {PRIOR_APPS} apps, so short bursts don't top the list — then compared as z-scores within league. "
+                        f"Outfield weights: {_weights_str(OUTFIELD_WEIGHTS)}. Goalkeeper weights: {_weights_str(GK_WEIGHTS)}. "
+                        f"Hidden gems get +{HIDDEN_GEM_BONUS:g}, U18 players +{U18_BONUS:g}."),
     ("Ladder / opponent strength", "Regular-season ladders only. opp_top_half = opponent finished in the top half of its league."),
     ("PPG with/without", "Regular season only, only when the player started >= 3 and missed >= 3. Small samples: treat as a flag, not evidence."),
     ("Not available", "Assists, shots, xG, passes, tackles, positions, age/DOB, transfer status. Data is entered by club volunteers and can contain attribution errors."),

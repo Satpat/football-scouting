@@ -14,11 +14,13 @@ Source: Football SA's DRIBL match centre (fsa.dribl.com), 2026 season, HPG Homes
 
 ## What DRIBL records — and what it doesn't
 
-DRIBL lineups carry: who was named, who started, substitution minutes, goals (with penalty and own-goal flags), cards, captain and goalkeeper flags, a per-match "borrowed from another team" flag, and 3-2-1 votes. That is the whole on-ball picture. There are **no assists, shots, expected goals, passes, tackles, positions or ages**. Positions and formations exist as fields but are essentially never filled in for these leagues, so the only role split is goalkeeper vs outfield.
+DRIBL lineups carry: who was named, who started, substitution minutes, goals (with penalty and own-goal flags), cards, captain and goalkeeper flags, a per-match "borrowed from another team" flag, and 3-2-1 votes. That is the whole on-ball picture.
+
+There are **no assists, shots, expected goals, passes, tackles, positions or ages**. Positions and formations exist as fields but are essentially never filled in for these leagues, so the only role split is goalkeeper vs outfield.
 
 ## Method notes
 
-${notes.map((n) => html`<p><b>${n.topic}.</b> ${n.note}</p>`)}
+<div class="notes-cols">${notes.map((n) => html`<p><b>${n.topic}.</b> ${n.note}</p>`)}</div>
 
 ## Reading the numbers responsibly
 

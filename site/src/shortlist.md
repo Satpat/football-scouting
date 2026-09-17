@@ -12,7 +12,8 @@ const leagues = await FileAttachment("./data/leagues.json").json();
 const notes = await FileAttachment("./data/notes.json").json();
 ```
 
-<p class="muted">Players with at least 450 minutes and 5 appearances, ranked within role by <b>gem score</b>: a league-adjusted composite of non-penalty goals per 90, best-on-ground votes, on-pitch goal difference vs the team, share of team goals and minutes share, plus a bonus for having no senior minutes and for being a U18 player. Rates are shrunk toward the league average so short bursts don't dominate. Details on the <a href="./about">About</a> page.</p>
+<p class="muted">Players with at least 450 minutes and 5 appearances, ranked within role by <b>gem score</b> — a league-adjusted composite of non-penalty goals per 90, best-on-ground votes, on-pitch goal difference, and share of team goals and minutes.</p>
+<p class="muted">Bonus for no senior minutes and for being a U18 player. Rates are shrunk toward the league average so short bursts don't dominate — details on the <a href="./about">About</a> page.</p>
 
 <div class="section">
   <div>
@@ -65,8 +66,8 @@ const rows = shortlist.filter((d) => d.role === role && division.includes(d.divi
 ```
 
 ```js
-const outfieldCols = ["shown_rank", "player_name", "club", "league", "grade", "age", "gem_score", "apps", "minutes", "goals_open_play", "npg_per90", "team_goal_share_pct", "goals_go_ahead", "goals_winner", "votes", "gd_on_pitch_vs_team", "sen_minutes", "borrowed_apps", "team_ladder_pos"];
-const gkCols = ["shown_rank", "player_name", "club", "league", "grade", "age", "gem_score", "apps", "minutes", "ga_on_pitch_per90", "clean_sheets", "clean_sheet_pct", "votes", "sen_minutes", "borrowed_apps", "team_ladder_pos"];
+const outfieldCols = ["shown_rank", "player_name", "club", "league", "grade", "age", "gem_score", "apps", "minutes", "npg_per90", "team_goal_share_pct", "goals_go_ahead", "goals_winner", "votes_per_app", "gd_on_pitch_vs_team", "borrowed_apps", "team_ladder_pos"];
+const gkCols = ["shown_rank", "player_name", "club", "league", "grade", "age", "gem_score", "apps", "minutes", "ga_on_pitch_per90", "clean_sheets", "clean_sheet_pct", "votes_per_app", "borrowed_apps", "team_ladder_pos"];
 const cols = role === "GK" ? gkCols : outfieldCols;
 const hdr = {...iconHeaders(cols), shown_rank: "#"};
 const gemScoreCell = (v, i) => {
@@ -100,5 +101,5 @@ const fmts = {...formats(cols), shown_rank: (v) => v, league: shortLeagueOnly, g
 
 <div class="card">
   <h2>How the score is built</h2>
-  ${notes.filter((n) => ["Shortlist score", "Pathway", "Votes", "Borrowed", "Minutes estimated"].includes(n.topic)).map((n) => html`<p><b>${n.topic}.</b> ${n.note}</p>`)}
+  <div class="notes-cols">${notes.filter((n) => ["Shortlist score", "Pathway", "Votes", "Borrowed", "Minutes estimated"].includes(n.topic)).map((n) => html`<p><b>${n.topic}.</b> ${n.note}</p>`)}</div>
 </div>
