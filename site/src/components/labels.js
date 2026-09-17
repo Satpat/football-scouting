@@ -73,3 +73,12 @@ export function formats(cols) { return Object.fromEntries(cols.map((c) => [c, (v
 export function metricOptions(cols) {
   return new Map(cols.filter((c) => labels[c]?.metric).map((c) => [label(c), c]));
 }
+
+// Compact league / competition names for tables
+export function shortLeague(name) {
+  return String(name ?? "")
+    .replace("HPG Homes State League ", "SL").replace(" - ", " ").replace("Under 18's", "U18").replace("(18s)", "U18")
+    .replace("(Seniors)", "").replace("(Reserves)", "Res").replace("Reserves", "Res").replace("Finals Series", "Finals").replace("Final Series", "Finals")
+    .replace("Federation Cup", "Fed Cup").replace("Hahn Australia Cup and ", "").replace("Senior Men's Trial Matches", "Trials").replace("Trial Matches", "Trials")
+    .replace(/\s+/g, " ").trim();
+}

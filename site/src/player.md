@@ -7,7 +7,7 @@ sql:
 ---
 
 ```js
-import {label, short, describe, fmt, fmtDate, headers, formats, crest, clubCell, clubInfo, percentile, GRADE_NAME} from "./components/labels.js";
+import {label, short, describe, fmt, fmtDate, headers, formats, crest, clubCell, clubInfo, percentile, shortLeague, GRADE_NAME} from "./components/labels.js";
 import {radar} from "./components/radar.js";
 import {icon, iconHeader, iconLabel, gemMark, COL_ICONS, COL_SUFFIX} from "./components/icons.js";
 const players = await FileAttachment("./data/players.csv").csv({typed: true});
@@ -70,7 +70,7 @@ const primary = p?.club_color || "#ffffff";
 const kv = (rows) => html`<table class="kv"><tbody>${rows.map(([col, k, v]) => html`<tr><th>${iconLabel(col, k)}</th><td>${v ?? "–"}</td></tr>`)}</tbody></table>`;
 const seasonCols = ["apps", "starts", "minutes", "goals", "goals_open_play", "goals_penalty", "votes", "yellow_cards", "red_cards", "clean_sheets", "goals_go_ahead", "goals_winner", "captain_apps", "borrowed_apps"];
 const seasonTable = (rows) => html`<table class="stats"><thead><tr><th>Team</th><th>League</th>${seasonCols.map((c) => html`<th>${iconHeader(c, `${label(c)} — ${describe(c)}`)}</th>`)}</tr></thead>
-  <tbody>${rows.map((r) => html`<tr class="${r.team_id === p?.team_id ? "sel" : ""}"><td>${r.team}</td><td>${r.league.replace("HPG Homes State League ", "SL")}</td>${seasonCols.map((c) => html`<td>${fmt(c, r[c])}</td>`)}</tr>`)}</tbody></table>`;
+  <tbody>${rows.map((r) => html`<tr class="${r.team_id === p?.team_id ? "sel" : ""}"><td>${r.team}</td><td>${shortLeague(r.league)}</td>${seasonCols.map((c) => html`<td>${fmt(c, r[c])}</td>`)}</tr>`)}</tbody></table>`;
 const rateCols = ["npg_per90", "goals_per90", "votes_per_app", "team_goal_share_pct", "minutes_share_pct", "start_rate_pct", "gd_on_pitch_vs_team", "ga_on_pitch_per90", "clean_sheet_pct", "yellows_per90", "ppg_when_playing", "ppg_start_diff"];
 ```
 
@@ -132,7 +132,7 @@ const allMatches = p
   ? (await sql`SELECT * FROM member_matches WHERE player_id = ${p.player_id} ORDER BY date`).toArray().map((r) => r.toJSON())
   : [];
 const seasonRows = allMatches.filter((r) => r.did_play);
-const compChoices = ["All competitions", ...new Set(allMatches.map((r) => r.league))];
+const compChoices = new Map([["All competitions", "All competitions"], ...[...new Set(allMatches.map((r) => r.league))].map((l) => [shortLeague(l), l])]);
 ```
 
 ```js
@@ -141,18 +141,18 @@ const compSel = view(Inputs.select(compChoices, {value: "All competitions", labe
 
 ```js
 const matchRows = allMatches.filter((r) => compSel === "All competitions" || r.league === compSel).map((r) => ({...r, opponent: r.side === "home" ? r.away_team : r.side === "away" ? r.home_team : `${r.home_team} v ${r.away_team}`, opponent_club: r.side === "home" ? r.away_club : r.side === "away" ? r.home_club : null, ha: r.side === "home" ? "H" : r.side === "away" ? "A" : "–"}));
-const matchCols = ["date", "league", "full_round", "opponent", "ha", "result", "score", "did_play", "starting", "minutes", "goals", "votes", "yellow_cards", "red_cards", "is_captain", "clean_sheet", "borrowed_side"];
+const matchCols = ["date", "league", "opponent", "ha", "result", "score", "did_play", "starting", "minutes", "goals", "votes", "yellow_cards", "red_cards", "is_captain", "clean_sheet", "borrowed_side"];
 const matchLabels = {...headers(matchCols), ha: "Home / away", opponent: "Opponent", full_round: "Round", did_play: "Played", borrowed_side: "Borrowed for this match"};
-const matchAlign = Object.fromEntries(matchCols.filter((c) => !["league", "opponent", "full_round"].includes(c)).map((c) => [c, "center"]));
+const matchAlign = Object.fromEntries(matchCols.filter((c) => !["league", "opponent"].includes(c)).map((c) => [c, "center"]));
 const matchHdr = Object.fromEntries(matchCols.map((c) => [c, iconHeader(c, matchLabels[c])]));
-const matchFmt = {...formats(matchCols), date: fmtDate,
+const matchFmt = {...formats(matchCols), date: fmtDate, league: shortLeague,
   opponent: (v, i) => { const s = document.createElement("span"); s.className = "club-cell"; s.append(crest(matchRows[i].opponent_club, 18), document.createTextNode(" " + v)); return s; },
   result: (v) => v ? html`<span class="pill ${v}">${v}</span>` : "", ha: (v) => v};
 ```
 
 <div class="card">
   <h2>Match stats <span class="muted">— ${matchRows.length} matches${compSel === "All competitions" ? " in all competitions" : ""}</span></h2>
-  ${p ? Inputs.table(matchRows, {columns: matchCols, header: matchHdr, format: matchFmt, align: matchAlign, rows: 30, select: false, width: {opponent: 260, league: 220, full_round: 110}, layout: "auto"}) : ""}
+  ${p ? Inputs.table(matchRows, {columns: matchCols, header: matchHdr, format: matchFmt, align: matchAlign, rows: 30, select: false, width: {opponent: 260, league: 150}, layout: "auto"}) : ""}
   <div class="icon-key">${matchCols.map((c) => html`<span>${iconHeader(c, matchLabels[c], {size: 13})} ${matchLabels[c]}</span>`)}</div>
   <p class="muted">All matches DRIBL lists for this player this season, including cups and trial matches. Minutes here are DRIBL's own figures.</p>
 </div>
