@@ -140,8 +140,8 @@ const compSel = view(Inputs.select(compChoices, {value: "All competitions", labe
 ```
 
 ```js
-const matchRows = allMatches.filter((r) => compSel === "All competitions" || r.league === compSel).map((r) => ({...r, opponent: r.side === "home" ? r.away_team : r.side === "away" ? r.home_team : `${r.home_team} v ${r.away_team}`, opponent_club: r.side === "home" ? r.away_club : r.side === "away" ? r.home_club : null, ha: r.side === "home" ? "H" : r.side === "away" ? "A" : "–"}));
-const matchCols = ["date", "league", "opponent", "ha", "result", "score", "did_play", "starting", "minutes", "goals", "votes", "yellow_cards", "red_cards", "is_captain", "clean_sheet", "borrowed_side"];
+const matchRows = allMatches.filter((r) => r.did_play).filter((r) => compSel === "All competitions" || r.league === compSel).map((r) => ({...r, opponent: r.side === "home" ? r.away_team : r.side === "away" ? r.home_team : `${r.home_team} v ${r.away_team}`, opponent_club: r.side === "home" ? r.away_club : r.side === "away" ? r.home_club : null, ha: r.side === "home" ? "H" : r.side === "away" ? "A" : "–"}));
+const matchCols = ["date", "league", "opponent", "ha", "result", "score", "starting", "minutes", "goals", "votes", "yellow_cards", "red_cards", "is_captain", "clean_sheet", "borrowed_side"];
 const matchLabels = {...headers(matchCols), ha: "Home / away", opponent: "Opponent", full_round: "Round", did_play: "Played", borrowed_side: "Borrowed for this match"};
 const matchAlign = Object.fromEntries(matchCols.filter((c) => !["league", "opponent"].includes(c)).map((c) => [c, "center"]));
 const matchHdr = Object.fromEntries(matchCols.map((c) => [c, iconHeader(c, matchLabels[c])]));
@@ -151,7 +151,7 @@ const matchFmt = {...formats(matchCols), date: fmtDate, league: shortLeague,
 ```
 
 <div class="card">
-  <h2>Match stats <span class="muted">— ${matchRows.length} matches${compSel === "All competitions" ? " in all competitions" : ""}</span></h2>
+  <h2>Match stats <span class="muted">— ${matchRows.length} matches played${compSel === "All competitions" ? " in all competitions" : ""}</span></h2>
   ${p ? Inputs.table(matchRows, {columns: matchCols, header: matchHdr, format: matchFmt, align: matchAlign, rows: 30, select: false, width: {opponent: 260, league: 150}, layout: "auto"}) : ""}
   <div class="icon-key">${matchCols.map((c) => html`<span>${iconHeader(c, matchLabels[c], {size: 13})} ${matchLabels[c]}</span>`)}</div>
   <p class="muted">All matches DRIBL lists for this player this season, including cups and trial matches. Minutes here are DRIBL's own figures.</p>

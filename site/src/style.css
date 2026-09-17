@@ -98,3 +98,14 @@ form[class*="inputs"] { max-width: 100%; }
 th .ico-hdr { width: 100%; justify-content: center; }
 table.stats th, table.stats td { text-align: center; }
 table.stats th:first-child, table.stats td:first-child, table.stats th:nth-child(2), table.stats td:nth-child(2) { text-align: left; }
+
+/* icon headers must never be ellipsised by the table's narrow numeric columns */
+form table th { overflow: visible !important; text-overflow: clip !important; min-width: 2.2em; }
+th .ico-hdr svg { flex: none; }
+
+/* breathing room after headings, everywhere */
+h1 { margin-bottom: 1rem; }
+h2 { margin-bottom: 0.75rem; }
+h3 { margin-bottom: 0.5rem; }
+.card h2 { margin-top: 0; margin-bottom: 0.75rem; }
+.card h2 + p.muted { margin-top: 0; }
