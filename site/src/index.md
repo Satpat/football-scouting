@@ -9,6 +9,7 @@ sql:
 
 ```js
 import {labels, label, short, describe, fmt, fmtDate, headers, formats, metricOptions, crest, GRADES, GRADE_NAME, GRADE_COLORS} from "./components/labels.js";
+import {gemMark} from "./components/icons.js";
 const players = await FileAttachment("./data/players.csv").csv({typed: true});
 const leagues = await FileAttachment("./data/leagues.json").json();
 const meta = await FileAttachment("./data/meta.json").json();
@@ -109,7 +110,7 @@ function chart(width) {
 <div class="grid grid-cols-3" style="grid-auto-rows: auto;">
   <div class="card grid-colspan-2">
     <h2>${label(ys)} vs ${label(xs)} <span class="muted">— ${withXY.length.toLocaleString()} players shown${gemsOnly ? " (hidden gems only)" : ""}</span></h2>
-    <p class="muted">${describe(ys)}. ${describe(xs)}. Dashed lines are medians of the players shown. Gold outline = hidden gem.</p>
+    <p class="muted">${describe(ys)}. ${describe(xs)}. Dashed lines are medians of the players shown. Gold outline = hidden gem (no senior minutes).</p>
     ${resize(chart)}
   </div>
   <div class="card">
@@ -123,7 +124,7 @@ function detail(d) {
   const gk = d.role === "GK";
   return html`<h2 style="display:flex;align-items:center;gap:8px">${crest(d.club, 28)} <a href="./player?id=${d.player_id}&team=${d.team_id}">${d.player_name}</a></h2>
   <p>${d.club} · ${d.team} · age ${d.age ?? "–"}</p>
-  <div class="badges"><span class="badge grade">${GRADE_NAME[d.grade]} · ${d.division}</span>${d.hidden_gem ? html`<span class="badge gem">hidden gem</span>` : ""}${d.u18_player ? html`<span class="badge grade">U18 player</span>` : ""}${d.minutes_est_apps > 0 ? html`<span class="badge est" title="${describe("minutes_est_apps")}">${d.minutes_est_apps} apps est. minutes</span>` : ""}</div>
+  <div class="badges"><span class="badge grade">${GRADE_NAME[d.grade]} · ${d.division}</span>${d.hidden_gem ? gemMark() : ""}${d.u18_player ? html`<span class="badge grade">U18 player</span>` : ""}${d.minutes_est_apps > 0 ? html`<span class="badge est" title="${describe("minutes_est_apps")}">${d.minutes_est_apps} apps est. minutes</span>` : ""}</div>
   <p><a href="./player?id=${d.player_id}&team=${d.team_id}"><b>Open full profile →</b></a> · <a href="${d.dribl_url}" target="_blank" rel="noopener">DRIBL ↗</a></p>
   <div class="kpi">${k("age")}${k("apps")}${k("starts")}${k("minutes")}${gk ? k("clean_sheets") : k("goals")}${gk ? k("ga_on_pitch_per90") : k("npg_per90")}${k("votes")}${k("team_goal_share_pct")}${k("gd_on_pitch_vs_team")}${k("yellow_cards")}${k("captain_apps")}${k("borrowed_apps")}${k("sen_minutes")}</div>
   <p class="muted" style="margin-top:0.75rem">Grades played: ${d.grades_played} · highest: ${GRADE_NAME[d.highest_grade]} · ${d.n_teams} team${d.n_teams === 1 ? "" : "s"} · team finished ${d.team_ladder_pos ?? "–"}/${d.ladder_teams ?? "–"} (${fmt("team_ppg", d.team_ppg)} PPG)</p>

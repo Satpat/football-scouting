@@ -60,3 +60,31 @@ table.stats tr.sel td { background: var(--theme-background-alt); font-weight: 60
 .radar-legend { font-size: 12px; flex: 1 1 200px; }
 .radar-legend th { text-align: left; font-weight: 500; color: var(--theme-foreground-muted); padding: 3px 6px 3px 0; }
 .radar-legend td { text-align: right; padding: 3px 0 3px 6px; font-variant-numeric: tabular-nums; }
+.ico { vertical-align: -3px; }
+.ico-hdr { display: inline-flex; align-items: center; justify-content: center; cursor: help; color: var(--theme-foreground-muted); }
+.ico-hdr:hover { color: var(--theme-foreground); }
+.ico-label { display: inline-flex; align-items: center; gap: 6px; }
+.ico-label .ico { color: var(--theme-foreground-muted); }
+table.stats th .ico-hdr, table.kv th .ico-label .ico { flex: 0 0 auto; }
+.icon-key { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12px; color: var(--theme-foreground-muted); margin-top: 6px; }
+.icon-key span { display: inline-flex; align-items: center; gap: 4px; }
+
+/* One typeface everywhere (the sans-serif the tables use), content-sized cards, narrower page */
+:root { --serif: var(--sans-serif); --observablehq-max-width: 100vw; }
+h1, h2, h3, h4, .profile-head h1 { font-family: var(--sans-serif); letter-spacing: -0.01em; }
+h1 { font-size: 1.9rem; }
+h2 { font-size: 1.05rem; font-weight: 600; }
+#observablehq-main { max-width: 1200px; }
+h1, h2, h3, h4, h5, h6 { max-width: none; }
+.grid { grid-auto-rows: auto !important; align-items: start; }
+.grid .card { height: auto; min-height: 0; }
+.card { padding: 1rem 1.25rem; }
+form[class*="inputs"] { max-width: 100%; }
+
+/* hidden-gem mark: a diamond, not a word */
+.gem-mark { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; background: #b8860b; color: #fff; vertical-align: middle; cursor: help; }
+.gem-mark svg { width: 14px; height: 14px; }
+.profile-head .gem-mark { width: 26px; height: 26px; background: rgba(255,255,255,0.92); color: #b8860b; }
+.ico-hdr { gap: 2px; }
+.ico-q { font-size: 10px; font-weight: 600; letter-spacing: 0; line-height: 1; color: var(--theme-foreground-muted); }
+.ico-hdr:hover .ico-q { color: var(--theme-foreground); }
