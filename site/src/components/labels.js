@@ -2,6 +2,7 @@
 import {FileAttachment} from "observablehq:stdlib";
 import * as d3 from "npm:d3";
 import {crestHref} from "./crests.js";
+import {iconHeader, COL_ICONS} from "./icons.js";
 
 export const labels = await FileAttachment("../data/labels.json").json();
 export const clubs = await FileAttachment("../data/clubs.csv").csv({typed: true});
@@ -9,6 +10,21 @@ const clubBySlug = new Map(clubs.map((c) => [c.slug, c]));
 const clubByName = new Map(clubs.map((c) => [c.club, c]));
 export const slugify = (name) => String(name ?? "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 export function clubInfo(nameOrSlug) { return clubByName.get(nameOrSlug) ?? clubBySlug.get(nameOrSlug) ?? clubBySlug.get(slugify(nameOrSlug)); }
+
+// A fixture's own league already tells you the grade (a league is one grade's competition), so
+// any "<club> Under 18's SL2"-style compound name can be split back into club + grade + league.
+const leaguesMeta = await FileAttachment("../data/leagues.json").json();
+const gradeByLeague = new Map(leaguesMeta.map((l) => [l.league, l.grade]));
+// Cups/trials/friendlies aren't in leagues.json (only the graded State League competitions are),
+// so fall back to reading the grade off the competition's own name.
+export function leagueGrade(leagueName) {
+  const known = gradeByLeague.get(leagueName);
+  if (known) return known;
+  const name = String(leagueName ?? "");
+  if (/U18|Under 18/i.test(name)) return "U18";
+  if (/Reserves|Res\b/i.test(name)) return "RES";
+  return name ? "SEN" : undefined;
+}
 // <img> for a club crest (empty span when unknown so table cells stay aligned)
 export function crest(nameOrSlug, size = 20) {
   const c = clubInfo(nameOrSlug);
@@ -67,11 +83,52 @@ export function fmt(col, v) {
 
 // {friendlyLabel: column} map for a set of columns — what Inputs.table / Plot want
 export function headers(cols) { return Object.fromEntries(cols.map((c) => [c, label(c)])); }
+// Short-form headers (P/W/D/L/GF/GA/GD/Pts) for compact tables like a ladder, where the full label is too wide.
+export function shortHeaders(cols) { return Object.fromEntries(cols.map((c) => [c, short(c)])); }
+// Icons stand in for a number (a count, a rate, a percentage); text, dates and yes/no flags always get a text header.
+export function isNumericCol(col) { return ["int", "dec", "pct"].includes(labels[col]?.fmt); }
+// Identity attributes read better as words even when their fmt is numeric — a person's age isn't a "stat" to compress.
+const ICON_EXEMPT = new Set(["age"]);
+// Numeric stat columns with a known icon (COL_ICONS) get the icon-only header used by the match/season tables,
+// so every player-stats table in the app reads the same way. Everything else falls back to text.
+export function iconHeaders(cols) { return Object.fromEntries(cols.map((c) => [c, COL_ICONS[c] && isNumericCol(c) && !ICON_EXEMPT.has(c) ? iconHeader(c, label(c)) : label(c)])); }
 export function formats(cols) { return Object.fromEntries(cols.map((c) => [c, (v) => fmt(c, v)])); }
 
-// Metrics offered on the chart axes (label -> column), ordered by group as declared in labels.json
+// Metric columns grouped into player-facing categories, for the chart-axis dropdowns.
+const METRIC_GROUPS = [
+  ["Playing time", ["apps", "starts", "sub_apps", "bench_unused", "minutes", "minutes_share_pct", "availability_pct", "start_rate_pct"]],
+  ["Attack", ["goals", "goals_open_play", "goals_penalty", "own_goals", "goals_per90", "npg_per90", "team_goal_share_pct", "goals_equaliser", "goals_go_ahead", "goals_winner", "goals_late", "goals_consolation", "goals_away", "goals_vs_top_half", "goals_as_sub", "goals_per_sub_90"]],
+  ["Defence", ["gf_on_pitch", "ga_on_pitch", "gd_on_pitch_per90", "gd_on_pitch_vs_team", "ga_on_pitch_per90", "ga_on_pitch_vs_team"]],
+  ["Goalkeeping", ["clean_sheets", "full_matches", "clean_sheet_pct"]],
+  ["Discipline", ["yellow_cards", "red_cards", "yellows_per90"]],
+  ["Impact & votes", ["votes", "votes_3", "votes_per_app", "captain_apps", "borrowed_apps"]],
+  ["Team stats", ["ppg_when_playing", "ppg_start_diff", "team_ladder_pos", "team_ppg"]],
+  ["Career totals", ["sen_minutes", "res_minutes", "u18_minutes", "sen_apps", "n_teams", "borrowed_apps_all", "age"]],
+];
+// {friendlyLabel: column} map for the metric dropdowns — same shape metricOptions used to return.
 export function metricOptions(cols) {
   return new Map(cols.filter((c) => labels[c]?.metric).map((c) => [label(c), c]));
+}
+// Sort an Inputs.select(metricOptions(cols), {...})'s <option>s into <optgroup> sections by category.
+// Takes the <form> Inputs.select returns and mutates it in place, so view()/disabled/reactivity all
+// keep working exactly as Inputs.select already handles them — this only reorganises the markup.
+// Inputs.select gives each <option> an index-based value (not the column name), so match by its
+// visible label text instead, which is exactly what metricOptions() used as the map key.
+export function groupMetricSelect(form) {
+  const sel = form.querySelector("select");
+  if (!sel) return form;
+  const selected = sel.options[sel.selectedIndex]; // moving <option>s can reset the browser's selection
+  const byLabel = new Map(Array.from(sel.querySelectorAll("option")).map((o) => [o.textContent, o]));
+  for (const [name, groupCols] of METRIC_GROUPS) {
+    const present = groupCols.map((c) => byLabel.get(label(c))).filter(Boolean);
+    if (!present.length) continue;
+    const og = document.createElement("optgroup");
+    og.label = name;
+    for (const opt of present) { og.append(opt); byLabel.delete(opt.textContent); }
+    sel.append(og);
+  }
+  if (selected) selected.selected = true;
+  return form;
 }
 
 // Compact league / competition names for tables
@@ -81,4 +138,9 @@ export function shortLeague(name) {
     .replace("(Seniors)", "").replace("(Reserves)", "Res").replace("Reserves", "Res").replace("Finals Series", "Finals").replace("Final Series", "Finals")
     .replace("Federation Cup", "Fed Cup").replace("Hahn Australia Cup and ", "").replace("Senior Men's Trial Matches", "Trials").replace("Trial Matches", "Trials")
     .replace(/\s+/g, " ").trim();
+}
+// shortLeague(), minus the trailing grade token — for use next to a Grade column, where repeating "U18"/"Res" is redundant.
+export function shortLeagueOnly(name) {
+  const s = shortLeague(name);
+  return s.replace(/\s*(U18'?s?|Res)$/, "").trim() || s;
 }

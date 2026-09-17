@@ -7,9 +7,9 @@ sql:
 ---
 
 ```js
-import {label, short, describe, fmt, fmtDate, toDate, headers, formats, crest, clubCell, clubInfo, percentile, shortLeague, GRADE_NAME} from "./components/labels.js";
+import {label, short, describe, fmt, fmtDate, toDate, iconHeaders, formats, crest, clubCell, clubInfo, percentile, shortLeague, shortLeagueOnly, leagueGrade, isNumericCol, GRADE_NAME} from "./components/labels.js";
 import {radar} from "./components/radar.js";
-import {icon, iconHeader, iconLabel, gemMark, COL_ICONS, COL_SUFFIX} from "./components/icons.js";
+import {icon, iconHeader, gemMark} from "./components/icons.js";
 const players = await FileAttachment("./data/players.csv").csv({typed: true});
 const careers = await FileAttachment("./data/careers.csv").csv({typed: true});
 const q = new URLSearchParams(location.search);
@@ -25,7 +25,7 @@ const searched = pid ? [] : view(Inputs.search(players, {placeholder: "Search a 
 
 ```js
 if (!pid) display(html`<h1>Player profile</h1><p class="muted">Pick a player to open their profile.</p>`);
-if (!pid) display(Inputs.table(searched, {columns: ["player_name", "club", "team", "league", "age", "apps", "goals", "minutes"], header: headers(["player_name", "club", "team", "league", "age", "apps", "goals", "minutes"]),
+if (!pid) display(Inputs.table(searched, {columns: ["player_name", "club", "team", "league", "age", "apps", "goals", "minutes"], header: iconHeaders(["player_name", "club", "team", "league", "age", "apps", "goals", "minutes"]),
   format: {...formats(["age", "apps", "goals", "minutes"]), player_name: (v, i) => html`<a href="./player?id=${searched[i].player_id}&team=${searched[i].team_id}">${v}</a>`}, rows: 20, select: false}));
 if (pid && !rowsFor.length) display(html`<h1>Player not found</h1><p class="muted">No player with id <code>${pid}</code>. <a href="./player">Search instead</a>.</p>`);
 ```
@@ -33,7 +33,7 @@ if (pid && !rowsFor.length) display(html`<h1>Player not found</h1><p class="mute
 ```js
 const teamRows = (rowsFor.some((r) => r.apps > 0) ? rowsFor.filter((r) => r.apps > 0) : rowsFor).slice().sort((a, b) => b.minutes - a.minutes);
 const defaultTeam = teamRows.find((r) => r.team_id === tidParam)?.team_id ?? teamRows[0]?.team_id;
-const teamSel = view(Inputs.radio(new Map(teamRows.map((r) => [`${r.team} (${GRADE_NAME[r.grade]}) — ${r.apps} apps`, r.team_id])), {value: defaultTeam, label: rowsFor.length ? "Team" : ""}));
+const teamSel = view(Inputs.radio(new Map(teamRows.map((r) => [`${r.club} · ${GRADE_NAME[r.grade]} · ${shortLeague(r.league)} — ${r.apps} apps`, r.team_id])), {value: defaultTeam, label: rowsFor.length ? "Team" : ""}));
 ```
 
 ```js
@@ -67,41 +67,41 @@ const primary = p?.club_color || "#ffffff";
 </div>` : ""}</div>
 
 ```js
-const fact = (col, labelText, value) => html`<div class="fact"><div class="fv">${value ?? "–"}</div><div class="fl">${icon(COL_ICONS[col] ?? "hash", {size: 12, title: labelText})} ${labelText}</div></div>`;
+const fact = (labelText, value) => html`<div class="fact"><div class="fv">${value ?? "–"}</div><div class="fl">${labelText}</div></div>`;
 const tile = (col, value, extra) => html`<div class="tile"><div class="tv">${extra ?? ""}${fmt(col, value)}</div><div class="tl">${label(col)}</div></div>`;
 const cardGlyph = (kind) => html`<span class="card-glyph ${kind}"></span>`;
 const seasonCols = ["apps", "starts", "minutes", "goals", "goals_open_play", "goals_penalty", "votes", "yellow_cards", "red_cards", "clean_sheets", "goals_go_ahead", "goals_winner", "captain_apps", "borrowed_apps"];
 const rateCols = ["npg_per90", "goals_per90", "votes_per_app", "team_goal_share_pct", "minutes_share_pct", "start_rate_pct", "gd_on_pitch_vs_team", "ga_on_pitch_per90", "clean_sheet_pct", "yellows_per90", "ppg_when_playing", "ppg_start_diff"];
-const seasonTable = (rows) => html`<table class="stats"><thead><tr><th>Team</th><th>League</th>${seasonCols.map((c) => html`<th>${iconHeader(c, `${label(c)} — ${describe(c)}`)}</th>`)}</tr></thead>
-  <tbody>${rows.map((r) => html`<tr class="${r.team_id === p?.team_id ? "sel" : ""}"><td>${r.team}</td><td>${shortLeague(r.league)}</td>${seasonCols.map((c) => html`<td>${fmt(c, r[c])}</td>`)}</tr>`)}</tbody></table>`;
+const seasonTable = (rows) => html`<table class="stats"><thead><tr><th>Club</th><th>Grade</th><th>League</th>${seasonCols.map((c) => html`<th>${iconHeader(c, `${label(c)} — ${describe(c)}`)}</th>`)}</tr></thead>
+  <tbody>${rows.map((r) => html`<tr class="${r.team_id === p?.team_id ? "sel" : ""}"><td>${clubCell(r.club, 16)}</td><td>${GRADE_NAME[r.grade]}</td><td>${shortLeagueOnly(r.league)}</td>${seasonCols.map((c) => html`<td>${fmt(c, r[c])}</td>`)}</tr>`)}</tbody></table>`;
 ```
 
 <div class="grid grid-cols-3" style="grid-auto-rows: auto;">
-  <div class="card">
+  ${p ? html`<div class="card">
     <h2>Profile</h2>
-    ${p ? html`<div class="facts2">
-      ${fact("age", "Age", p.age)}
-      ${fact("nationality", "Nationality", p.flag ? html`<span class="flag" title="${p.nationality}">${p.flag}</span> ${p.nationality}` : p.nationality)}
-      ${fact("jersey", "Shirt", p.jersey)}
-      ${fact("role", "Role", p.role)}
-      ${fact("grade", "Grade", GRADE_NAME[p.grade])}
-      ${fact("league", "League", shortLeague(p.league))}
-      ${fact("grades_played", "Grades played", p.grades_played)}
-      ${fact("highest_grade", "Highest grade", GRADE_NAME[p.highest_grade])}
-      ${fact("sen_minutes", "Senior minutes", fmt("sen_minutes", p.sen_minutes))}
-      ${fact("team_ladder_pos", "Team finished", p.team_ladder_pos ? `${p.team_ladder_pos} of ${p.ladder_teams}` : "–")}
-      ${fact("team_ppg", "Team points per game", fmt("team_ppg", p.team_ppg))}
-      ${fact("n_teams", "Teams this season", p.n_teams)}
-    </div>` : ""}
-  </div>
-  <div class="card grid-colspan-2">
-    <h2><span class="h2-crest">${p ? crest(p.club, 22) : ""}</span> ${p ? shortLeague(p.league) : "Season"} 2026 <span class="muted">— ${p?.team ?? ""}</span></h2>
-    ${p ? html`<div class="tiles2">
+    <div class="facts2">
+      ${fact("Age", p.age)}
+      ${fact("Nationality", p.flag ? html`<span class="flag" title="${p.nationality}">${p.flag}</span> ${p.nationality}` : p.nationality)}
+      ${fact("Shirt", p.jersey)}
+      ${fact("Role", p.role)}
+      ${fact("Grade", GRADE_NAME[p.grade])}
+      ${fact("League", shortLeague(p.league))}
+      ${fact("Grades played", p.grades_played)}
+      ${fact("Highest grade", GRADE_NAME[p.highest_grade])}
+      ${fact("Senior minutes", fmt("sen_minutes", p.sen_minutes))}
+      ${fact("Team finished", p.team_ladder_pos ? `${p.team_ladder_pos} of ${p.ladder_teams}` : "–")}
+      ${fact("Team points per game", fmt("team_ppg", p.team_ppg))}
+      ${fact("Teams this season", p.n_teams)}
+    </div>
+  </div>` : ""}
+  ${p ? html`<div class="card grid-colspan-2">
+    <h2><span class="h2-crest">${crest(p.club, 22)}</span> ${shortLeague(p.league)} 2026 <span class="muted">— ${p.club ?? ""}</span></h2>
+    <div class="tiles2">
       ${tile("apps", p.apps)}${tile("starts", p.starts)}${tile("minutes", p.minutes)}${tile("goals", p.goals)}
       ${tile("goals_open_play", p.goals_open_play)}${tile("goals_penalty", p.goals_penalty)}${tile("votes", p.votes)}
       ${tile("yellow_cards", p.yellow_cards, cardGlyph("y"))}${tile("red_cards", p.red_cards, cardGlyph("r"))}
       ${p.role === "GK" ? tile("clean_sheets", p.clean_sheets) : tile("goals_go_ahead", p.goals_go_ahead)}
-      ${tile("goals_winner", p.goals_winner)}${tile("captain_apps", p.captain_apps)}
+      ${tile("goals_winner", p.goals_winner)}${p.captain_apps > 0 ? tile("captain_apps", p.captain_apps) : ""}
     </div>
     <div class="tiles2 rates">
       ${tile("npg_per90", p.npg_per90)}${tile("votes_per_app", p.votes_per_app)}${tile("team_goal_share_pct", p.team_goal_share_pct)}
@@ -109,8 +109,8 @@ const seasonTable = (rows) => html`<table class="stats"><thead><tr><th>Team</th>
       ${p.role === "GK" ? tile("ga_on_pitch_per90", p.ga_on_pitch_per90) : tile("ppg_start_diff", p.ppg_start_diff)}
     </div>
     ${p.minutes_est_apps > 0 ? html`<p class="muted">${p.minutes_est_apps} of ${p.apps} appearances have estimated minutes (subs not recorded).</p>` : ""}
-    ${rowsFor.filter((r) => r.apps > 0).length > 1 ? html`<details><summary class="muted">All teams this season</summary>${seasonTable(rowsFor.filter((r) => r.apps > 0).sort((a, b) => b.minutes - a.minutes))}</details>` : ""}` : ""}
-  </div>
+    ${rowsFor.filter((r) => r.apps > 0).length > 1 ? html`<details><summary class="muted">All teams this season</summary>${seasonTable(rowsFor.filter((r) => r.apps > 0).sort((a, b) => b.minutes - a.minutes))}</details>` : ""}
+  </div>` : ""}
 </div>
 
 ```js
@@ -124,14 +124,14 @@ const traits = p ? (p.role === "GK" ? GK_TRAITS : TRAITS).map(([col, invert]) =>
 ```
 
 <div class="grid grid-cols-3" style="grid-auto-rows: auto;">
-  <div class="card">
+  ${p ? html`<div class="card">
     <h2>Player traits</h2>
-    <p class="muted" style="margin-top:-0.5rem">Percentile vs ${peers.length} ${p?.role === "GK" ? "goalkeepers" : "outfield players"} in this league with 450+ minutes. Cards and goals conceded are inverted.</p>
-    ${p ? html`<div class="radar-wrap">${radar(traits.map((t) => ({...t, label: label(t.col).replace(" per 90", "/90").replace("Best-on-ground ", "").replace("On-pitch goal difference vs team", "GD vs team").replace("Share of team ", "Team ")})), {size: 360, accent, levels: 3})}</div>` : ""}
-  </div>
-  <div class="card grid-colspan-2">
+    <p class="muted" style="margin-top:-0.5rem">Percentile vs ${peers.length} ${p.role === "GK" ? "goalkeepers" : "outfield players"} in this league with 450+ minutes. Cards and goals conceded are inverted.</p>
+    <div class="radar-wrap">${resize((width) => radar(traits.map((t) => ({...t, label: label(t.col).replace(" per 90", "/90").replace("Best-on-ground ", "").replace("On-pitch goal difference vs team", "GD vs team").replace("Share of team ", "Team ")})), {size: Math.min(width, 380), accent, levels: 3}))}</div>
+  </div>` : ""}
+  ${p ? html`<div class="card grid-colspan-2">
     <h2>Season so far</h2>
-    ${p && seasonRows.length ? resize((width) => {
+    ${seasonRows.length ? resize((width) => {
       let g = 0, m = 0;
       const cum = seasonRows.map((r, i) => ({i: i + 1, date: r.date, goals: (g += r.goals ?? 0), minutes: (m += r.minutes ?? 0), opp: r.side === "home" ? r.away_team : r.home_team, result: r.result, comp: r.league}));
       return Plot.plot({width, height: 240, marginLeft: 40, x: {label: "Appearance (all competitions) →"}, y: {label: "↑ Cumulative goals", grid: true},
@@ -139,8 +139,8 @@ const traits = p ? (p.role === "GK" ? GK_TRAITS : TRAITS).map(([col, invert]) =>
                 Plot.dot(cum, {x: "i", y: "goals", fill: (d) => d.result === "W" ? "#2ca02c" : d.result === "D" ? "#999" : "#d62728", r: 4,
                   channels: {Date: (d) => fmtDate(d.date), Opponent: "opp", Result: "result", Competition: "comp", Minutes: "minutes"}, tip: {format: {x: false, y: true}}})]});
     }) : html`<p class="muted">No matches recorded.</p>`}
-    <p class="muted">Cumulative goals by appearance across every competition; dots coloured by result.</p>
-  </div>
+    <p class="muted">Dot colour shows the match result.</p>
+  </div>` : ""}
 </div>
 
 ```js
@@ -177,20 +177,20 @@ const shortDate = (v) => { const d = toDate(v); return d ? d3.timeFormat("%-d %b
 const voteBadge = (v) => v > 0 ? html`<span class="vote v${v}">${v}</span>` : html`<span class="muted">–</span>`;
 const matchList = html`<div class="mlist">
   <div class="mrow mhead">
-    <span></span><span></span><span>Opponent</span><span></span>
-    ${["minutes", "goals", "votes", "yellow_cards", "red_cards", "is_captain"].map((c) => html`<span>${iconHeader(c, label(c))}</span>`)}
+    <span></span><span>Opponent</span><span>Grade</span><span>League</span><span></span>
+    ${["minutes", "goals", "votes", "yellow_cards", "red_cards"].map((c) => html`<span>${iconHeader(c, label(c))}</span>`)}
   </div>
   ${pageRows.map((r) => html`<div class="mrow">
-    <span class="mcomp" title="${shortLeague(r.league)}">${icon(r.cup ? "trophy" : "ball", {size: 14, title: shortLeague(r.league)})}</span>
-    <span class="mdate">${shortDate(r.date)} <small>${r.ha}</small></span>
-    <span class="mopp">${crest(r.opponent_club, 20)} ${r.opponent}</span>
-    <span class="mres">${r.result ? html`<span class="pill ${r.result}">${r.result}</span>` : ""} <span class="score"><b class="${r.own >= r.opp ? "hi" : ""}">${r.own ?? "–"}</b> - <b class="${r.opp >= r.own ? "hi" : ""}">${r.opp ?? "–"}</b></span>${r.borrowed_side ? html`<span class="brw" title="Borrowed for this match">${icon("handshake", {size: 12})}</span>` : ""}</span>
+    <span class="mdate">${shortDate(r.date)} <span class="ha-pill">${r.ha}</span></span>
+    <span class="mopp">${crest(r.opponent_club, 20)} ${r.opponent_club ?? r.opponent}</span>
+    <span>${leagueGrade(r.league) ?? "–"}</span>
+    <span>${shortLeagueOnly(r.league)}</span>
+    <span class="mres">${r.result ? html`<span class="pill ${r.result}">${r.result}</span>` : ""} <span class="score"><b class="${r.own >= r.opp ? "hi" : ""}">${r.own ?? "–"}</b> - <b class="${r.opp >= r.own ? "hi" : ""}">${r.opp ?? "–"}</b></span>${r.borrowed_side ? html`<span class="brw-slot" title="Borrowed for this match">${icon("handshake", {size: 12})}</span>` : ""}</span>
     <span>${fmt("minutes", r.minutes)}</span>
     <span>${r.goals || "0"}</span>
     <span>${voteBadge(r.votes ?? 0)}</span>
     <span>${r.yellow_cards ? html`${cardGlyph("y")} ${r.yellow_cards}` : "0"}</span>
     <span>${r.red_cards ? html`${cardGlyph("r")} ${r.red_cards}` : "0"}</span>
-    <span>${r.is_captain ? icon("captain", {size: 14, title: "Captain"}) : ""}</span>
   </div>`)}
   <div class="mnav">
     <button class="mbtn" disabled=${page === 0 ? true : null} onclick=${() => setPage(page - 1)}>‹ Previous</button>
@@ -200,18 +200,26 @@ const matchList = html`<div class="mlist">
 </div>`;
 ```
 
-<div class="card">
-  <div class="mtitle"><h2>Match stats</h2>${p ? compInput : ""}</div>
-  ${p ? matchList : ""}
-  <p class="muted">Every match DRIBL lists for this player this season, cups and trials included. Minutes are DRIBL's own. Votes are the 3-2-1 best-on-ground votes for that match.</p>
-</div>
-
 ```js
 const careerRows = p ? careers.filter((c) => c.player_id === p.player_id).sort((a, b) => d3.descending(a.season, b.season)) : [];
-const careerCols = ["season", "clubs", "leagues", "played", "started", "minutes", "goals", "votes", "yellow_cards", "red_cards", "clean_sheets", "was_goalkeeper"];
+const careerStatCols = ["played", "started", "minutes", "goals", "votes", "yellow_cards", "red_cards", "clean_sheets", "was_goalkeeper"];
+const leaguesOf = (c) => String(c.leagues ?? "").split("; ").filter(Boolean);
+const careerTable = html`<table class="stats career-table"><thead><tr><th>Season</th><th>Club</th>${careerStatCols.map((c) => html`<th>${isNumericCol(c) ? iconHeader(c, label(c)) : label(c)}</th>`)}</tr></thead>
+  <tbody>${careerRows.flatMap((c) => [
+    html`<tr class="season-row"><td>${c.season}</td><td>${clubCell(String(c.clubs).split("; ")[0], 18)}</td>${careerStatCols.map((col) => html`<td>${fmt(col, c[col])}</td>`)}</tr>`,
+    ...leaguesOf(c).map((l) => html`<tr class="league-row"><td></td><td class="league-name">${GRADE_NAME[leagueGrade(l)] ?? "–"} · ${shortLeagueOnly(l)}</td><td colspan="${careerStatCols.length}"></td></tr>`),
+  ])}</tbody></table>`;
 ```
 
-<div class="card">
-  <h2>Career <span class="muted">— seasons recorded in DRIBL</span></h2>
-  ${p ? Inputs.table(careerRows, {columns: careerCols, header: headers(careerCols), format: {...formats(careerCols), clubs: (v, i) => { const s = document.createElement("span"); s.className = "club-cell"; s.append(crest(String(v).split("; ")[0], 18), document.createTextNode(" " + v)); return s; }}, rows: 10, select: false, width: {leagues: 420, clubs: 200}, layout: "auto"}) : ""}
+<div class="grid grid-cols-2" style="grid-auto-rows: auto;">
+  ${p ? html`<div class="card">
+    <div class="mtitle"><h2>Match stats</h2>${compInput}</div>
+    ${matchList}
+    <p class="muted">Includes cups and trials. Minutes are DRIBL's own; votes are 3-2-1 best-on-ground.</p>
+  </div>` : ""}
+  ${p ? html`<div class="card">
+    <h2>Career <span class="muted">— seasons recorded in DRIBL</span></h2>
+    <div class="table-scroll">${careerTable}</div>
+    <p class="muted">Leagues/grades played that season are listed under it.</p>
+  </div>` : ""}
 </div>

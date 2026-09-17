@@ -6,7 +6,7 @@ toc: false
 # Shortlist
 
 ```js
-import {label, describe, fmt, headers, formats, crest, GRADES, GRADE_NAME} from "./components/labels.js";
+import {fmt, iconHeaders, formats, shortLeagueOnly, GRADES} from "./components/labels.js";
 const shortlist = await FileAttachment("./data/shortlist.csv").csv({typed: true});
 const leagues = await FileAttachment("./data/leagues.json").json();
 const notes = await FileAttachment("./data/notes.json").json();
@@ -54,18 +54,37 @@ const rows = shortlist.filter((d) => d.role === role && division.includes(d.divi
 ```
 
 ```js
-const outfieldCols = ["shown_rank", "player_name", "club", "league", "grade", "age", "hidden_gem", "u18_player", "gem_score", "why_flagged", "apps", "minutes", "goals_open_play", "npg_per90", "team_goal_share_pct", "goals_go_ahead", "goals_winner", "votes", "gd_on_pitch_vs_team", "sen_minutes", "borrowed_apps", "team_ladder_pos", "minutes_est_apps"];
-const gkCols = ["shown_rank", "player_name", "club", "league", "grade", "age", "hidden_gem", "u18_player", "gem_score", "why_flagged", "apps", "minutes", "ga_on_pitch_per90", "clean_sheets", "clean_sheet_pct", "votes", "sen_minutes", "borrowed_apps", "team_ladder_pos", "minutes_est_apps"];
+const outfieldCols = ["shown_rank", "player_name", "club", "league", "grade", "age", "gem_score", "apps", "minutes", "goals_open_play", "npg_per90", "team_goal_share_pct", "goals_go_ahead", "goals_winner", "votes", "gd_on_pitch_vs_team", "sen_minutes", "borrowed_apps", "team_ladder_pos"];
+const gkCols = ["shown_rank", "player_name", "club", "league", "grade", "age", "gem_score", "apps", "minutes", "ga_on_pitch_per90", "clean_sheets", "clean_sheet_pct", "votes", "sen_minutes", "borrowed_apps", "team_ladder_pos"];
 const cols = role === "GK" ? gkCols : outfieldCols;
-const hdr = {...headers(cols), shown_rank: "#"};
-const fmts = {...formats(cols), shown_rank: (v) => v, why_flagged: (v) => html`<span class="why">${v}</span>`, player_name: (v, i) => html`<a href="./player?id=${rows[i].player_id}&team=${rows[i].team_id}">${v}</a>`,
+const hdr = {...iconHeaders(cols), shown_rank: "#"};
+const gemScoreCell = (v, i) => {
+  const wrap = document.createElement("span");
+  wrap.className = "gem-tip";
+  wrap.tabIndex = 0;
+  wrap.append(fmt("gem_score", v));
+  const clauses = String(rows[i].why_flagged ?? "").split("; ").filter(Boolean);
+  if (clauses.length) {
+    const pop = document.createElement("div");
+    pop.className = "gem-tip-pop";
+    const title = document.createElement("div");
+    title.className = "gem-tip-title";
+    title.textContent = "Why flagged";
+    const ul = document.createElement("ul");
+    ul.append(...clauses.map((c) => { const li = document.createElement("li"); li.textContent = c; return li; }));
+    pop.append(title, ul);
+    wrap.append(pop);
+  }
+  return wrap;
+};
+const fmts = {...formats(cols), shown_rank: (v) => v, league: shortLeagueOnly, gem_score: gemScoreCell, minutes: (v, i) => fmt("minutes", v) + (rows[i].minutes_est_apps > 0 ? "*" : ""), player_name: (v, i) => html`<a href="./player?id=${rows[i].player_id}&team=${rows[i].team_id}">${v}</a>`,
 };
 ```
 
 <div class="card">
   <h2>${role === "GK" ? "Goalkeepers" : "Outfield players"} <span class="muted">— ${rows.length} shown</span></h2>
-  ${Inputs.table(rows, {columns: cols, header: hdr, format: fmts, rows: 25, select: false, width: {why_flagged: 420, player_name: 160, club: 140, league: 150}, layout: "auto"})}
-  <p class="muted">Click a name to open the player's profile. "Est." columns mean sub minutes were not recorded (mostly U18), so minutes are estimated.</p>
+  ${Inputs.table(rows, {columns: cols, header: hdr, format: fmts, rows: 25, select: false, width: {player_name: 140, club: 120}, layout: "auto"})}
+  <p class="muted">Click a name to open the player's profile. Hover the gem score for why they're flagged. * marks estimated minutes — sub minutes weren't recorded for that player, mostly U18.</p>
 </div>
 
 <div class="card">
