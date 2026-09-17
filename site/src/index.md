@@ -8,7 +8,7 @@ sql:
 # Player explorer
 
 ```js
-import {labels, label, short, describe, fmt, fmtDate, iconHeaders, formats, metricOptions, groupMetricSelect, crest, shortLeague, GRADES, GRADE_NAME, GRADE_COLORS} from "./components/labels.js";
+import {labels, label, short, describe, fmt, fmtDate, iconHeaders, formats, metricOptions, groupMetricSelect, crest, clubCell, shortLeague, GRADES, GRADE_NAME, GRADE_COLORS} from "./components/labels.js";
 import {gemMark} from "./components/icons.js";
 const players = await FileAttachment("./data/players.csv").csv({typed: true});
 const leagues = await FileAttachment("./data/leagues.json").json();
@@ -28,8 +28,8 @@ const leagueChoices = new Map(leagues.filter((l) => division.includes(l.division
 const leagueSel = view(Inputs.select(leagueChoices, {multiple: true, size: Math.min(leagueChoices.size, 12) || 1, value: [...leagueChoices.values()], label: "Leagues (⌘/ctrl-click to pick several)"}));
 ```
 
-<div class="grid grid-cols-4 filters">
-  <div class="card">
+<div class="section">
+  <div>
 
 ```js
 const role = view(Inputs.radio(["All", "Outfield", "GK"], {value: "All", label: "Role"}));
@@ -37,14 +37,14 @@ const gemsOnly = view(Inputs.toggle({label: "Hidden gems only", value: false}));
 ```
   <span class="muted">Hidden gem = Reserves/U18 player with no senior minutes all season.</span>
   </div>
-  <div class="card">
+  <div>
 
 ```js
 const minMinutes = view(Inputs.range([0, 2000], {value: 450, step: 10, label: "Minimum minutes"}));
 const minApps = view(Inputs.range([0, 25], {value: 3, step: 1, label: "Minimum appearances"}));
 ```
   </div>
-  <div class="card">
+  <div>
 
 ```js
 const defenseView = view(Inputs.toggle({label: "Defensive impact view", value: role === "GK"}));
@@ -54,7 +54,7 @@ const yMetric = view(groupMetricSelect(Inputs.select(metricOptions(playerCols), 
 ```
   <span class="muted">Defensive view plots minutes played vs clean sheets or goals conceded on pitch — on for GK by default, or switch it on for any role.</span>
   </div>
-  <div class="card">
+  <div>
 
 ```js
 const clubs = ["(none)", ...new Set(players.map((d) => d.club).sort())];
@@ -174,7 +174,7 @@ const searched = view(Inputs.search(filtered, {placeholder: "Search player, club
 ```
 
 ```js
-const picked = view(Inputs.table(searched, {columns: tableCols, header: iconHeaders(tableCols), format: {...formats(tableCols), player_name: (v, i) => html`<a href="./player?id=${searched[i].player_id}&team=${searched[i].team_id}">${v}</a>`, club: (v) => { const s = document.createElement("span"); s.className = "club-cell"; s.append(crest(v, 16), document.createTextNode(" " + v)); return s; }}, rows: 18, multiple: false,
+const picked = view(Inputs.table(searched, {columns: tableCols, header: iconHeaders(tableCols), format: {...formats(tableCols), player_name: (v, i) => html`<a href="./player?id=${searched[i].player_id}&team=${searched[i].team_id}">${v}</a>`, club: (v) => clubCell(v, 16)}, rows: 18, multiple: false,
   sort: ys, reverse: labels[ys]?.higher_is_better !== false, width: {player_name: 170, club: 150, league: 170}}));
 ```
 

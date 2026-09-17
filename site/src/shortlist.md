@@ -14,22 +14,22 @@ const notes = await FileAttachment("./data/notes.json").json();
 
 <p class="muted">Players with at least 450 minutes and 5 appearances, ranked within role by <b>gem score</b>: a league-adjusted composite of non-penalty goals per 90, best-on-ground votes, on-pitch goal difference vs the team, share of team goals and minutes share, plus a bonus for having no senior minutes and for being a U18 player. Rates are shrunk toward the league average so short bursts don't dominate. Details on the <a href="./about">About</a> page.</p>
 
-<div class="grid grid-cols-4 filters">
-  <div class="card">
+<div class="section">
+  <div>
 
 ```js
 const division = view(Inputs.checkbox(["SL1", "SL2"], {value: ["SL1", "SL2"], label: "Division"}));
 const gradeSel = view(Inputs.checkbox(GRADES, {value: [...GRADES.values()], label: "Grade"}));
 ```
   </div>
-  <div class="card">
+  <div>
 
 ```js
 const leagueChoices = new Map(leagues.filter((l) => !l.is_finals && division.includes(l.division) && gradeSel.includes(l.grade)).map((l) => [l.short, l.league]));
 const leagueSel = view(Inputs.select(leagueChoices, {multiple: true, size: Math.min(leagueChoices.size, 9) || 1, value: [...leagueChoices.values()], label: "Leagues"}));
 ```
   </div>
-  <div class="card">
+  <div>
 
 ```js
 const role = view(Inputs.radio(["Outfield", "GK"], {value: "Outfield", label: "Role"}));
@@ -37,7 +37,7 @@ const gemsOnly = view(Inputs.toggle({label: "Hidden gems only", value: true}));
 const u18Only = view(Inputs.toggle({label: "U18 players only", value: false}));
 ```
   </div>
-  <div class="card">
+  <div>
 
 ```js
 const topN = view(Inputs.range([10, 400], {value: 50, step: 10, label: "Show top N"}));

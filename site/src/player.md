@@ -76,8 +76,9 @@ const seasonTable = (rows) => html`<table class="stats"><thead><tr><th>Club</th>
   <tbody>${rows.map((r) => html`<tr class="${r.team_id === p?.team_id ? "sel" : ""}"><td>${clubCell(r.club, 16)}</td><td>${GRADE_NAME[r.grade]}</td><td>${shortLeagueOnly(r.league)}</td>${seasonCols.map((c) => html`<td>${fmt(c, r[c])}</td>`)}</tr>`)}</tbody></table>`;
 ```
 
-<div class="grid grid-cols-3" style="grid-auto-rows: auto;">
-  ${p ? html`<div class="card">
+<div>${p ? html`<div class="card">
+  <div class="split split-1-2">
+    <div class="col">
     <h2>Profile</h2>
     <div class="facts2">
       ${fact("Age", p.age)}
@@ -93,8 +94,8 @@ const seasonTable = (rows) => html`<table class="stats"><thead><tr><th>Club</th>
       ${fact("Team points per game", fmt("team_ppg", p.team_ppg))}
       ${fact("Teams this season", p.n_teams)}
     </div>
-  </div>` : ""}
-  ${p ? html`<div class="card grid-colspan-2">
+    </div>
+    <div class="col">
     <h2><span class="h2-crest">${crest(p.club, 22)}</span> ${shortLeague(p.league)} 2026 <span class="muted">— ${p.club ?? ""}</span></h2>
     <div class="tiles2">
       ${tile("apps", p.apps)}${tile("starts", p.starts)}${tile("minutes", p.minutes)}${tile("goals", p.goals)}
@@ -110,8 +111,9 @@ const seasonTable = (rows) => html`<table class="stats"><thead><tr><th>Club</th>
     </div>
     ${p.minutes_est_apps > 0 ? html`<p class="muted">${p.minutes_est_apps} of ${p.apps} appearances have estimated minutes (subs not recorded).</p>` : ""}
     ${rowsFor.filter((r) => r.apps > 0).length > 1 ? html`<details><summary class="muted">All teams this season</summary>${seasonTable(rowsFor.filter((r) => r.apps > 0).sort((a, b) => b.minutes - a.minutes))}</details>` : ""}
-  </div>` : ""}
-</div>
+    </div>
+  </div>
+  </div>` : ""}</div>
 
 ```js
 const TRAITS = [
@@ -123,13 +125,14 @@ const peers = p ? players.filter((d) => d.league === p.league && d.role === p.ro
 const traits = p ? (p.role === "GK" ? GK_TRAITS : TRAITS).map(([col, invert]) => ({col, invert, value: p[col], pct: percentile(peers.map((d) => d[col]), p[col], invert)})) : [];
 ```
 
-<div class="grid grid-cols-3" style="grid-auto-rows: auto;">
-  ${p ? html`<div class="card">
+<div>${p ? html`<div class="card">
+  <div class="split split-1-2">
+    <div class="col">
     <h2>Player traits</h2>
     <p class="muted" style="margin-top:-0.5rem">Percentile vs ${peers.length} ${p.role === "GK" ? "goalkeepers" : "outfield players"} in this league with 450+ minutes. Cards and goals conceded are inverted.</p>
     <div class="radar-wrap">${resize((width) => radar(traits.map((t) => ({...t, label: label(t.col).replace(" per 90", "/90").replace("Best-on-ground ", "").replace("On-pitch goal difference vs team", "GD vs team").replace("Share of team ", "Team ")})), {size: Math.min(width, 380), accent, levels: 3}))}</div>
-  </div>` : ""}
-  ${p ? html`<div class="card grid-colspan-2">
+    </div>
+    <div class="col">
     <h2>Season so far</h2>
     ${seasonRows.length ? resize((width) => {
       let g = 0, m = 0;
@@ -140,8 +143,9 @@ const traits = p ? (p.role === "GK" ? GK_TRAITS : TRAITS).map(([col, invert]) =>
                   channels: {Date: (d) => fmtDate(d.date), Opponent: "opp", Result: "result", Competition: "comp", Minutes: "minutes"}, tip: {format: {x: false, y: true}}})]});
     }) : html`<p class="muted">No matches recorded.</p>`}
     <p class="muted">Dot colour shows the match result.</p>
-  </div>` : ""}
-</div>
+    </div>
+  </div>
+</div>` : ""}</div>
 
 ```js
 const allMatches = p
@@ -211,15 +215,17 @@ const careerTable = html`<table class="stats career-table"><thead><tr><th>Season
   ])}</tbody></table>`;
 ```
 
-<div class="grid grid-cols-2" style="grid-auto-rows: auto;">
-  ${p ? html`<div class="card">
+<div>${p ? html`<div class="card">
+  <div class="split split-1-1">
+    <div class="col">
     <div class="mtitle"><h2>Match stats</h2>${compInput}</div>
     ${matchList}
     <p class="muted">Includes cups and trials. Minutes are DRIBL's own; votes are 3-2-1 best-on-ground.</p>
-  </div>` : ""}
-  ${p ? html`<div class="card">
+    </div>
+    <div class="col">
     <h2>Career <span class="muted">— seasons recorded in DRIBL</span></h2>
     <div class="table-scroll">${careerTable}</div>
     <p class="muted">Leagues/grades played that season are listed under it.</p>
-  </div>` : ""}
-</div>
+    </div>
+  </div>
+</div>` : ""}</div>

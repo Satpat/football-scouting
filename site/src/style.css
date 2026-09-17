@@ -3,12 +3,31 @@
 @import url("observablehq:theme-near-midnight.css") (prefers-color-scheme: dark);
 @import url("observablehq:theme-alt.css");
 @import url("observablehq:theme-wide.css");
+@import url("https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700&display=swap");
 
-:root { --gem: #b8860b; }
+/* Pitch green replaces the theme's stock blue-purple accent everywhere Observable's own CSS
+   drives it from --theme-foreground-focus (links, active sidebar item, search highlight), so
+   the whole chrome reads as one identity instead of a generic dashboard. Gold stays reserved
+   for the hidden-gem mark only — it never becomes the general-purpose accent. */
+:root {
+  --gem: #b8860b;
+  --accent: #1e5631;
+  --theme-foreground-focus: var(--accent);
+  --display: "Big Shoulders Display", var(--sans-serif);
+}
+@media (prefers-color-scheme: dark) {
+  :root { --accent: #4caf7d; }
+}
+input[type="checkbox"], input[type="radio"], input[type="range"] { accent-color: var(--accent); }
 
-.filters form { margin: 0; }
-.filters label { font-size: 13px; }
-.filters .card { padding: 0.75rem 1rem; }
+/* Filter/control groups are one connected panel, not separate content, so they get no card
+   chrome — just a shared hairline separating them from the page intro above and results below. */
+.section { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 1.5rem 2.5rem; margin: 1.25rem 0; padding: 1.1rem 0; border-top: 1px solid var(--theme-foreground-faintest); border-bottom: 1px solid var(--theme-foreground-faintest); }
+/* wide enough that an Inputs.range group (label + number box + slider, ~360px natural width)
+   never has its number input squeezed into an ellipsis */
+.section > div { flex: 1 1 260px; min-width: 240px; }
+.section form { margin: 0; }
+.section label { font-size: 13px; }
 .card h2 { margin-top: 0; }
 .kpi { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 0.5rem 1rem; text-align: center; }
 .kpi .v { font-size: 1.5rem; font-weight: 600; line-height: 1.1; }
@@ -16,9 +35,8 @@
 .badge { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; margin-right: 4px; }
 .badge.gem { background: var(--gem); color: white; }
 .badge.grade { background: var(--theme-foreground-fainter); }
-.badge.est { background: #eee; color: #555; }
+.badge.est { background: transparent; color: var(--theme-foreground-muted); border: 1px solid var(--theme-foreground-faint); }
 .muted { color: var(--theme-foreground-muted); font-size: 13px; }
-form[class*="inputs"] { max-width: none; }
 
 .badges { display: flex; flex-wrap: wrap; gap: 4px; margin: 4px 0; }
 .crest { vertical-align: middle; border-radius: 3px; object-fit: contain; }
@@ -29,21 +47,10 @@ form[class*="inputs"] { max-width: none; }
 .profile-head { display: flex; align-items: center; gap: 1.25rem; padding: 1.25rem 1.5rem; border-radius: 8px; color: white; }
 .profile-head img.headshot { width: 112px; height: 112px; border-radius: 50%; object-fit: cover; object-position: center top; border: 3px solid rgba(255,255,255,0.75); background: #fff; flex: 0 0 auto; }
 .profile-head .crest { width: 56px; height: 56px; background: rgba(255,255,255,0.85); padding: 4px; border-radius: 8px; }
-.profile-head h1 { margin: 0; color: white; font-size: 2rem; }
+.profile-head h1 { margin: 0; color: white; font-size: 2.4rem; }
 .profile-head .sub { opacity: 0.9; }
 .profile-head .actions { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
 .profile-head .actions a { background: white; color: #222; padding: 6px 12px; border-radius: 999px; font-weight: 600; text-decoration: none; font-size: 13px; }
-.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.75rem 1rem; text-align: center; }
-.facts .v { font-size: 1.1rem; font-weight: 600; }
-.facts .l { font-size: 11px; color: var(--theme-foreground-muted); text-transform: uppercase; letter-spacing: 0.04em; }
-.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); gap: 0.75rem; }
-.tiles .t { text-align: center; padding: 0.5rem 0; border-radius: 6px; background: var(--theme-background-alt); }
-.tiles .v { font-size: 1.6rem; font-weight: 700; line-height: 1.1; }
-.tiles .l { font-size: 11px; color: var(--theme-foreground-muted); }
-.trait { display: grid; grid-template-columns: 180px 1fr 48px; align-items: center; gap: 8px; margin: 6px 0; font-size: 13px; }
-.trait .bar { height: 10px; background: var(--theme-background-alt); border-radius: 5px; overflow: hidden; }
-.trait .bar > div { height: 100%; border-radius: 5px; }
-.trait .pct { text-align: right; font-weight: 600; }
 @media (max-width: 640px) { .profile-head { flex-wrap: wrap; } .profile-head .actions { margin-left: 0; } }
 
 table.kv { width: 100%; border-collapse: collapse; font-size: 14px; }
@@ -65,11 +72,17 @@ table.stats th .ico-hdr, table.kv th .ico-label .ico { flex: 0 0 auto; }
 .icon-key { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12px; color: var(--theme-foreground-muted); margin-top: 6px; }
 .icon-key span { display: inline-flex; align-items: center; gap: 4px; }
 
-/* One typeface everywhere (the sans-serif the tables use), content-sized cards, narrower page */
+/* Two type roles: a condensed display face carries section headings (the one deliberate
+   typographic choice here), while data stays on the sans-serif everywhere it needs
+   tabular-nums — tables, stat tiles, badges. Content-sized cards, narrower page. */
 :root { --serif: var(--sans-serif); --observablehq-max-width: 100vw; }
-h1, h2, h3, h4, .profile-head h1 { font-family: var(--sans-serif); letter-spacing: -0.01em; }
-h1 { font-size: 1.9rem; }
-h2 { font-size: 1.05rem; font-weight: 600; }
+h1, h2, .profile-head h1, #observablehq-sidebar > ol:first-child > li > a { font-family: var(--display); letter-spacing: -0.01em; }
+h3, h4 { font-family: var(--sans-serif); letter-spacing: -0.01em; }
+h1 { font-size: 2.25rem; font-weight: 700; }
+h2 { font-size: 1.3rem; font-weight: 600; }
+/* keep the wordmark branded green on every page, not just when Explorer (the home page)
+   happens to also be the active nav item */
+#observablehq-sidebar > ol:first-child > li > a { font-weight: 700; color: var(--accent); }
 /* wide enough for the busiest tables (ladder, shortlist) but never wider than the viewport can spare */
 #observablehq-main { max-width: min(1800px, 98vw); }
 h1, h2, h3, h4, h5, h6 { max-width: none; }
@@ -123,6 +136,17 @@ h3 { margin-bottom: 0.5rem; }
 .card-glyph.y { background: #f2c200; } .card-glyph.r { background: #e5484d; }
 .h2-crest { display: inline-flex; vertical-align: middle; margin-right: 4px; }
 details summary { cursor: pointer; margin: 0.5rem 0; }
+
+/* Two related modules sharing one card instead of two adjacent boxes: a divider between
+   columns does the separating, not a second border+background. */
+.split { display: grid; gap: 0 1.75rem; }
+.split-1-2 { grid-template-columns: 1fr 2fr; }
+.split-1-1 { grid-template-columns: 1fr 1fr; }
+.split > .col + .col { border-left: 1px solid var(--theme-foreground-faintest); padding-left: 1.75rem; }
+@media (max-width: 780px) {
+  .split { grid-template-columns: 1fr !important; }
+  .split > .col + .col { border-left: none; padding-left: 0; border-top: 1px solid var(--theme-foreground-faintest); padding-top: 1.25rem; margin-top: 1.25rem; }
+}
 
 .mtitle { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
 .mtitle h2 { margin-bottom: 0.25rem; }
