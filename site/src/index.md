@@ -18,16 +18,6 @@ const playerCols = Object.keys(players[0]);
 
 <p class="muted">${meta.matches.toLocaleString()} matches · ${meta.players.toLocaleString()} players · ${meta.appearances.toLocaleString()} appearances · State League 1 &amp; 2, all grades. Each point is one player-season (a player who played for two teams appears twice). Hover for details, click to pin a player.</p>
 
-```js
-const division = view(Inputs.checkbox(["SL1", "SL2"], {value: ["SL1", "SL2"], label: "Division"}));
-const gradeSel = view(Inputs.checkbox(GRADES, {value: [...GRADES.values()], label: "Grade"}));
-```
-
-```js
-const leagueChoices = new Map(leagues.filter((l) => division.includes(l.division) && gradeSel.includes(l.grade)).map((l) => [l.short, l.league]));
-const leagueSel = view(Inputs.select(leagueChoices, {multiple: true, size: Math.min(leagueChoices.size, 12) || 1, value: [...leagueChoices.values()], label: "Leagues (⌘/ctrl-click to pick several)"}));
-```
-
 <div class="section">
   <div>
 
@@ -36,6 +26,32 @@ const role = view(Inputs.radio(["All", "Outfield", "GK"], {value: "All", label: 
 const gemsOnly = view(Inputs.toggle({label: "Hidden gems only", value: false}));
 ```
   <span class="muted">Hidden gem = Reserves/U18 player with no senior minutes all season.</span>
+  </div>
+  <div>
+
+```js
+const xMetric = view(groupMetricSelect(Inputs.select(metricOptions(playerCols), {value: "minutes", label: "X axis"})));
+const yMetric = view(groupMetricSelect(Inputs.select(metricOptions(playerCols), {value: "goals", label: "Y axis"})));
+```
+  </div>
+</div>
+
+<details>
+<summary>More filters</summary>
+<div class="section">
+  <div>
+
+```js
+const division = view(Inputs.checkbox(["SL1", "SL2"], {value: ["SL1", "SL2"], label: "Division"}));
+const gradeSel = view(Inputs.checkbox(GRADES, {value: [...GRADES.values()], label: "Grade"}));
+```
+  </div>
+  <div>
+
+```js
+const leagueChoices = new Map(leagues.filter((l) => division.includes(l.division) && gradeSel.includes(l.grade)).map((l) => [l.short, l.league]));
+const leagueSel = view(Inputs.select(leagueChoices, {multiple: true, size: Math.min(leagueChoices.size, 12) || 1, value: [...leagueChoices.values()], label: "Leagues (⌘/ctrl-click to pick several)"}));
+```
   </div>
   <div>
 
@@ -49,8 +65,6 @@ const minApps = view(Inputs.range([0, 25], {value: 3, step: 1, label: "Minimum a
 ```js
 const defenseView = view(Inputs.toggle({label: "Defensive impact view", value: role === "GK"}));
 const defenseMetric = view(Inputs.radio(new Map([["Clean sheets", "clean_sheets"], ["Goals conceded on pitch", "ga_on_pitch"]]), {value: "clean_sheets", label: ""}));
-const xMetric = view(groupMetricSelect(Inputs.select(metricOptions(playerCols), {value: "minutes", label: "X axis"})));
-const yMetric = view(groupMetricSelect(Inputs.select(metricOptions(playerCols), {value: "goals", label: "Y axis"})));
 ```
   <span class="muted">Defensive view plots minutes played vs clean sheets or goals conceded on pitch — on for GK by default, or switch it on for any role.</span>
   </div>
@@ -63,6 +77,7 @@ const labelTop = view(Inputs.range([0, 30], {value: 8, step: 1, label: "Label to
 ```
   </div>
 </div>
+</details>
 
 ```js
 const filtered = players.filter((d) =>
@@ -116,7 +131,7 @@ function chart(width) {
   <div class="card grid-colspan-2">
     <h2>${label(ys)} vs ${label(xs)} <span class="muted">— ${withXY.length.toLocaleString()} players shown${gemsOnly ? " (hidden gems only)" : ""}</span></h2>
     <p class="muted">${describe(ys)}. ${describe(xs)}. Dashed lines are medians of the players shown. Gold outline = hidden gem (no senior minutes).${yReversed ? " Axis flipped so the top shows the best performers." : ""}</p>
-    ${resize(chart)}
+    <div style="min-height: 560px">${resize(chart)}</div>
   </div>
   <div class="card">
     ${selected ? detail(selected) : html`<h2>Pick a player</h2><p class="muted">Click a point on the chart or a row in the table below.</p>`}

@@ -140,13 +140,24 @@ details summary { cursor: pointer; margin: 0.5rem 0; }
 /* Two related modules sharing one card instead of two adjacent boxes: a divider between
    columns does the separating, not a second border+background. */
 .split { display: grid; gap: 0 1.75rem; }
-.split-1-2 { grid-template-columns: 1fr 2fr; }
-.split-1-1 { grid-template-columns: 1fr 1fr; }
+/* minmax(0, ...) not a bare fr: grid items default to min-width:auto, which lets a wide
+   table (career table, match list) force its track to grow instead of shrinking to fit —
+   the table's own overflow-x:auto scroller never gets a chance to engage otherwise. */
+.split-1-2 { grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); }
+.split-1-1 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.split > .col { min-width: 0; }
 .split > .col + .col { border-left: 1px solid var(--theme-foreground-faintest); padding-left: 1.75rem; }
 @media (max-width: 780px) {
   .split { grid-template-columns: 1fr !important; }
   .split > .col + .col { border-left: none; padding-left: 0; border-top: 1px solid var(--theme-foreground-faintest); padding-top: 1.25rem; margin-top: 1.25rem; }
 }
+
+/* Player profile tabs: an underline, not another box — the page already has enough cards. */
+.tabbar { display: flex; gap: 1.5rem; margin: 1.5rem 0 1rem; border-bottom: 1px solid var(--theme-foreground-faintest); }
+.tab-btn { background: none; border: none; border-bottom: 2px solid transparent; color: var(--theme-foreground-muted); font: inherit; font-family: var(--display); font-size: 1.1rem; padding: 0.4rem 0.1rem 0.6rem; margin-bottom: -1px; cursor: pointer; }
+.tab-btn:hover { color: var(--theme-foreground); }
+.tab-btn.active { color: var(--theme-foreground); border-bottom-color: var(--accent); }
+.tab-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 .mtitle { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
 .mtitle h2 { margin-bottom: 0.25rem; }

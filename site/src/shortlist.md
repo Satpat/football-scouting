@@ -18,6 +18,25 @@ const notes = await FileAttachment("./data/notes.json").json();
   <div>
 
 ```js
+const role = view(Inputs.radio(["Outfield", "GK"], {value: "Outfield", label: "Role"}));
+const gemsOnly = view(Inputs.toggle({label: "Hidden gems only", value: true}));
+const u18Only = view(Inputs.toggle({label: "U18 players only", value: false}));
+```
+  </div>
+  <div>
+
+```js
+const topN = view(Inputs.range([10, 400], {value: 50, step: 10, label: "Show top N"}));
+```
+  </div>
+</div>
+
+<details>
+<summary>More filters</summary>
+<div class="section">
+  <div>
+
+```js
 const division = view(Inputs.checkbox(["SL1", "SL2"], {value: ["SL1", "SL2"], label: "Division"}));
 const gradeSel = view(Inputs.checkbox(GRADES, {value: [...GRADES.values()], label: "Grade"}));
 ```
@@ -32,20 +51,12 @@ const leagueSel = view(Inputs.select(leagueChoices, {multiple: true, size: Math.
   <div>
 
 ```js
-const role = view(Inputs.radio(["Outfield", "GK"], {value: "Outfield", label: "Role"}));
-const gemsOnly = view(Inputs.toggle({label: "Hidden gems only", value: true}));
-const u18Only = view(Inputs.toggle({label: "U18 players only", value: false}));
-```
-  </div>
-  <div>
-
-```js
-const topN = view(Inputs.range([10, 400], {value: 50, step: 10, label: "Show top N"}));
 const clubs = ["(all)", ...new Set(shortlist.map((d) => d.club).sort())];
 const club = view(Inputs.select(clubs, {value: "(all)", label: "Club"}));
 ```
   </div>
 </div>
+</details>
 
 ```js
 const rows = shortlist.filter((d) => d.role === role && division.includes(d.division) && gradeSel.includes(d.grade) && leagueSel.includes(d.league) &&

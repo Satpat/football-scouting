@@ -74,9 +74,7 @@ const seasonCols = ["apps", "starts", "minutes", "goals", "goals_open_play", "go
 const rateCols = ["npg_per90", "goals_per90", "votes_per_app", "team_goal_share_pct", "minutes_share_pct", "start_rate_pct", "gd_on_pitch_vs_team", "ga_on_pitch_per90", "clean_sheet_pct", "yellows_per90", "ppg_when_playing", "ppg_start_diff"];
 const seasonTable = (rows) => html`<table class="stats"><thead><tr><th>Club</th><th>Grade</th><th>League</th>${seasonCols.map((c) => html`<th>${iconHeader(c, `${label(c)} — ${describe(c)}`)}</th>`)}</tr></thead>
   <tbody>${rows.map((r) => html`<tr class="${r.team_id === p?.team_id ? "sel" : ""}"><td>${clubCell(r.club, 16)}</td><td>${GRADE_NAME[r.grade]}</td><td>${shortLeagueOnly(r.league)}</td>${seasonCols.map((c) => html`<td>${fmt(c, r[c])}</td>`)}</tr>`)}</tbody></table>`;
-```
-
-<div>${p ? html`<div class="card">
+const profileCard = () => p ? html`<div class="card">
   <div class="split split-1-2">
     <div class="col">
     <h2>Profile</h2>
@@ -113,7 +111,8 @@ const seasonTable = (rows) => html`<table class="stats"><thead><tr><th>Club</th>
     ${rowsFor.filter((r) => r.apps > 0).length > 1 ? html`<details><summary class="muted">All teams this season</summary>${seasonTable(rowsFor.filter((r) => r.apps > 0).sort((a, b) => b.minutes - a.minutes))}</details>` : ""}
     </div>
   </div>
-  </div>` : ""}</div>
+</div>` : null;
+```
 
 ```js
 const TRAITS = [
@@ -123,29 +122,12 @@ const TRAITS = [
 const GK_TRAITS = [["ga_on_pitch_per90", true], ["clean_sheet_pct", false], ["votes_per_app", false], ["minutes_share_pct", false], ["gd_on_pitch_vs_team", false], ["yellows_per90", true]];
 const peers = p ? players.filter((d) => d.league === p.league && d.role === p.role && d.minutes >= 450) : [];
 const traits = p ? (p.role === "GK" ? GK_TRAITS : TRAITS).map(([col, invert]) => ({col, invert, value: p[col], pct: percentile(peers.map((d) => d[col]), p[col], invert)})) : [];
+const traitsCard = () => p ? html`<div class="card">
+  <h2>Player traits</h2>
+  <p class="muted" style="margin-top:-0.5rem">Percentile vs ${peers.length} ${p.role === "GK" ? "goalkeepers" : "outfield players"} in this league with 450+ minutes. Cards and goals conceded are inverted.</p>
+  <div class="radar-wrap" style="max-width: 440px; margin: 0 auto;">${resize((width) => radar(traits.map((t) => ({...t, label: label(t.col).replace(" per 90", "/90").replace("Best-on-ground ", "").replace("On-pitch goal difference vs team", "GD vs team").replace("Share of team ", "Team ")})), {size: Math.min(width, 380), accent, levels: 3}))}</div>
+</div>` : null;
 ```
-
-<div>${p ? html`<div class="card">
-  <div class="split split-1-2">
-    <div class="col">
-    <h2>Player traits</h2>
-    <p class="muted" style="margin-top:-0.5rem">Percentile vs ${peers.length} ${p.role === "GK" ? "goalkeepers" : "outfield players"} in this league with 450+ minutes. Cards and goals conceded are inverted.</p>
-    <div class="radar-wrap">${resize((width) => radar(traits.map((t) => ({...t, label: label(t.col).replace(" per 90", "/90").replace("Best-on-ground ", "").replace("On-pitch goal difference vs team", "GD vs team").replace("Share of team ", "Team ")})), {size: Math.min(width, 380), accent, levels: 3}))}</div>
-    </div>
-    <div class="col">
-    <h2>Season so far</h2>
-    ${seasonRows.length ? resize((width) => {
-      let g = 0, m = 0;
-      const cum = seasonRows.map((r, i) => ({i: i + 1, date: r.date, goals: (g += r.goals ?? 0), minutes: (m += r.minutes ?? 0), opp: r.side === "home" ? r.away_team : r.home_team, result: r.result, comp: r.league}));
-      return Plot.plot({width, height: 240, marginLeft: 40, x: {label: "Appearance (all competitions) →"}, y: {label: "↑ Cumulative goals", grid: true},
-        marks: [Plot.lineY(cum, {x: "i", y: "goals", stroke: accent, curve: "step-after", strokeWidth: 2}),
-                Plot.dot(cum, {x: "i", y: "goals", fill: (d) => d.result === "W" ? "#2ca02c" : d.result === "D" ? "#999" : "#d62728", r: 4,
-                  channels: {Date: (d) => fmtDate(d.date), Opponent: "opp", Result: "result", Competition: "comp", Minutes: "minutes"}, tip: {format: {x: false, y: true}}})]});
-    }) : html`<p class="muted">No matches recorded.</p>`}
-    <p class="muted">Dot colour shows the match result.</p>
-    </div>
-  </div>
-</div>` : ""}</div>
 
 ```js
 const allMatches = p
@@ -213,19 +195,42 @@ const careerTable = html`<table class="stats career-table"><thead><tr><th>Season
     html`<tr class="season-row"><td>${c.season}</td><td>${clubCell(String(c.clubs).split("; ")[0], 18)}</td>${careerStatCols.map((col) => html`<td>${fmt(col, c[col])}</td>`)}</tr>`,
     ...leaguesOf(c).map((l) => html`<tr class="league-row"><td></td><td class="league-name">${GRADE_NAME[leagueGrade(l)] ?? "–"} · ${shortLeagueOnly(l)}</td><td colspan="${careerStatCols.length}"></td></tr>`),
   ])}</tbody></table>`;
+const seasonChartCard = () => p ? html`<div class="card">
+  <h2>Season so far</h2>
+  ${seasonRows.length ? html`<div style="min-height: 280px">${resize((width) => {
+    let g = 0, m = 0;
+    const cum = seasonRows.map((r, i) => ({i: i + 1, date: r.date, goals: (g += r.goals ?? 0), minutes: (m += r.minutes ?? 0), opp: r.side === "home" ? r.away_team : r.home_team, result: r.result, comp: r.league}));
+    return Plot.plot({width, height: 280, marginLeft: 40, x: {label: "Appearance (all competitions) →"}, y: {label: "↑ Cumulative goals", grid: true},
+      marks: [Plot.lineY(cum, {x: "i", y: "goals", stroke: accent, curve: "step-after", strokeWidth: 2}),
+              Plot.dot(cum, {x: "i", y: "goals", fill: (d) => d.result === "W" ? "#2ca02c" : d.result === "D" ? "#999" : "#d62728", r: 4,
+                channels: {Date: (d) => fmtDate(d.date), Opponent: "opp", Result: "result", Competition: "comp", Minutes: "minutes"}, tip: {format: {x: false, y: true}}})]});
+  })}</div>` : html`<p class="muted">No matches recorded.</p>`}
+  <p class="muted">Dot colour shows the match result.</p>
+</div>` : null;
+const matchesCard = () => p ? html`<div class="card">
+  <div class="mtitle"><h2>Match stats</h2>${compInput}</div>
+  ${matchList}
+  <p class="muted">Includes cups and trials. Minutes are DRIBL's own; votes are 3-2-1 best-on-ground.</p>
+</div>` : null;
+const careerCard = () => p ? html`<div class="card">
+  <h2>Career <span class="muted">— seasons recorded in DRIBL</span></h2>
+  <div class="table-scroll">${careerTable}</div>
+  <p class="muted">Leagues/grades played that season are listed under it.</p>
+</div>` : null;
 ```
 
-<div>${p ? html`<div class="card">
-  <div class="split split-1-1">
-    <div class="col">
-    <div class="mtitle"><h2>Match stats</h2>${compInput}</div>
-    ${matchList}
-    <p class="muted">Includes cups and trials. Minutes are DRIBL's own; votes are 3-2-1 best-on-ground.</p>
-    </div>
-    <div class="col">
-    <h2>Career <span class="muted">— seasons recorded in DRIBL</span></h2>
-    <div class="table-scroll">${careerTable}</div>
-    <p class="muted">Leagues/grades played that season are listed under it.</p>
-    </div>
+```js
+const tab = Mutable("Overview");
+const setTab = (t) => (tab.value = t);
+```
+
+<div>${p ? html`
+  <div class="tabbar" role="tablist">
+    <button class="tab-btn ${tab === "Overview" ? "active" : ""}" onclick=${() => setTab("Overview")}>Overview</button>
+    <button class="tab-btn ${tab === "Matches" ? "active" : ""}" onclick=${() => setTab("Matches")}>Matches</button>
+    <button class="tab-btn ${tab === "Career" ? "active" : ""}" onclick=${() => setTab("Career")}>Career</button>
   </div>
-</div>` : ""}</div>
+  ${tab === "Overview" ? html`${profileCard()}${traitsCard()}` : ""}
+  ${tab === "Matches" ? html`${seasonChartCard()}${matchesCard()}` : ""}
+  ${tab === "Career" ? careerCard() : ""}
+` : ""}</div>
