@@ -911,6 +911,22 @@
   "higher_is_better": null,
   "metric": false
  },
+ "flag": {
+  "label": "Flag",
+  "short": "Flag",
+  "desc": "Flag emoji for the recorded nationality",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "borrowed_side": {
+  "label": "Borrowed",
+  "short": "Borrowed",
+  "desc": "DRIBL listed the player as borrowed for this match",
+  "fmt": "bool",
+  "higher_is_better": null,
+  "metric": false
+ },
  "headshot": {
   "label": "Photo",
   "short": "Photo",

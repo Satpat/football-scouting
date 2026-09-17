@@ -47,7 +47,7 @@ export const COL_ICONS = {
   starting: "play", minutes: "clock", goals: "ball", goals_open_play: "ball", goals_penalty: "target", own_goals: "minus",
   votes: "star", yellow_cards: "yellowcard", red_cards: "redcard", is_captain: "captain", captain_apps: "captain",
   is_goalkeeper: "gloves", clean_sheet: "gloves", clean_sheets: "gloves", clean_sheet_pct: "gloves", in_dataset: "database",
-  apps: "list", starts: "play", sub_apps: "swap", bench_unused: "bench", borrowed: "handshake", borrowed_apps: "handshake",
+  borrowed_side: "handshake", flag: "globe", apps: "list", starts: "play", sub_apps: "swap", bench_unused: "bench", borrowed: "handshake", borrowed_apps: "handshake",
   goals_go_ahead: "trending", goals_winner: "zap", goals_equaliser: "swap", goals_late: "clock",
   team_gf: "plus", team_ga: "minus", age: "cake", nationality: "globe", jersey: "shirt", role: "user", grade: "layers",
   n_teams: "users", grades_played: "route", highest_grade: "trending", sen_minutes: "clock", team_ladder_pos: "ladder",

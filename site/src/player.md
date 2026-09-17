@@ -78,7 +78,7 @@ const rateCols = ["npg_per90", "goals_per90", "votes_per_app", "team_goal_share_
   <div class="card">
     <h2>Profile</h2>
     ${p ? kv([
-      ["age", "Age", p.age], ["nationality", "Nationality", p.nationality], ["jersey", "Shirt", p.jersey], ["role", "Role", p.role],
+      ["age", "Age", p.age], ["nationality", "Nationality", p.flag ? html`<span title="${p.nationality}" style="font-size:1.3em;cursor:help">${p.flag}</span>` : p.nationality], ["jersey", "Shirt", p.jersey], ["role", "Role", p.role],
       ["grade", "Grade", GRADE_NAME[p.grade]], ["league", "League", p.league], ["n_teams", "Teams this season", p.n_teams],
       ["grades_played", "Grades played", p.grades_played], ["highest_grade", "Highest grade", GRADE_NAME[p.highest_grade]],
       ["sen_minutes", "Senior minutes", fmt("sen_minutes", p.sen_minutes)],
@@ -140,9 +140,10 @@ const compSel = view(Inputs.select(compChoices, {value: "All competitions", labe
 ```
 
 ```js
-const matchRows = allMatches.filter((r) => compSel === "All competitions" || r.league === compSel).map((r) => ({...r, opponent: r.side === "home" ? r.away_team : r.home_team, opponent_club: r.side === "home" ? r.away_club : r.home_club, ha: r.side === "home" ? "H" : "A"}));
-const matchCols = ["date", "league", "full_round", "opponent", "ha", "result", "score", "did_play", "starting", "minutes", "goals", "votes", "yellow_cards", "red_cards", "is_captain", "clean_sheet", "in_dataset"];
-const matchLabels = {...headers(matchCols), ha: "Home / away", opponent: "Opponent", full_round: "Round", did_play: "Played", in_dataset: "In SL dataset"};
+const matchRows = allMatches.filter((r) => compSel === "All competitions" || r.league === compSel).map((r) => ({...r, opponent: r.side === "home" ? r.away_team : r.side === "away" ? r.home_team : `${r.home_team} v ${r.away_team}`, opponent_club: r.side === "home" ? r.away_club : r.side === "away" ? r.home_club : null, ha: r.side === "home" ? "H" : r.side === "away" ? "A" : "–"}));
+const matchCols = ["date", "league", "full_round", "opponent", "ha", "result", "score", "did_play", "starting", "minutes", "goals", "votes", "yellow_cards", "red_cards", "is_captain", "clean_sheet", "borrowed_side"];
+const matchLabels = {...headers(matchCols), ha: "Home / away", opponent: "Opponent", full_round: "Round", did_play: "Played", borrowed_side: "Borrowed for this match"};
+const matchAlign = Object.fromEntries(matchCols.filter((c) => !["league", "opponent", "full_round"].includes(c)).map((c) => [c, "center"]));
 const matchHdr = Object.fromEntries(matchCols.map((c) => [c, iconHeader(c, matchLabels[c])]));
 const matchFmt = {...formats(matchCols), date: fmtDate,
   opponent: (v, i) => { const s = document.createElement("span"); s.className = "club-cell"; s.append(crest(matchRows[i].opponent_club, 18), document.createTextNode(" " + v)); return s; },
@@ -151,9 +152,9 @@ const matchFmt = {...formats(matchCols), date: fmtDate,
 
 <div class="card">
   <h2>Match stats <span class="muted">— ${matchRows.length} matches${compSel === "All competitions" ? " in all competitions" : ""}</span></h2>
-  ${p ? Inputs.table(matchRows, {columns: matchCols, header: matchHdr, format: matchFmt, rows: 30, select: false, width: {opponent: 260, league: 220, full_round: 110}, layout: "auto"}) : ""}
+  ${p ? Inputs.table(matchRows, {columns: matchCols, header: matchHdr, format: matchFmt, align: matchAlign, rows: 30, select: false, width: {opponent: 260, league: 220, full_round: 110}, layout: "auto"}) : ""}
   <div class="icon-key">${matchCols.map((c) => html`<span>${iconHeader(c, matchLabels[c], {size: 13})} ${matchLabels[c]}</span>`)}</div>
-  <p class="muted">All matches DRIBL lists for this player this season, including cups and trial matches. Minutes here are DRIBL's own figures. "In SL dataset" marks the State League fixtures that feed the Explorer's stats.</p>
+  <p class="muted">All matches DRIBL lists for this player this season, including cups and trial matches. Minutes here are DRIBL's own figures.</p>
 </div>
 
 ```js

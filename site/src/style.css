@@ -93,3 +93,8 @@ form[class*="inputs"] { max-width: 100%; }
 .badge, .pill { display: inline-flex; align-items: center; justify-content: center; line-height: 1; height: 20px; padding: 0 8px; box-sizing: border-box; }
 .badges { align-items: center; }
 .badges .gem-mark { height: 22px; width: 22px; }
+
+/* centred stat columns: header icon and value share the same axis */
+th .ico-hdr { width: 100%; justify-content: center; }
+table.stats th, table.stats td { text-align: center; }
+table.stats th:first-child, table.stats td:first-child, table.stats th:nth-child(2), table.stats td:nth-child(2) { text-align: left; }

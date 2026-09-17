@@ -147,6 +147,8 @@ LABELS = {
     # profile
     "age": ("Age", "Age", "Age as shown on the DRIBL member profile at extraction time", "int", None, True),
     "nationality": ("Nationality", "Nat.", "Nationality recorded in DRIBL", "str", None, False),
+    "flag": ("Flag", "Flag", "Flag emoji for the recorded nationality", "str", None, False),
+    "borrowed_side": ("Borrowed", "Borrowed", "DRIBL listed the player as borrowed for this match", "bool", None, False),
     "headshot": ("Photo", "Photo", "DRIBL profile photo URL", "str", None, False),
     "dribl_url": ("DRIBL profile", "DRIBL", "Link to the player's public DRIBL member profile", "str", None, False),
     "club_slug": ("Club key", "Club key", "Crest file key", "str", None, False),
@@ -200,11 +202,11 @@ PLAYER_COLS = ["player_id", "player_name", "club", "team", "team_id", "league", 
                "ppg_when_playing", "ppg_start_diff", "team_ladder_pos", "ladder_teams", "team_ppg", "team_matches",
                "grades_played", "highest_grade", "u18_player", "hidden_gem", "sen_minutes", "res_minutes", "u18_minutes",
                "sen_apps", "n_teams", "borrowed_apps_all",
-               "age", "nationality", "headshot", "dribl_url", "club_slug", "club_color", "club_accent"]
+               "age", "nationality", "flag", "headshot", "dribl_url", "club_slug", "club_color", "club_accent"]
 CAREER_COLS = ["player_id", "season", "clubs", "leagues", "played", "started", "minutes", "goals", "yellow_cards", "red_cards",
                "votes", "clean_sheets", "was_goalkeeper"]
 MEMBER_MATCH_COLS = ["player_id", "date", "comp", "league", "full_round", "home_team", "away_team", "home_club", "away_club",
-                     "home_score", "away_score", "score", "side", "result", "did_play", "starting", "minutes", "goals",
+                     "home_score", "away_score", "score", "side", "result", "borrowed_side", "did_play", "starting", "minutes", "goals",
                      "yellow_cards", "red_cards", "votes", "is_captain", "is_goalkeeper", "clean_sheet", "match_hash_id", "in_dataset"]
 SHORTLIST_COLS = ["rank_in_role", "role", "player_id", "team_id", "player_name", "club", "team", "league", "grade", "division",
                   "u18_player", "highest_grade", "hidden_gem", "gem_score", "scout_score", "why_flagged", "age",
@@ -261,6 +263,39 @@ def league_order(leagues: pd.DataFrame) -> list:
     return rows
 
 
+DEMONYM_ISO = {
+    "australian": "AU", "australia": "AU", "afghan": "AF", "british, uk": "GB", "british": "GB", "english": "GB", "scottish": "GB",
+    "welsh": "GB", "italian": "IT", "greek, hellenic": "GR", "greek": "GR", "burundian": "BI", "congolese": "CD", "japanese": "JP",
+    "liberian": "LR", "south sudanese": "SS", "new zealand, nz": "NZ", "new zealander": "NZ", "albanian": "AL", "south korean": "KR",
+    "korean": "KR", "nepali, nepalese": "NP", "nepalese": "NP", "nigerian": "NG", "lebanese": "LB", "burmese": "MM", "sudanese": "SD",
+    "syrian": "SY", "american": "US", "iranian, persian": "IR", "iranian": "IR", "brazilian": "BR", "zimbabwean": "ZW", "ethiopian": "ET",
+    "serbian": "RS", "vietnamese": "VN", "iraqi": "IQ", "argentine": "AR", "argentinian": "AR", "south african": "ZA", "croatian": "HR",
+    "tanzanian": "TZ", "pakistani": "PK", "indian": "IN", "somali, somalian": "SO", "somali": "SO", "ni-vanuatu, vanuatuan": "VU",
+    "eritrean": "ER", "irish": "IE", "ukrainian": "UA", "indonesian": "ID", "guinean": "GN", "ghanaian": "GH", "kenyan": "KE",
+    "bosnian or herzegovinian": "BA", "bosnian": "BA", "canadian": "CA", "palestinian": "PS", "cambodian": "KH", "russian": "RU",
+    "philippine, filipino": "PH", "filipino": "PH", "cypriot": "CY", "polish": "PL", "german": "DE", "malaysian": "MY", "chilean": "CL",
+    "spanish": "ES", "egyptian": "EG", "dutch, netherlandic": "NL", "dutch": "NL", "french": "FR", "portuguese": "PT", "turkish": "TR",
+    "macedonian": "MK", "hungarian": "HU", "romanian": "RO", "bulgarian": "BG", "colombian": "CO", "mexican": "MX", "peruvian": "PE",
+    "uruguayan": "UY", "venezuelan": "VE", "chinese": "CN", "thai": "TH", "sri lankan": "LK", "bangladeshi": "BD", "singaporean": "SG",
+    "fijian": "FJ", "samoan": "WS", "tongan": "TO", "papua new guinean": "PG", "maltese": "MT", "swedish": "SE", "norwegian": "NO",
+    "danish": "DK", "finnish": "FI", "belgian": "BE", "swiss": "CH", "austrian": "AT", "czech": "CZ", "slovak": "SK", "slovenian": "SI",
+    "montenegrin": "ME", "kosovar": "XK", "moroccan": "MA", "algerian": "DZ", "tunisian": "TN", "libyan": "LY", "jordanian": "JO",
+    "saudi, saudi arabian": "SA", "emirati": "AE", "israeli": "IL", "armenian": "AM", "georgian": "GE", "kazakh": "KZ", "uzbek": "UZ",
+    "cameroonian": "CM", "ivorian": "CI", "senegalese": "SN", "malian": "ML", "sierra leonean": "SL", "togolese": "TG", "ugandan": "UG",
+    "rwandan": "RW", "zambian": "ZM", "malawian": "MW", "mozambican": "MZ", "angolan": "AO", "namibian": "NA", "botswanan": "BW",
+    "jamaican": "JM", "trinidadian": "TT", "cuban": "CU", "dominican": "DO", "haitian": "HT", "salvadoran": "SV", "guatemalan": "GT",
+    "honduran": "HN", "costa rican": "CR", "panamanian": "PA", "ecuadorian": "EC", "bolivian": "BO", "paraguayan": "PY",
+    "taiwanese": "TW", "mongolian": "MN", "bhutanese": "BT", "maldivian": "MV", "laotian": "LA", "timorese": "TL", "kurdish": "",
+}
+
+
+def flag_of(nationality) -> str:
+    if not nationality:
+        return ""
+    code = DEMONYM_ISO.get(str(nationality).strip().lower(), "")
+    return "".join(chr(0x1F1E6 + ord(c) - 65) for c in code) if len(code) == 2 else ""
+
+
 def slugify(name: str) -> str:
     import re
     return re.sub(r"[^a-z0-9]+", "-", str(name).lower()).strip("-")
@@ -278,7 +313,7 @@ def profile_frame(profiles: dict) -> pd.DataFrame:
     rows = []
     for pid, p in profiles.items():
         clubs = p.get("player_clubs") or []
-        rows.append({"player_id": pid, "age": p.get("age"), "nationality": p.get("nationality"), "headshot": p.get("image"),
+        rows.append({"player_id": pid, "age": p.get("age"), "nationality": p.get("nationality"), "flag": flag_of(p.get("nationality")), "headshot": p.get("image"),
                      "dribl_url": DRIBL_PROFILE.format(id=pid),
                      "_club_colors": {c.get("name"): (c.get("color"), c.get("accent")) for c in clubs}})
     return pd.DataFrame(rows)
@@ -296,13 +331,30 @@ def career_frame(careers: dict) -> pd.DataFrame:
     return pd.DataFrame(rows).sort_values(["player_id", "season"])
 
 
-def member_match_frame(member_matches: dict, known_matches: set) -> pd.DataFrame:
+def member_match_frame(member_matches: dict, known_matches: set, player_teams: dict, player_clubs: dict) -> pd.DataFrame:
+    """player_teams/player_clubs: player_id -> set of team ids / club names from the SL dataset. DRIBL sets side='borrowed'
+    for borrowed players, so the side is resolved from the player's known teams, then clubs."""
     rows = []
     strip = lambda t: str(t or "").replace(" Male", "").replace(" Female", "")
     for pid, ms in member_matches.items():
+        teams, clubs = player_teams.get(pid, set()), player_clubs.get(pid, set())
         for m in ms:
             hs, as_ = m.get("home_score"), m.get("away_score")
             side = m.get("side")
+            borrowed_side = side == "borrowed"
+            if side not in ("home", "away"):
+                h_t, a_t = m.get("home_team_hash_id"), m.get("away_team_hash_id")
+                h_c, a_c = m.get("home_club_name"), m.get("away_club_name")
+                if h_t in teams and a_t not in teams:
+                    side = "home"
+                elif a_t in teams and h_t not in teams:
+                    side = "away"
+                elif h_c in clubs and a_c not in clubs:
+                    side = "home"
+                elif a_c in clubs and h_c not in clubs:
+                    side = "away"
+                else:
+                    side = None
             if hs is None or as_ is None or side not in ("home", "away"):
                 result = ""
             else:
@@ -314,7 +366,7 @@ def member_match_frame(member_matches: dict, known_matches: set) -> pd.DataFrame
                          "home_team": strip(m.get("home_team_name")), "away_team": strip(m.get("away_team_name")),
                          "home_club": m.get("home_club_name"), "away_club": m.get("away_club_name"),
                          "home_score": hs, "away_score": as_, "score": f"{hs}–{as_}" if hs is not None and as_ is not None else "",
-                         "side": side, "result": result, "did_play": bool(m.get("played")), "starting": bool(m.get("started")),
+                         "side": side, "result": result, "borrowed_side": borrowed_side, "did_play": bool(m.get("played")), "starting": bool(m.get("started")),
                          "minutes": m.get("minutes"), "goals": m.get("goals"), "yellow_cards": m.get("yellow_card_count"),
                          "red_cards": m.get("red_card_count"), "votes": m.get("votes"), "is_captain": bool(m.get("is_captain")),
                          "is_goalkeeper": bool(m.get("is_goalkeeper")), "clean_sheet": bool(m.get("clean_sheet")),
@@ -334,12 +386,12 @@ def main():
     app_play = app[app.playing]
 
     # profile fields: age, nationality, headshot, DRIBL link, club colours; crest key from clubs.csv
-    for c in ("age", "nationality", "headshot", "dribl_url", "club_color", "club_accent"):
+    for c in ("age", "nationality", "flag", "headshot", "dribl_url", "club_color", "club_accent"):
         season[c] = None
     if profiles:
         pf = profile_frame(profiles).set_index("player_id")
         season = season.join(pf.drop(columns=["_club_colors"]), on="player_id", rsuffix="_p")
-        for c in ("age", "nationality", "headshot", "dribl_url"):
+        for c in ("age", "nationality", "flag", "headshot", "dribl_url"):
             season[c] = season.pop(f"{c}_p")
         colors = season.apply(lambda r: (pf.loc[r.player_id, "_club_colors"].get(r.club) if r.player_id in pf.index else None) or (None, None), axis=1)
         season["club_color"] = [c[0] for c in colors]
@@ -359,7 +411,9 @@ def main():
     if careers:
         exports["careers.csv"] = tidy(career_frame(careers), CAREER_COLS)
     if member_matches:
-        exports["member_matches.parquet"] = tidy(member_match_frame(member_matches, set(matches.match_hash_id)), MEMBER_MATCH_COLS, bool_as_text=False)
+        player_teams = app_play.groupby("player_id").team_id.agg(set).to_dict()
+        player_clubs = app_play.groupby("player_id").club.agg(set).to_dict()
+        exports["member_matches.parquet"] = tidy(member_match_frame(member_matches, set(matches.match_hash_id), player_teams, player_clubs), MEMBER_MATCH_COLS, bool_as_text=False)
     for name, df in exports.items():
         missing = [c for c in df.columns if c not in LABELS]
         assert not missing, f"{name}: no LABELS entry for {missing}"
