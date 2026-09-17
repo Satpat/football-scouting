@@ -1,6 +1,5 @@
 ---
 title: Player profile
-theme: dashboard
 toc: false
 sql:
   appearances: ./data/appearances.parquet
@@ -9,6 +8,7 @@ sql:
 
 ```js
 import {label, short, describe, fmt, fmtDate, headers, formats, crest, clubCell, clubInfo, percentile, GRADE_NAME} from "./components/labels.js";
+import {radar} from "./components/radar.js";
 const players = await FileAttachment("./data/players.csv").csv({typed: true});
 const careers = await FileAttachment("./data/careers.csv").csv({typed: true});
 const q = new URLSearchParams(location.search);
@@ -47,7 +47,7 @@ const primary = p?.club_color || "#ffffff";
 
 <div>${p ? html`<div class="profile-head" style="background: linear-gradient(135deg, ${accent}, ${accent}cc);">
   ${p.headshot ? html`<img class="headshot" src="${p.headshot}" alt="${p.player_name}" referrerpolicy="no-referrer">` : ""}
-  ${crest(p.club, 56)}
+  ${(() => { const c = crest(p.club, 56); c.loading = "eager"; return c; })()}
   <div>
     <h1>${p.player_name}</h1>
     <div class="sub">${p.club} · ${p.team}</div>
@@ -66,36 +66,31 @@ const primary = p?.club_color || "#ffffff";
 </div>` : ""}</div>
 
 ```js
-const fact = (v, l) => html`<div><div class="v">${v ?? "–"}</div><div class="l">${l}</div></div>`;
-const tile = (col, v = p?.[col]) => html`<div class="t"><div class="v">${fmt(col, v)}</div><div class="l">${short(col)}</div></div>`;
+const kv = (rows) => html`<table class="kv"><tbody>${rows.map(([k, v]) => html`<tr><th>${k}</th><td>${v ?? "–"}</td></tr>`)}</tbody></table>`;
+const seasonCols = ["apps", "starts", "minutes", "goals", "goals_open_play", "goals_penalty", "votes", "yellow_cards", "red_cards", "clean_sheets", "goals_go_ahead", "goals_winner", "captain_apps", "borrowed_apps"];
+const seasonTable = (rows) => html`<table class="stats"><thead><tr><th>Team</th><th>League</th>${seasonCols.map((c) => html`<th title="${describe(c)}">${short(c)}</th>`)}</tr></thead>
+  <tbody>${rows.map((r) => html`<tr class="${r.team_id === p?.team_id ? "sel" : ""}"><td>${r.team}</td><td>${r.league.replace("HPG Homes State League ", "SL")}</td>${seasonCols.map((c) => html`<td>${fmt(c, r[c])}</td>`)}</tr>`)}</tbody></table>`;
+const rateCols = ["npg_per90", "goals_per90", "votes_per_app", "team_goal_share_pct", "minutes_share_pct", "start_rate_pct", "gd_on_pitch_vs_team", "ga_on_pitch_per90", "clean_sheet_pct", "yellows_per90", "ppg_when_playing", "ppg_start_diff"];
 ```
 
 <div class="grid grid-cols-3" style="grid-auto-rows: auto;">
   <div class="card">
     <h2>Profile</h2>
-    ${p ? html`<div class="facts">
-      ${fact(p.age, "Age")}
-      ${fact(p.nationality, "Nationality")}
-      ${fact(p.jersey, "Shirt")}
-      ${fact(p.role, "Role")}
-      ${fact(GRADE_NAME[p.grade], "Grade")}
-      ${fact(p.league, "League")}
-      ${fact(p.n_teams, "Teams this season")}
-      ${fact(p.grades_played, "Grades played")}
-      ${fact(GRADE_NAME[p.highest_grade], "Highest grade")}
-      ${fact(fmt("sen_minutes", p.sen_minutes), "Senior minutes")}
-      ${fact(p.team_ladder_pos ? `${p.team_ladder_pos} / ${p.ladder_teams}` : "–", "Team ladder position")}
-      ${fact(fmt("team_ppg", p.team_ppg), "Team points per game")}
-    </div>` : ""}
+    ${p ? kv([
+      ["Age", p.age], ["Nationality", p.nationality], ["Shirt", p.jersey], ["Role", p.role],
+      ["Grade", GRADE_NAME[p.grade]], ["League", p.league], ["Teams this season", p.n_teams],
+      ["Grades played", p.grades_played], ["Highest grade", GRADE_NAME[p.highest_grade]],
+      ["Senior minutes", fmt("sen_minutes", p.sen_minutes)],
+      ["Team ladder position", p.team_ladder_pos ? `${p.team_ladder_pos} / ${p.ladder_teams}` : "–"],
+      ["Team points per game", fmt("team_ppg", p.team_ppg)],
+    ]) : ""}
   </div>
   <div class="card grid-colspan-2">
-    <h2>${p ? p.league : "Season"} <span class="muted">— ${p?.team ?? ""}</span></h2>
-    ${p ? html`<div class="tiles">
-      ${tile("apps")}${tile("starts")}${tile("minutes")}${tile("goals")}${tile("goals_open_play")}${tile("goals_penalty")}
-      ${tile("votes")}${tile("yellow_cards")}${tile("red_cards")}${p.role === "GK" ? tile("clean_sheets") : tile("goals_go_ahead")}
-      ${tile("captain_apps")}${tile("borrowed_apps")}
-    </div>
-    <p class="muted" style="margin-top:0.75rem">${fmt("npg_per90", p.npg_per90)} non-penalty goals per 90 · ${fmt("team_goal_share_pct", p.team_goal_share_pct)} of team goals · ${fmt("votes_per_app", p.votes_per_app)} votes per app · on-pitch GD ${fmt("gd_on_pitch_vs_team", p.gd_on_pitch_vs_team)} vs team · ${p.goals_winner} winners, ${p.goals_equaliser} equalisers, ${p.goals_late} late goals · team PPG when starting vs not: ${fmt("ppg_start_diff", p.ppg_start_diff)}</p>` : ""}
+    <h2>Season 2026 by team</h2>
+    ${p ? seasonTable(rowsFor.slice().sort((a, b) => b.minutes - a.minutes)) : ""}
+    <h3 style="margin-top:1rem">Rates — ${p?.team ?? ""}</h3>
+    ${p ? html`<table class="stats"><thead><tr>${rateCols.map((c) => html`<th title="${describe(c)}">${short(c)}</th>`)}</tr></thead><tbody><tr>${rateCols.map((c) => html`<td>${fmt(c, p[c])}</td>`)}</tr></tbody></table>` : ""}
+    <p class="muted" style="margin-top:0.5rem">Hover a column header for its definition. ${p?.minutes_est_apps > 0 ? `${p.minutes_est_apps} of ${p.apps} appearances have estimated minutes (subs not recorded).` : ""}</p>
   </div>
 </div>
 
@@ -111,11 +106,10 @@ const traits = p ? (p.role === "GK" ? GK_TRAITS : TRAITS).map(([col, invert]) =>
 
 <div class="grid grid-cols-3" style="grid-auto-rows: auto;">
   <div class="card">
-    <h2>Player traits <span class="muted">— vs ${peers.length} ${p?.role === "GK" ? "goalkeepers" : "outfield players"} in this league with 450+ minutes</span></h2>
-    ${traits.map((t) => html`<div class="trait" title="${describe(t.col)}"><div>${label(t.col)}<br><span class="muted">${fmt(t.col, t.value)}</span></div>
-      <div class="bar"><div style="width:${t.pct ?? 0}%; background:${t.pct == null ? "#999" : t.pct >= 75 ? "#2ca02c" : t.pct >= 40 ? "#e6a700" : "#d62728"}"></div></div>
-      <div class="pct">${t.pct == null ? "–" : t.pct + "%"}</div></div>`)}
-    <p class="muted">Percentile rank. Yellow cards are inverted (fewer is better). Positions are not recorded by DRIBL, so peers are all outfield players.</p>
+    <h2>Player traits <span class="muted">— percentile vs ${peers.length} ${p?.role === "GK" ? "goalkeepers" : "outfield players"} in this league (450+ min)</span></h2>
+    ${p ? html`<div class="radar-wrap">${radar(traits.map((t) => ({...t, label: short(t.col)})), {size: 340, accent})}
+      <table class="radar-legend"><tbody>${traits.map((t) => html`<tr><th title="${describe(t.col)}">${label(t.col)}</th><td>${fmt(t.col, t.value)}</td><td><b>${t.pct == null ? "–" : t.pct + "%"}</b></td></tr>`)}</tbody></table></div>` : ""}
+    <p class="muted">Higher is better on every axis; conceded goals and yellow cards are inverted. DRIBL records no positions, so peers are all ${p?.role === "GK" ? "goalkeepers" : "outfield players"}.</p>
   </div>
   <div class="card grid-colspan-2">
     <h2>Season so far</h2>

@@ -1,6 +1,5 @@
 ---
 title: Explorer
-theme: dashboard
 toc: false
 sql:
   appearances: ./data/appearances.parquet

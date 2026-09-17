@@ -1,6 +1,5 @@
 ---
 title: Shortlist
-theme: dashboard
 toc: false
 ---
 

@@ -1,6 +1,5 @@
 ---
 title: Teams & ladders
-theme: dashboard
 toc: false
 ---
 
