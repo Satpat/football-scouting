@@ -4,6 +4,8 @@ Player and team statistics for Football SA's **HPG Homes State League 1 and 2** 
 
 **Live site:** https://satpat.github.io/football-scouting/
 
+New here? [ARCHITECTURE.md](ARCHITECTURE.md) explains how the pieces fit, what is generated, and how to ship a change.
+
 ## What is here
 
 | Path | Purpose |
@@ -15,7 +17,8 @@ Player and team statistics for Football SA's **HPG Homes State League 1 and 2** 
 | `build_scouting.py` | Builds every derived table (minutes, per-90 rates, game-state goals, on-pitch goal difference, clean sheets, votes, pathway, league-adjusted shortlist) → `output/dribl_scouting_2026.xlsx` and split JSON. `--check` runs reconciliation. |
 | `build_site_data.py` | Exports compact CSV/JSON for the site into `site/src/data/`, including `labels.json` (friendly column names) — the only place column labels are defined. |
 | `dribl_extract.py` | Local-Python equivalent of the browser extraction (currently blocked by Cloudflare). |
-| `site/` | [Observable Framework](https://observablehq.com/framework/) project: Explorer (any-metric scatter with league/grade toggles and a SQL-backed match-by-match view), Shortlist, Player profile (FotMob-style, `player?id=…`), Teams & ladders, About. |
+| `site/` | [Observable Framework](https://observablehq.com/framework/) project: Explorer (any-metric scatter with league/grade toggles and a SQL-backed match-by-match view), Shortlist, Player profile (FotMob-style, `player?id=…`), Teams & ladders, Ask the data (natural-language chat), About. |
+| `chat-worker/` | Stateless Cloudflare Worker behind the **Ask the data** page: holds the OpenAI key, turns questions into DuckDB SQL. Deploys to Cloudflare, not Pages — see [chat-worker/README.md](chat-worker/README.md). |
 | `SESSION_LOG.md` | Full working notes: API discovery, the `hash_id`/`match_hash_id` trap, pagination, what DRIBL does and doesn't record. |
 
 `output/` (raw dumps, workbook) is git-ignored; only the small site data files are committed.
@@ -52,6 +55,16 @@ python build_fonts.py
 ```bash
 cd site && npm install && npm run dev
 ```
+
+The **Ask the data** page also needs the chat Worker, in a second terminal:
+
+```bash
+cd chat-worker && npm install && npm run dev
+```
+
+Copy `chat-worker/.dev.vars.example` to `.dev.vars` first. Leaving `CHAT_MOCK="1"` in it
+exercises the whole chat loop with **no OpenAI spend**; swap in a real `OPENAI_API_KEY` for
+live answers. The page picks its endpoint by hostname, so no configuration is needed.
 
 ## Data caveats (short version)
 

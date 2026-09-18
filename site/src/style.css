@@ -254,3 +254,98 @@ details summary { cursor: pointer; margin: 0.5rem 0; }
 .ladder form table td, .ladder form table th { padding-right: 4px; }
 .ladder form table tr > :not(:first-of-type) { padding-left: 4px; }
 .ladder form table tr > :last-of-type { padding-right: 8px; }
+
+/* ── Chat ("Ask the data") ────────────────────────────────────────────────────
+   The transcript is prose, so it would inherit Framework's 640px reading measure if it
+   sat at page level — but it lives inside .card, which this file already uncaps, so the
+   answer text and its result table share the card's full width.
+   Everything here is theme variables and --accent: dark mode is driven entirely by the
+   prefers-color-scheme theme imports at the top of this file, so any hard-coded grey
+   would survive the theme switch and look wrong in one of the two modes. */
+.chat-log { display: flex; flex-direction: column; gap: 1.5rem; }
+.chat-turn { display: flex; flex-direction: column; gap: 0.6rem; }
+
+/* The question is the thing you scan for when scrolling back through a conversation,
+   so it gets the accent rule rather than a background fill — a tinted block would fight
+   the result tables directly beneath it. */
+.chat-q {
+  font-weight: 600;
+  border-left: 3px solid var(--accent);
+  padding-left: 0.75rem;
+}
+.chat-a p:first-child { margin-top: 0; }
+.chat-a p:last-child { margin-bottom: 0; }
+.chat-a ul, .chat-a ol { margin: 0.5rem 0; padding-left: 1.25rem; }
+.chat-a code {
+  background: var(--theme-background-alt);
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+.chat-step { margin-top: 0.25rem; }
+.chat-err { color: var(--theme-foreground-muted); font-size: 13px; }
+.chat-pending { color: var(--theme-foreground-muted); font-size: 13px; font-style: italic; }
+
+/* The SQL is the receipt for every number above it: always present, never in the way. */
+.chat-sql summary {
+  cursor: pointer;
+  color: var(--theme-foreground-muted);
+  font-size: 13px;
+}
+.chat-sql pre {
+  background: var(--theme-background-alt);
+  border-radius: 4px;
+  padding: 0.6rem 0.8rem;
+  overflow-x: auto;
+  font-size: 12.5px;
+  margin: 0.4rem 0 0;
+}
+
+.chat-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem; }
+/* Same shape as .mbtn — these are buttons that happen to carry a question. */
+.chat-chip {
+  background: var(--theme-background-alt);
+  border: 1px solid var(--theme-foreground-faintest);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font: inherit;
+  font-size: 13px;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+.chat-chip:hover { border-color: var(--accent); }
+.chat-chip:focus-visible { outline: 2px solid var(--accent); }
+
+/* Composer sticks to the bottom of the card so the input stays reachable as the
+   transcript grows, without the page having to scroll-anchor. */
+.chat-composer {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-end;
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--theme-foreground-faintest);
+}
+.chat-input {
+  flex: 1 1 auto;
+  font: inherit;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--theme-foreground-faintest);
+  border-radius: 6px;
+  background: var(--theme-background);
+  color: inherit;
+  resize: vertical;
+  min-height: 2.6rem;
+}
+.chat-input:focus-visible { outline: 2px solid var(--accent); border-color: var(--accent); }
+@media (max-width: 640px) {
+  .chat-composer { flex-direction: column; align-items: stretch; }
+}
+
+/* A generated query can return far more columns than a hand-built table ever would, and
+   Inputs.table compresses them all into the card width until headers collide. Let the
+   table take its natural width and scroll inside the step instead — the same treatment
+   .ladder gets, and the rule .table-scroll applies to plain tables. */
+.chat-step form { overflow-x: auto; }
+.chat-step form table { width: auto; min-width: 100%; }

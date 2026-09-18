@@ -1,0 +1,10 @@
+# Copy to `.dev.vars` for `wrangler dev`. NEVER commit .dev.vars.
+#
+# Plumbing test with no real key and no OpenAI spend. The mock walks the same
+# two-phase shape as the real model (ask for SQL, then answer), so the page's
+# loop, SQL guard and table rendering can all be tested offline:
+CHAT_MOCK="1"
+#
+# Real local test (calls OpenAI, costs money): comment out CHAT_MOCK above and
+# set your key here instead:
+# OPENAI_API_KEY="sk-...your key..."

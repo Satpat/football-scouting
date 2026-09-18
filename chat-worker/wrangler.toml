@@ -1,0 +1,9 @@
+name = "football-chat"
+main = "worker.js"
+compatibility_date = "2026-07-01"
+
+# Secrets are NOT set here. Set the OpenAI key once, out of source control:
+#   npx wrangler secret put OPENAI_API_KEY
+#
+# For local plumbing tests without a real key, put CHAT_MOCK="1" (and
+# optionally a fake OPENAI_API_KEY) in .dev.vars — see .dev.vars.example.
