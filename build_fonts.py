@@ -13,9 +13,11 @@ stylesheet rather than in every page's <head>, and cost no extra request.
 
 Aptos is not on Google Fonts and is never registered with the OS even where Office is
 installed (the files live inside the app bundle), so self-hosting is the only way headings
-render as Aptos for anyone but the author. Requires fonttools + brotli:
+render as Aptos for anyone but the author.
 
-    pip install fonttools brotli
+Needs fonttools + brotli, which live in the project venv alongside the data-pipeline deps:
+
+    source .venv/bin/activate && python build_fonts.py
 """
 import base64
 import subprocess
@@ -37,6 +39,17 @@ UNICODES = (
 )
 
 
+def check_deps() -> None:
+    try:
+        import brotli  # noqa: F401  (fontTools shells out to it for woff2)
+        import fontTools  # noqa: F401
+    except ModuleNotFoundError as e:
+        sys.exit(
+            f"{e.name} is missing. Run it from the project venv:\n"
+            "    source .venv/bin/activate && pip install fonttools brotli"
+        )
+
+
 def subset(src: Path, dest: Path) -> None:
     subprocess.run(
         [sys.executable, "-m", "fontTools.subset", str(src),
@@ -47,6 +60,7 @@ def subset(src: Path, dest: Path) -> None:
 
 
 def main() -> None:
+    check_deps()
     if not DFONTS.is_dir():
         sys.exit(f"{DFONTS} not found — install Microsoft Office or point DFONTS at the Aptos files")
     rules = []

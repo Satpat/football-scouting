@@ -36,7 +36,16 @@ python build_site_data.py
 # 3. Commit site/src/data and push — GitHub Actions rebuilds the site.
 ```
 
-Python deps: `pip install pandas openpyxl requests pyarrow`.
+Python deps: `pip install pandas openpyxl requests pyarrow fonttools brotli`.
+
+`fonttools`/`brotli` are only needed by `build_fonts.py`, which regenerates the subsetted
+Aptos webfont in `site/src/fonts.css` from a local Microsoft Office install. The generated
+file is committed, so you only need this if the headings font changes:
+
+```bash
+source .venv/bin/activate
+python build_fonts.py
+```
 
 ## Run the site locally
 
