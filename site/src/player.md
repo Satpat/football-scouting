@@ -7,7 +7,7 @@ sql:
 ---
 
 ```js
-import {label, short, describe, fmt, fmtDate, toDate, iconHeaders, formats, crest, clubCell, clubInfo, percentile, shortLeague, shortLeagueOnly, leagueGrade, isNumericCol, GRADE_NAME} from "./components/labels.js";
+import {label, short, describe, fmt, fmtDate, toDate, crest, clubCell, clubInfo, percentile, shortLeague, shortLeagueOnly, leagueGrade, isNumericCol, GRADE_NAME} from "./components/labels.js";
 import {radar} from "./components/radar.js";
 import {icon, iconHeader, gemMark} from "./components/icons.js";
 const players = await FileAttachment("./data/players.csv").csv({typed: true});
@@ -19,15 +19,11 @@ const rowsFor = players.filter((d) => d.player_id === pid);
 ```
 
 ```js
-// No player chosen: search
-const searched = pid ? [] : view(Inputs.search(players, {placeholder: "Search a player, club or team…", columns: ["player_name", "club", "team"]}));
-```
-
-```js
-if (!pid) display(html`<h1>Player profile</h1><p class="muted">Pick a player to open their profile.</p>`);
-if (!pid) display(Inputs.table(searched, {columns: ["player_name", "club", "team", "league", "age", "apps", "goals", "minutes"], header: iconHeaders(["player_name", "club", "team", "league", "age", "apps", "goals", "minutes"]),
-  format: {...formats(["age", "apps", "goals", "minutes"]), player_name: (v, i) => html`<a href="./player?id=${searched[i].player_id}&team=${searched[i].team_id}">${v}</a>`, league: shortLeague}, rows: 20, select: false}));
-if (pid && !rowsFor.length) display(html`<h1>Player not found</h1><p class="muted">No player with id <code>${pid}</code>. <a href="./player">Search instead</a>.</p>`);
+// This page is only ever reached by clicking a player, so a bare /player has no one to show.
+// It used to answer that with a searchable table of every player-season, which duplicated the
+// Explorer; point people at the two pages that link here instead.
+if (!pid) display(html`<h1>Player profile</h1><p class="muted">Open a player from the <a href="./">Explorer</a> or the <a href="./shortlist">Player shortlist</a>.</p>`);
+if (pid && !rowsFor.length) display(html`<h1>Player not found</h1><p class="muted">No player with id <code>${pid}</code>. Open a player from the <a href="./">Explorer</a> or the <a href="./shortlist">Player shortlist</a>.</p>`);
 ```
 
 ```js
@@ -133,7 +129,11 @@ const allMatches = p
   ? (await sql`SELECT * FROM member_matches WHERE player_id = ${p.player_id} ORDER BY date`).toArray().map((r) => r.toJSON())
   : [];
 const seasonRows = allMatches.filter((r) => r.did_play);
-const compChoices = new Map([["All competitions", "All competitions"], ...[...new Set(allMatches.map((r) => r.league))].map((l) => [shortLeague(l), l])]);
+// Keyed on the short label, not the raw league: the same competition appears under several raw
+// spellings (sponsored and not, "Under 13's" vs "Under 13"), and a Map keyed on labels would keep
+// only the last raw name per label and silently hide the other variant's matches. Filtering by
+// label instead merges the variants, which is what a reader expects from one dropdown entry.
+const compChoices = ["All competitions", ...new Set(allMatches.map((r) => shortLeague(r.league)))];
 ```
 
 ```js
@@ -142,7 +142,7 @@ const compSel = Generators.input(compInput);
 ```
 
 ```js
-const matchRows = allMatches.filter((r) => r.did_play).filter((r) => compSel === "All competitions" || r.league === compSel)
+const matchRows = allMatches.filter((r) => r.did_play).filter((r) => compSel === "All competitions" || shortLeague(r.league) === compSel)
   .sort((a, b) => d3.descending(toDate(a.date), toDate(b.date)))
   .map((r) => ({...r, opponent: r.side === "home" ? r.away_team : r.side === "away" ? r.home_team : `${r.home_team} v ${r.away_team}`,
     opponent_club: r.side === "home" ? r.away_club : r.side === "away" ? r.home_club : null,

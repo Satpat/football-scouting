@@ -131,15 +131,16 @@ export function groupMetricSelect(form) {
   return form;
 }
 
-// Compact league / competition names for tables. Strips sponsor names (grounds-naming-rights
-// sponsors change and a player's match history can include junior grades that carry a
-// different sponsor than the senior State League competitions — HPG Homes, Nova, RAA and
-// Carl's Jr. all appear in the real data) and normalises every "Under N's" / "UN's" spelling
-// to "UN" so it lines up with the Grade column's own values.
+// Compact league / competition names for tables. Strips sponsor names (sponsors change and a
+// player's match history can include junior grades that carry a different sponsor than the
+// senior State League competitions — HPG Homes, Nova, RAA, Hahn and Carl's Jr./Junior all
+// appear in the real data, and the same competition shows up both with and without its
+// sponsor) and normalises every "Under N's" / "UN's" spelling to "UN" so it lines up with
+// the Grade column's own values.
 export function shortLeague(name) {
   return String(name ?? "")
-    .replace(/^(HPG Homes|Nova|RAA)\s+/, "")
-    .replace(/Carl['’]s Jr\.?\s*/i, "")
+    .replace(/^(HPG Homes|Nova|RAA|Hahn)\s+/, "")
+    .replace(/Carl['’]s (?:Jr\.?|Junior)\s*/i, "")
     .replace("State League ", "SL")
     .replace(" - ", " ")
     .replace(/\((\d+)s\)/, "U$1")
@@ -147,7 +148,7 @@ export function shortLeague(name) {
     .replace(/\bU(\d+)'s\b/g, "U$1")
     .replace("(Seniors)", "").replace("(Reserves)", "Res").replace("Reserves", "Res")
     .replace("Finals Series", "Finals").replace("Final Series", "Finals")
-    .replace("Federation Cup", "Fed Cup").replace("Hahn Australia Cup", "Cup")
+    .replace("Federation Cup", "Fed Cup")
     .replace(/Senior Men'?s\s*/, "").replace("Trial Matches", "Trials")
     .replace(/\s+/g, " ").trim();
 }

@@ -25,7 +25,7 @@ const playerCols = Object.keys(players[0]);
 const role = view(Inputs.radio(["All", "Outfield", "GK"], {value: "All", label: "Role"}));
 const gemsOnly = view(Inputs.toggle({label: "Hidden gems only", value: false}));
 ```
-  <span class="muted">Hidden gem = Reserves/U18 player with no senior minutes all season.</span>
+  <p class="muted">Hidden gem = Reserves/U18 player with no senior minutes all season.</p>
   </div>
   <div>
 

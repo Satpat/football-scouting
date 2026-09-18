@@ -1,9 +1,9 @@
 ---
-title: Shortlist
+title: Player shortlist
 toc: false
 ---
 
-# Shortlist
+# Player shortlist
 
 ```js
 import {fmt, iconHeaders, formats, shortLeagueOnly, GRADES} from "./components/labels.js";

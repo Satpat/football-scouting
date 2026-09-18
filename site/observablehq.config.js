@@ -4,8 +4,7 @@ export default {
   root: "src",
   pages: [
     {name: "Explorer", path: "/"},
-    {name: "Shortlist", path: "/shortlist"},
-    {name: "Player profile", path: "/player"},
+    {name: "Player shortlist", path: "/shortlist"},
     {name: "Teams & ladders", path: "/teams"},
     {name: "About the data", path: "/about"},
   ],
