@@ -126,8 +126,8 @@ const fmts = {...formats(cols), shown_rank: (v) => v, league: shortLeagueOnly, g
 
 <div class="card">
   <h2>${role === "GK" ? "Goalkeepers" : "Outfield players"} <span class="muted">— ${rows.length} shown</span></h2>
-  ${Inputs.table(rows, {columns: cols, header: hdr, format: fmts, rows: 25, select: false, width: {player_name: 140, club: 120}, layout: "auto"})}
-  <p class="muted">Click a name to open the player's profile. Hover the gem score for why they're flagged. * marks estimated minutes — sub minutes weren't recorded for that player, mostly U18.</p>
+  <div class="table-scroll">${Inputs.table(rows, {columns: cols, header: hdr, format: fmts, rows: 25, select: false, width: {player_name: 140, club: 120}, layout: "auto"})}</div>
+  <p class="muted">Tap or click a name to open the player's profile. Tap or hover the gem score for why they're flagged. * marks estimated minutes — sub minutes weren't recorded for that player, mostly U18.</p>
 </div>
 
 <div class="card">

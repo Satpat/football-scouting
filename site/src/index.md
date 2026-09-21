@@ -155,16 +155,16 @@ function chart(width) {
 }
 ```
 
-<div class="grid grid-cols-3" style="grid-auto-rows: auto;">
-  <div class="card grid-colspan-2">
+<div class="grid explorer-main" style="grid-auto-rows: auto;">
+  <div class="card">
     <h2>${label(ys)} vs ${label(xs)} <span class="muted">— ${withXY.length.toLocaleString()} players shown${gemsOnly ? " (hidden gems only)" : ""}</span></h2>
     <p class="muted">${describe(ys)}. ${describe(xs)}.</p>
     <p class="muted">Dashed lines are medians of the players shown. Gold outline = hidden gem (no senior minutes).${yReversed ? " Axis flipped so the top shows the best performers." : ""}</p>
-    <p class="muted">Each point is one player-season (a player who played for two teams appears twice). Hover for details, click to pin a player.</p>
+    <p class="muted">Each point is one player-season (a player who played for two teams appears twice). Tap or click a point to see details.</p>
     <div style="min-height: 560px">${resize(chart)}</div>
   </div>
   <div class="card">
-    ${selected ? detail(selected) : html`<h2>Pick a player</h2><p class="muted">Click a point on the chart or a row in the table below.</p>`}
+    ${selected ? detail(selected) : html`<h2>Pick a player</h2><p class="muted">Tap a point on the chart or a row in the table below.</p>`}
   </div>
 </div>
 
@@ -203,10 +203,10 @@ const matchRows = selected
 const matchCols = ["date_local", "round", "opponent", "home_away", "result", "team_gf", "team_ga", "starting", "minutes", "goals", "assists", "sofascore_rating", "xg", "xa", "key_passes", "votes", "yellow_cards", "red_cards", "clean_sheet"];
 ```
 
-<div class="grid grid-cols-3" style="grid-auto-rows: auto;">
-  <div class="card grid-colspan-2">
+<div class="grid explorer-detail" style="grid-auto-rows: auto;">
+  <div class="card">
     <h2>${selected ? `${selected.player_name} — match by match` : "Match by match"}</h2>
-    ${selected ? Inputs.table(matchRows, {columns: matchCols, header: iconHeaders(matchCols), format: {...formats(matchCols), date_local: fmtDate}, rows: 12, select: false, width: {opponent: 220}}) : html`<p class="muted">Select a player to see every appearance, queried live with SQL from the appearances file.</p>`}
+    <div class="table-scroll">${selected ? Inputs.table(matchRows, {columns: matchCols, header: iconHeaders(matchCols), format: {...formats(matchCols), date_local: fmtDate}, rows: 12, select: false, width: {opponent: 220}}) : html`<p class="muted">Select a player to see every appearance, queried live with SQL from the appearances file.</p>`}</div>
   </div>
   <div class="card">
     <h2>Season so far</h2>

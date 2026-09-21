@@ -72,7 +72,7 @@ form[class*="-checkbox"] > label,
 .profile-head .actions a:hover { opacity: 0.9; }
 .profile-head .actions a.sofa-action { background: #0284c7; color: white; border: 1px solid rgba(255,255,255,0.4); }
 .profile-head .actions a.sofa-action:hover { background: #0369a1; }
-@media (max-width: 640px) { .profile-head { flex-wrap: wrap; } .profile-head .actions { margin-left: 0; } }
+/* Profile hero mobile layout: see the @media (max-width: 640px) block at the bottom of this file */
 
 table.kv { width: 100%; border-collapse: collapse; font-size: 14px; }
 table.kv th { text-align: left; font-weight: 500; color: var(--theme-foreground-muted); padding: 5px 8px 5px 0; width: 45%; border-bottom: 1px solid var(--theme-foreground-faintest); }
@@ -104,7 +104,7 @@ h2 { font-size: 1.3rem; font-weight: 600; }
    happens to also be the active nav item */
 #observablehq-sidebar > ol:first-child > li > a { font-weight: 700; color: var(--accent); }
 /* wide enough for the busiest tables (ladder, shortlist) but never wider than the viewport can spare */
-#observablehq-main { max-width: min(1800px, 98vw); }
+#observablehq-main { max-width: min(1800px, 100%); }
 h1, h2, h3, h4, h5, h6 { max-width: none; }
 /* Framework caps p/table/figure/lists at a 640px reading measure. Right for the long-form prose
    on /about, wrong everywhere text is a caption for something full-width: the heading spans the
@@ -187,7 +187,7 @@ details summary { cursor: pointer; margin: 0.5rem 0; }
 .split-1-1 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
 .split > .col { min-width: 0; }
 .split > .col + .col { border-left: 1px solid var(--theme-foreground-faintest); padding-left: 1.75rem; }
-@media (max-width: 780px) {
+@media (max-width: 900px) {
   .split { grid-template-columns: 1fr !important; }
   .split > .col + .col { border-left: none; padding-left: 0; border-top: 1px solid var(--theme-foreground-faintest); padding-top: 1.25rem; margin-top: 1.25rem; }
 }
@@ -250,7 +250,15 @@ details summary { cursor: pointer; margin: 0.5rem 0; }
 .gem-tip-pop { display: none; position: absolute; z-index: 20; left: 50%; top: 100%; transform: translateX(-50%); margin-top: 6px; width: 260px; max-width: 70vw;
   background: var(--theme-background-alt); border: 1px solid var(--theme-foreground-faintest); border-radius: 8px; padding: 10px 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35); text-align: left; white-space: normal; font-weight: 400; font-size: 12px; line-height: 1.5; color: var(--theme-foreground); }
-.gem-tip:hover .gem-tip-pop, .gem-tip:focus .gem-tip-pop, .gem-tip:focus-within .gem-tip-pop { display: block; }
+/* On pointer devices that can hover, show the tip on hover */
+@media (hover: hover) {
+  .gem-tip:hover .gem-tip-pop { display: block; }
+}
+/* On touch (and keyboard), show the tip on focus/focus-within — tap or tab activates it */
+.gem-tip:focus .gem-tip-pop, .gem-tip:focus-within .gem-tip-pop { display: block; }
+/* Remove default focus outline since the popup itself is the visual feedback */
+.gem-tip:focus { outline: none; }
+.gem-tip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .gem-tip-title { font-weight: 700; margin-bottom: 4px; }
 .gem-tip-pop ul { margin: 0; padding-left: 1.1em; }
 .gem-tip-pop li { margin: 2px 0; }
@@ -373,3 +381,132 @@ details summary { cursor: pointer; margin: 0.5rem 0; }
    .ladder gets, and the rule .table-scroll applies to plain tables. */
 .chat-step form { overflow-x: auto; }
 .chat-step form table { width: auto; min-width: 100%; }
+
+/* ── Mobile-responsive enhancements ──────────────────────────────────────────
+   All mobile-specific rules grouped together for maintainability.
+   Uses @media (hover: hover) for pointer-device distinctions and standard
+   breakpoints for layout changes. Container queries are used where the
+   Observable grid system already establishes containment contexts. */
+
+/* Scroll affordance: a sticky gradient fade on the right edge of horizontally
+   scrollable containers signals that more content is available. Purely
+   decorative — does not block clicks. */
+.table-scroll, .mlist, .chat-step form {
+  position: relative;
+}
+.table-scroll::after, .mlist::after, .chat-step form::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 28px;
+  background: linear-gradient(to left, var(--theme-background), transparent);
+  pointer-events: none;
+  z-index: 1;
+  /* Only visible when the container actually scrolls — checked via JS
+     or always shown as a safe default that fades naturally at the edge. */
+}
+
+/* Explorer page: 3-column grid → stacked on narrow viewports.
+   Observable's grid uses container queries internally; we override the
+   grid-template-columns for the Explorer-specific layout. */
+.grid.explorer-main { grid-template-columns: 1fr; grid-auto-rows: auto; }
+@container (min-width: 840px) {
+  .grid.explorer-main { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
+}
+.grid.explorer-detail { grid-template-columns: 1fr; grid-auto-rows: auto; }
+@container (min-width: 840px) {
+  .grid.explorer-detail { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
+}
+
+/* ── Profile hero: compact layout on narrow screens ────────────────────────── */
+@media (max-width: 640px) {
+  .profile-head {
+    flex-direction: column;
+    text-align: center;
+    padding: 1rem;
+    gap: 0.75rem;
+  }
+  .profile-head h1 { font-size: 1.6rem; }
+  .profile-head img.headshot { width: 80px; height: 80px; }
+  .profile-head .crest { width: 40px; height: 40px; }
+  .profile-head .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+    margin-left: 0;
+  }
+  .profile-head .actions a { font-size: 12px; padding: 5px 10px; }
+  .profile-head .badges { justify-content: center; }
+}
+
+/* ── Match-row grid: tighter columns on mobile ─────────────────────────────── */
+@media (max-width: 480px) {
+  .mrow {
+    grid-template-columns: 54px minmax(80px, 1fr) 38px 58px 74px repeat(5, 30px);
+    font-size: 11px;
+    gap: 2px;
+  }
+  .mrow.has-sofa {
+    grid-template-columns: 54px minmax(70px, 1fr) 38px 50px 60px repeat(7, 30px);
+    font-size: 11px;
+    gap: 2px;
+  }
+  .mrow.mhead { font-size: 10px; }
+}
+
+/* ── Ladder table: smaller text and tighter cells on mobile ──────────────── */
+@media (max-width: 640px) {
+  .ladder form table { font-size: 12px; }
+  .ladder form table td, .ladder form table th { padding: 4px 2px; }
+}
+
+/* ── Tab bar: scroll instead of overflow on narrow screens ──────────────── */
+@media (max-width: 480px) {
+  .tabbar {
+    gap: 0.75rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .tabbar::-webkit-scrollbar { display: none; }
+  .tab-btn { white-space: nowrap; font-size: 0.95rem; padding: 0.35rem 0.1rem 0.5rem; }
+}
+
+/* ── Chat send button: min 44×44px touch target per WCAG 2.5.5 ───────────── */
+@media (max-width: 640px) {
+  .chat-composer button { min-height: 44px; min-width: 44px; }
+}
+
+/* ── Radio/checkbox controls: allow wrapping on narrow screens ─────────── */
+@media (max-width: 640px) {
+  form[class*="-radio"] label {
+    white-space: normal !important;
+    font-size: 13px;
+  }
+  /* Explorer preset radios: compact when they wrap */
+  .section form[class*="-radio"] {
+    gap: 0.25rem;
+  }
+}
+
+/* ── Phone-specific base breakpoint (≤ 480px) ────────────────────────────── */
+@media (max-width: 480px) {
+  .card { padding: 0.75rem; }
+  h1 { font-size: 1.6rem; }
+  h2 { font-size: 1.1rem; }
+  .kpi { grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); gap: 0.4rem 0.75rem; }
+  .kpi .v { font-size: 1.25rem; }
+  .section { gap: 1rem; padding: 0.75rem 0; }
+  .section > div { flex: 1 1 100%; min-width: 0; }
+  /* Facts grid: single column on very narrow screens */
+  .facts2 { grid-template-columns: 1fr; }
+  /* Tiles: 3 per row instead of auto-fit */
+  .tiles2 { grid-template-columns: repeat(3, 1fr); gap: 0.75rem 0.25rem; }
+  .tile .tv { font-size: 1.15rem; }
+  .tile .tl { font-size: 11px; }
+  /* Match navigation */
+  .mnav { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap; }
+}

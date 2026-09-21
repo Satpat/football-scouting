@@ -169,15 +169,35 @@ To complement DRIBL's basic match events, detailed match metrics (xG, xA, key pa
    - **Team Context**: Regular season `team_xg_per_match`, `team_xga_per_match`, `team_xgd_per_match`, and `avg_possession_pct`.
    - **Null Integrity**: Players in non-tracked leagues (SL2, SAASL) cleanly preserve `np.nan` / `null` rather than filling with 0, preventing distortion of percentiles or false clustering at the chart origin.
 
-4. **Scouting Archetypes & Tags (`build_site_data.py`)**:
-   - **Emerging Senior (⚡)**: U21 players (`age <= 21` or `u18_player`) playing Senior NPL (`grade == 'SEN'` & `division == 'NPL'`) who demonstrate top-tier impact via:
-     $$\text{Sofascore Rating} \ge 7.0 \quad \text{OR} \quad (xG/90 + xA/90) \ge 0.40$$
-     *(Surfaces young players proving themselves at the highest state level; 32 players tagged).*
-   - **Undervalued Performer (🎯)**: Players on bottom-half **NPL** teams (`division == 'NPL'`, $\text{ladder\_pos} > \text{teams} / 2$, min 450 minutes) who excel in possession or defensive phases:
-     $$\text{Duel Win Rate} \ge 60\% \quad \text{OR} \quad \text{Pass Accuracy} \ge 80\%$$
-     *(Identifies quality players whose stats may be masked by a struggling NPL team; 27 players tagged).*
-   - **Universal Hidden Gem (💎)**: Unpromoted Reserves/U18 players with zero senior minutes all season.
-   - Populates plain-English explanations directly into `why_flagged` on the shortlist (e.g. *"Emerging Senior (U21 standout in Senior NPL)"*, *"Undervalued Performer on #7 NPL team"*).
+### 4. **Scouting Archetypes & Tags (`build_site_data.py`)**
+
+#### **Emerging Senior (⚡)**
+
+U21 players (`age <= 21` or `u18_player`) playing Senior NPL (`grade == 'SEN'` & `division == 'NPL'`) who demonstrate top-tier impact via:
+
+> $$\text{Sofascore Rating} \ge 7.0 \quad \text{OR} \quad (xG/90 + xA/90) \ge 0.40$$
+> 
+> *(Surfaces young players proving themselves at the highest state level; 32 players tagged).*
+
+---
+
+#### **Undervalued Performer (🎯)**
+
+Players on bottom-half **NPL** teams (`division == 'NPL'`, $\text{ladder\_pos} > \text{teams} / 2$, min 450 minutes) who excel in possession or defensive phases:
+
+> $$\text{Duel Win Rate} \ge 60\% \quad \text{OR} \quad \text{Pass Accuracy} \ge 80\%$$
+> 
+> *(Identifies quality players whose stats may be masked by a struggling NPL team; 27 players tagged).*
+
+---
+
+#### **Universal Hidden Gem (💎)**
+
+Unpromoted Reserves/U18 players with zero senior minutes all season.
+
+---
+
+Populates plain-English explanations directly into `why_flagged` on the shortlist (e.g. *"Emerging Senior (U21 standout in Senior NPL)"*, *"Undervalued Performer on #7 NPL team"*).
 
 5. **Static Site Integration**:
    - **Explorer (`site/src/index.md`)**: Promoted archetype toggles with native hover tooltips; preset buttons (Finishing, Creation, Ball Winning, Duels, Retention); detail card badges and direct Sofascore profile link; market value indicator; table external link icons (`↗`).
@@ -188,7 +208,7 @@ To complement DRIBL's basic match events, detailed match metrics (xG, xA, key pa
 
 ### 2. The site (Observable Framework → GitHub Pages)
 
-**What:** six pages (Explorer, Shortlist, Player profile, Teams & ladders, Ask the data, and About), no framework beyond Observable, no runtime dependencies.
+**What:** six pages (Explorer, Shortlist, Player profile, Teams & ladders, Ask the data, and About), no framework beyond Observable, no runtime dependencies. The layout is mobile-responsive — Explorer grids stack via container queries, tables scroll horizontally with gradient affordance hints, tooltips are touch-accessible via `focus-within`, and phone-specific breakpoints at 640px/480px adjust typography, spacing and grid tracks.
 
 **How:** the committed CSV/Parquet are loaded as `FileAttachment`s, and pages that need
 real querying declare tables in their front matter:
@@ -253,6 +273,7 @@ The **browser owns the loop** (max 3 queries); the Worker is single-shot and sta
 | Schema prompt built in the browser | Tuning the prompt is a page edit, not a Worker redeploy. |
 | One small Worker as the only backend | The single thing that needs a secret key. |
 | Multiple DRIBL tenants, one pipeline | Football SA and SAASL are separate governing bodies/DRIBL sites; both flow through the same extraction → merge → build scripts, tagged by a coarse `division` column, instead of per-source code paths. |
+| Mobile-responsive via CSS only | All responsive behaviour lives in `style.css` — container queries for Explorer grids, media-query breakpoints at 640px/480px for phones/tablets, `@media (hover: hover)` to gate hover-only tooltips, scroll-affordance shadows on tables. No JS layout logic, no separate mobile pages; the same markup adapts. |
 
 ---
 
@@ -289,6 +310,7 @@ The **browser owns the loop** (max 3 queries); the Worker is single-shot and sta
 | The chat model or its reasoning effort | `MODEL` / `REASONING_EFFORT` in `chat-worker/worker.js` | **redeploy the Worker** |
 | Which origins may call the Worker | `ALLOWED_ORIGINS` in `chat-worker/worker.js` | **redeploy the Worker** |
 | Styling for any page | `site/src/style.css` | commit + push |
+| Mobile breakpoints, touch tooltips, scroll affordances | the `Mobile-responsive enhancements` block at the bottom of `site/src/style.css` | commit + push |
 | Which pages appear in the sidebar | `site/observablehq.config.js` | commit + push |
 | Which competitions/divisions are extracted | `COMPS`/`TENANT`/`SEASON` in `extract_browser.js` (header comment has both current sources) | re-run extraction + `merge_dumps.py`, then the build scripts |
 | A division code or a league's sponsor prefix | `DIVISION_BY_COMPETITION` in `build_scouting.py`; sponsor stripping in `shortLeague()` (`labels.js`) and `league_order()` (`build_site_data.py`) | re-run `build_site_data.py`, commit + push |
