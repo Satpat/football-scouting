@@ -88,6 +88,8 @@ const defenseMetric = view(Inputs.radio(new Map([["Clean sheets", "clean_sheets"
 const clubs = ["(none)", ...new Set(players.map((d) => d.club).sort())];
 const club = view(Inputs.select(clubs, {value: "(none)", label: "Highlight club"}));
 const labelTop = view(Inputs.range([0, 30], {value: 8, step: 1, label: "Label top N on Y"}));
+const emergingOnly = view(Inputs.toggle({label: "Emerging seniors only", value: false}));
+const undervaluedOnly = view(Inputs.toggle({label: "Undervalued only", value: false}));
 ```
   </div>
 </div>
@@ -96,7 +98,8 @@ const labelTop = view(Inputs.range([0, 30], {value: 8, step: 1, label: "Label to
 ```js
 const filtered = players.filter((d) =>
   division.includes(d.division) && gradeSel.includes(d.grade) && leagueSel.includes(d.league) &&
-  (role === "All" || d.role === role) && d.minutes >= minMinutes && d.apps >= minApps && (!gemsOnly || d.hidden_gem)
+  (role === "All" || d.role === role) && d.minutes >= minMinutes && d.apps >= minApps &&
+  (!gemsOnly || d.hidden_gem) && (!emergingOnly || d.emerging_senior) && (!undervaluedOnly || d.undervalued_performer)
 );
 const xs = preset !== "custom" ? PRESETS[preset].x : (defenseView ? "minutes" : xMetric);
 const ys = preset !== "custom" ? PRESETS[preset].y : (defenseView ? defenseMetric : yMetric);
@@ -164,8 +167,14 @@ function detail(d) {
   const gk = d.role === "GK";
   const hasSofa = d.sofascore_rating != null || d.xg > 0 || d.passes_total > 0;
   return html`<h2 style="display:flex;align-items:center;gap:8px">${crest(d.club, 28)} <a href="./player?id=${d.player_id}&team=${d.team_id}">${d.player_name}</a></h2>
-  <p>${d.club} · ${GRADE_NAME[d.grade]} · ${shortLeague(d.league)} · age ${d.age ?? "–"}</p>
-  <div class="badges"><span class="badge grade">${GRADE_NAME[d.grade]} · ${d.division}</span>${d.hidden_gem ? gemMark() : ""}${d.u18_player ? html`<span class="badge grade">U18 player</span>` : ""}${d.minutes_est_apps > 0 ? html`<span class="badge est" title="${describe("minutes_est_apps")}">${d.minutes_est_apps} apps est. minutes</span>` : ""}</div>
+  <div class="badges">
+    <span class="badge grade">${GRADE_NAME[d.grade]} · ${d.division}</span>
+    ${d.hidden_gem ? gemMark() : ""}
+    ${d.emerging_senior ? html`<span class="badge" style="background:#0284c7;color:white;" title="${describe('emerging_senior')}">⚡ Emerging Senior</span>` : ""}
+    ${d.undervalued_performer ? html`<span class="badge" style="background:#7c3aed;color:white;" title="${describe('undervalued_performer')}">🎯 Undervalued</span>` : ""}
+    ${d.u18_player ? html`<span class="badge grade">U18 player</span>` : ""}
+    ${d.minutes_est_apps > 0 ? html`<span class="badge est" title="${describe("minutes_est_apps")}">${d.minutes_est_apps} apps est. minutes</span>` : ""}
+  </div>
   <p><a href="./player?id=${d.player_id}&team=${d.team_id}"><b>Open full profile →</b></a> · <a href="${d.dribl_url}" target="_blank" rel="noopener">DRIBL ↗</a></p>
   <div class="kpi">${k("age")}${k("apps")}${k("starts")}${k("minutes")}${gk ? k("clean_sheets") : k("goals")}${gk ? k("ga_on_pitch_per90") : k("npg_per90")}${k("votes")}${k("team_goal_share_pct")}${k("gd_on_pitch_vs_team")}${k("yellow_cards")}${k("captain_apps")}${k("borrowed_apps")}${k("sen_minutes")}</div>
   ${hasSofa ? html`<div class="kpi" style="margin-top:0.5rem;background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.2);border-radius:6px;padding:6px 8px;">
@@ -213,7 +222,7 @@ const searched = view(Inputs.search(filtered, {placeholder: "Search player, club
 ```
 
 ```js
-const picked = view(Inputs.table(searched, {columns: tableCols, header: iconHeaders(tableCols), format: {...formats(tableCols), player_name: (v, i) => html`<a href="./player?id=${searched[i].player_id}&team=${searched[i].team_id}">${v}</a>`, club: (v) => clubCell(v, 16), league: shortLeagueOnly}, rows: 18, multiple: false,
+const picked = view(Inputs.table(searched, {columns: tableCols, header: iconHeaders(tableCols), format: {...formats(tableCols), player_name: (v, i) => html`<a href="./player?id=${searched[i].player_id}&team=${searched[i].team_id}">${v}</a>${searched[i].emerging_senior ? html` <span title="Emerging Senior">⚡</span>` : ""}${searched[i].undervalued_performer ? html` <span title="Undervalued Performer">🎯</span>` : ""}`, club: (v) => clubCell(v, 16), league: shortLeagueOnly}, rows: 18, multiple: false,
   sort: ys, reverse: labels[ys]?.higher_is_better !== false, width: {player_name: 170, club: 150, league: 170}}));
 ```
 

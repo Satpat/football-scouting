@@ -847,6 +847,22 @@
   "higher_is_better": null,
   "metric": false
  },
+ "emerging_senior": {
+  "label": "Emerging senior",
+  "short": "Emerging",
+  "desc": "U21 player in Senior NPL with Sofascore rating >= 7.0 or xG+xA/90 >= 0.40",
+  "fmt": "bool",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "undervalued_performer": {
+  "label": "Undervalued performer",
+  "short": "Undervalued",
+  "desc": "Player on a bottom-half team (min 450 mins) with >= 60% duel win rate or >= 80% pass accuracy",
+  "fmt": "bool",
+  "higher_is_better": null,
+  "metric": false
+ },
  "sen_minutes": {
   "label": "Senior minutes (all teams)",
   "short": "Senior min",

@@ -51,6 +51,8 @@ const primary = p?.club_color || "#ffffff";
     <div class="badges">
       <span class="badge grade">${GRADE_NAME[p.grade]} · ${p.division}</span>
       ${p.hidden_gem ? gemMark() : ""}
+      ${p.emerging_senior ? html`<span class="badge" style="background:#0284c7;color:white;" title="${describe('emerging_senior')}">⚡ Emerging Senior</span>` : ""}
+      ${p.undervalued_performer ? html`<span class="badge" style="background:#7c3aed;color:white;" title="${describe('undervalued_performer')}">🎯 Undervalued</span>` : ""}
       ${p.u18_player ? html`<span class="badge grade">U18 player</span>` : ""}
       ${p.role === "GK" ? html`<span class="badge grade">Goalkeeper</span>` : ""}
       ${p.minutes_est_apps > 0 ? html`<span class="badge est" title="${describe("minutes_est_apps")}">${p.minutes_est_apps} apps est. minutes</span>` : ""}

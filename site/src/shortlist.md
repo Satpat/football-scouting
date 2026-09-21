@@ -55,6 +55,8 @@ const leagueSel = view(Inputs.select(leagueChoices, {multiple: true, size: Math.
 ```js
 const clubs = ["(all)", ...new Set(shortlist.map((d) => d.club).sort())];
 const club = view(Inputs.select(clubs, {value: "(all)", label: "Club"}));
+const emergingOnly = view(Inputs.toggle({label: "Emerging seniors only", value: false}));
+const undervaluedOnly = view(Inputs.toggle({label: "Undervalued only", value: false}));
 ```
   </div>
 </div>
@@ -63,7 +65,8 @@ const club = view(Inputs.select(clubs, {value: "(all)", label: "Club"}));
 ```js
 const sortKey = sortBy === "Sofascore rating" ? "sofascore_rating" : sortBy === "xG / 90" ? "xg_p90" : "gem_score";
 const rows = shortlist.filter((d) => d.role === role && division.includes(d.division) && gradeSel.includes(d.grade) && leagueSel.includes(d.league) &&
-  (!gemsOnly || d.hidden_gem) && (!u18Only || d.u18_player) && (club === "(all)" || d.club === club) && (sortKey === "gem_score" || (d[sortKey] != null && d[sortKey] > 0)))
+  (!gemsOnly || d.hidden_gem || emergingOnly || undervaluedOnly) && (!emergingOnly || d.emerging_senior) && (!undervaluedOnly || d.undervalued_performer) &&
+  (!u18Only || d.u18_player) && (club === "(all)" || d.club === club) && (sortKey === "gem_score" || (d[sortKey] != null && d[sortKey] > 0)))
   .sort((a, b) => d3.descending(a[sortKey] ?? -999, b[sortKey] ?? -999)).slice(0, topN).map((d, i) => ({...d, shown_rank: i + 1}));
 ```
 
@@ -94,7 +97,7 @@ const gemScoreCell = (v, i) => {
 const ratingPill = (v) => v != null && v > 0
   ? html`<span class="rating-badge ${v >= 7.5 ? 'hi' : v >= 6.8 ? 'mid' : 'low'}">${v.toFixed(1)}</span>`
   : "–";
-const fmts = {...formats(cols), shown_rank: (v) => v, league: shortLeagueOnly, gem_score: gemScoreCell, sofascore_rating: ratingPill, minutes: (v, i) => fmt("minutes", v) + (rows[i].minutes_est_apps > 0 ? "*" : ""), player_name: (v, i) => html`<a href="./player?id=${rows[i].player_id}&team=${rows[i].team_id}">${v}</a>`,
+const fmts = {...formats(cols), shown_rank: (v) => v, league: shortLeagueOnly, gem_score: gemScoreCell, sofascore_rating: ratingPill, minutes: (v, i) => fmt("minutes", v) + (rows[i].minutes_est_apps > 0 ? "*" : ""), player_name: (v, i) => html`<a href="./player?id=${rows[i].player_id}&team=${rows[i].team_id}">${v}</a>${rows[i].emerging_senior ? html` <span title="Emerging Senior">⚡</span>` : ""}${rows[i].undervalued_performer ? html` <span title="Undervalued Performer">🎯</span>` : ""}`,
 };
 ```
 

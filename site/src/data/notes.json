@@ -52,11 +52,15 @@
   "note": "Regular season only, only when the player started >= 3 and missed >= 3. Small samples: treat as a flag, not evidence."
  },
  {
-  "topic": "Not available",
-  "note": "Assists, shots, xG, passes, tackles, positions, age/DOB, transfer status. Data is entered by club volunteers and can contain attribution errors."
- },
- {
   "topic": "Dates",
   "note": "date_local is Australia/Adelaide. Raw API dates are UTC."
+ },
+ {
+  "topic": "Emerging Senior",
+  "note": "U21 player in Senior NPL with a Sofascore rating >= 7.0 or xG+xA per 90 >= 0.40."
+ },
+ {
+  "topic": "Undervalued Performer",
+  "note": "Player on a bottom-half team (min 450 minutes) with a duel win rate >= 60% or pass accuracy >= 80%."
  }
 ]

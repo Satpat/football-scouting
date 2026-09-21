@@ -832,8 +832,9 @@ NOTES = [
                         f"Hidden gems get +{HIDDEN_GEM_BONUS:g}, U18 players +{U18_BONUS:g}."),
     ("Ladder / opponent strength", "Regular-season ladders only. opp_top_half = opponent finished in the top half of its league."),
     ("PPG with/without", "Regular season only, only when the player started >= 3 and missed >= 3. Small samples: treat as a flag, not evidence."),
-    ("Not available", "Assists, shots, xG, passes, tackles, positions, age/DOB, transfer status. Data is entered by club volunteers and can contain attribution errors."),
     ("Dates", "date_local is Australia/Adelaide. Raw API dates are UTC."),
+    ("Emerging Senior", "U21 player in Senior NPL with a Sofascore rating >= 7.0 or xG+xA per 90 >= 0.40."),
+    ("Undervalued Performer", "Player on a bottom-half team (min 450 minutes) with a duel win rate >= 60% or pass accuracy >= 80%."),
 ]
 
 

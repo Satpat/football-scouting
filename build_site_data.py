@@ -139,6 +139,8 @@ LABELS = {
     "highest_grade": ("Highest grade", "Highest", "Highest grade played this season", "str", None, False),
     "u18_player": ("U18 player", "U18", "Appeared in an Under 18 league (only age signal available)", "bool", None, False),
     "hidden_gem": ("Hidden gem", "Gem", "Reserves/U18 row with zero senior minutes all season", "bool", None, False),
+    "emerging_senior": ("Emerging senior", "Emerging", "U21 player in Senior NPL with Sofascore rating >= 7.0 or xG+xA/90 >= 0.40", "bool", None, False),
+    "undervalued_performer": ("Undervalued performer", "Undervalued", "Player on a bottom-half team (min 450 mins) with >= 60% duel win rate or >= 80% pass accuracy", "bool", None, False),
     "sen_minutes": ("Senior minutes (all teams)", "Senior min", "Minutes at senior grade across all teams", "int", True, True),
     "res_minutes": ("Reserves minutes (all teams)", "Res min", "Minutes at reserves grade across all teams", "int", None, True),
     "u18_minutes": ("U18 minutes (all teams)", "U18 min", "Minutes at U18 grade across all teams", "int", None, True),
@@ -297,7 +299,7 @@ PLAYER_COLS = ["player_id", "player_name", "club", "team", "team_id", "league", 
                "gf_on_pitch", "ga_on_pitch", "gd_on_pitch_per90", "gd_on_pitch_vs_team", "ga_on_pitch_per90", "ga_on_pitch_vs_team",
                "clean_sheets", "full_matches", "clean_sheet_pct", "yellow_cards", "red_cards", "yellows_per90",
                "ppg_when_playing", "ppg_start_diff", "team_ladder_pos", "ladder_teams", "team_ppg", "team_matches",
-               "grades_played", "highest_grade", "u18_player", "hidden_gem", "sen_minutes", "res_minutes", "u18_minutes",
+               "grades_played", "highest_grade", "u18_player", "hidden_gem", "emerging_senior", "undervalued_performer", "sen_minutes", "res_minutes", "u18_minutes",
                "sen_apps", "n_teams", "borrowed_apps_all",
                "age", "nationality", "flag", "headshot", "height_cm", "date_of_birth", "position_sofa",
                "dribl_url", "club_slug", "club_color", "club_accent"]
@@ -308,7 +310,7 @@ MEMBER_MATCH_COLS = ["player_id", "date", "comp", "league", "full_round", "home_
                      "yellow_cards", "red_cards", "votes", "is_captain", "is_goalkeeper", "clean_sheet", "match_hash_id", "in_dataset",
                      "sofascore_rating", "assists", "xg", "xa", "key_passes"]
 SHORTLIST_COLS = ["rank_in_role", "role", "player_id", "team_id", "player_name", "club", "team", "league", "grade", "division",
-                  "u18_player", "highest_grade", "hidden_gem", "gem_score", "scout_score", "why_flagged", "age",
+                  "u18_player", "highest_grade", "hidden_gem", "emerging_senior", "undervalued_performer", "gem_score", "scout_score", "why_flagged", "age",
                   "apps", "starts", "minutes", "minutes_share_pct", "goals", "goals_open_play", "npg_per90", "npg_per90_adj",
                   "team_goal_share_pct", "goals_go_ahead", "goals_winner", "goals_late", "votes", "votes_per_app",
                   "votes_per_app_adj", "gd_on_pitch_vs_team", "ga_on_pitch_per90", "clean_sheets", "clean_sheet_pct",
@@ -539,7 +541,30 @@ def main():
         season["club_color"] = [c[0] for c in colors]
         season["club_accent"] = [c[1] for c in colors]
     season["club_slug"] = season.club.map(slugify)
-    shortlist = shortlist.merge(season[["player_id", "team_id", "age"]], on=["player_id", "team_id"], how="left")
+
+    # Emerging Senior: U21 playing Senior NPL with Sofascore rating >= 7.0 or xG+xA/90 >= 0.40
+    is_u21 = (season.age.notna() & (season.age <= 21)) | season.u18_player
+    is_sen_npl = (season.grade == "SEN") & (season.division == "NPL")
+    good_perf = (season.sofascore_rating >= 7.0) | ((season.xg_p90.fillna(0) + season.xa_p90.fillna(0)) >= 0.40)
+    season["emerging_senior"] = (is_u21 & is_sen_npl & good_perf).fillna(False)
+
+    # Undervalued Performer: on bottom-half teams (min 450 mins) with duel win rate >= 60% or pass accuracy >= 80%
+    is_bottom_half = season.team_ladder_pos > (season.ladder_teams / 2)
+    strong_underlying = (season.duel_win_pct >= 60.0) | (season.pass_acc_pct >= 80.0)
+    season["undervalued_performer"] = (is_bottom_half & strong_underlying & (season.minutes >= 450)).fillna(False)
+    season = season.copy()
+
+    shortlist = shortlist.merge(season[["player_id", "team_id", "age", "emerging_senior", "undervalued_performer"]], on=["player_id", "team_id"], how="left")
+
+    def enrich_why(row):
+        clauses = [c for c in str(row.why_flagged or "").split("; ") if c]
+        if row.emerging_senior and not any("Emerging Senior" in c for c in clauses):
+            clauses.append("Emerging Senior (U21 standout in Senior NPL)")
+        if row.undervalued_performer and not any("Undervalued Performer" in c for c in clauses):
+            clauses.append(f"Undervalued Performer on #{row.team_ladder_pos:.0f} team")
+        return "; ".join(clauses)
+
+    shortlist["why_flagged"] = shortlist.apply(enrich_why, axis=1)
 
     SITE_DATA.mkdir(parents=True, exist_ok=True)
     exports = {

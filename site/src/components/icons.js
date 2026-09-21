@@ -89,6 +89,22 @@ export function gemMark(title = "Hidden gem: no senior minutes this season") {
   return span;
 }
 
+export function emergingMark(title = "Emerging Senior: U21 standout in Senior NPL") {
+  const span = document.createElement("span");
+  span.className = "gem-mark"; span.title = title; span.setAttribute("aria-label", title);
+  span.style.color = "#0284c7";
+  span.append(icon("zap", {size: 14, title}));
+  return span;
+}
+
+export function undervaluedMark(title = "Undervalued Performer: bottom-half team standout") {
+  const span = document.createElement("span");
+  span.className = "gem-mark"; span.title = title; span.setAttribute("aria-label", title);
+  span.style.color = "#8b5cf6";
+  span.append(icon("target", {size: 14, title}));
+  return span;
+}
+
 export function iconHeader(col, label, {size = 16, suffix = COL_SUFFIX[col]} = {}) {
   const span = document.createElement("span");
   span.className = "ico-hdr"; span.title = label; span.setAttribute("aria-label", label);
