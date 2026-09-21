@@ -171,35 +171,39 @@ To complement DRIBL's basic match events, detailed match metrics (xG, xA, key pa
 
 ### 4. **Scouting Archetypes & Tags (`build_site_data.py`)**
 
-#### **Emerging Senior (⚡)**
+#### ⚡ Emerging Senior
 
 U21 players (`age <= 21` or `u18_player`) playing Senior NPL (`grade == 'SEN'` & `division == 'NPL'`) who demonstrate top-tier impact via:
 
+**Criteria**
+
 > $$\text{Sofascore Rating} \ge 7.0 \quad \text{OR} \quad (xG/90 + xA/90) \ge 0.40$$
-> 
-> *(Surfaces young players proving themselves at the highest state level; 32 players tagged).*
+>
+> *Surfaces young players proving themselves at the highest state level; 32 players tagged.*
 
 ---
 
-#### **Undervalued Performer (🎯)**
+#### 🎯 Undervalued Performer
 
-Players on bottom-half **NPL** teams (`division == 'NPL'`, $\text{ladder\_pos} > \text{teams} / 2$, min 450 minutes) who excel in possession or defensive phases:
+Players on bottom-half **NPL** teams (`division == 'NPL'`, `ladder_pos > teams / 2`, min 450 minutes) who excel in possession or defensive phases:
+
+**Criteria**
 
 > $$\text{Duel Win Rate} \ge 60\% \quad \text{OR} \quad \text{Pass Accuracy} \ge 80\%$$
-> 
-> *(Identifies quality players whose stats may be masked by a struggling NPL team; 27 players tagged).*
+>
+> *Identifies quality players whose stats may be masked by a struggling NPL team; 27 players tagged.*
 
 ---
 
-#### **Universal Hidden Gem (💎)**
+#### 💎 Universal Hidden Gem
 
 Unpromoted Reserves/U18 players with zero senior minutes all season.
 
 ---
 
-Populates plain-English explanations directly into `why_flagged` on the shortlist (e.g. *"Emerging Senior (U21 standout in Senior NPL)"*, *"Undervalued Performer on #7 NPL team"*).
+> **Shortlist output:** Populates plain-English explanations directly into `why_flagged` (e.g. *"Emerging Senior (U21 standout in Senior NPL)"*, *"Undervalued Performer on #7 NPL team"*).
 
-5. **Static Site Integration**:
+### 5. **Static Site Integration**:
    - **Explorer (`site/src/index.md`)**: Promoted archetype toggles with native hover tooltips; preset buttons (Finishing, Creation, Ball Winning, Duels, Retention); detail card badges and direct Sofascore profile link; market value indicator; table external link icons (`↗`).
    - **Player Profile (`site/src/player.md`)**: Physical bio strip (DOB, height, market value); sky-blue "Sofascore profile ↗" hero action button; clickable Sofascore fact link; advanced stats grid; percentile radar toggle (*Standard Traits* vs *Sofascore Advanced Traits*); interactive Sofascore rating trend bar chart with 7.0 benchmark line; color-coded match rating badges; match xG.
    - **Teams & Ladders (`site/src/teams.md`)**: Actual Goals vs Expected Goals (xG vs xGA) scatter plot toggle and average possession % in the ladder table.
