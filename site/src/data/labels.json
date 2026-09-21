@@ -1711,6 +1711,30 @@
   "higher_is_better": null,
   "metric": false
  },
+ "sofascore_id": {
+  "label": "Sofascore ID",
+  "short": "Sofa ID",
+  "desc": "Unique player ID on Sofascore",
+  "fmt": "int",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "sofascore_url": {
+  "label": "Sofascore profile",
+  "short": "Sofascore",
+  "desc": "Link to player profile on Sofascore",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "market_value_eur": {
+  "label": "Market value (\u20ac)",
+  "short": "Market value",
+  "desc": "Estimated player transfer/market value in Euros (Sofascore)",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
  "home_possession": {
   "label": "Home possession",
   "short": "H poss",

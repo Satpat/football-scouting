@@ -251,6 +251,9 @@ LABELS = {
     "height_cm": ("Height (cm)", "Height", "Player height in centimeters", "int", None, True),
     "date_of_birth": ("Date of birth", "DOB", "Player birth date", "str", None, False),
     "position_sofa": ("Position (Sofascore)", "Pos", "Detailed position from Sofascore (G, D, M, F)", "str", None, False),
+    "sofascore_id": ("Sofascore ID", "Sofa ID", "Unique player ID on Sofascore", "int", None, False),
+    "sofascore_url": ("Sofascore profile", "Sofascore", "Link to player profile on Sofascore", "str", None, False),
+    "market_value_eur": ("Market value (€)", "Market value", "Estimated player transfer/market value in Euros (Sofascore)", "int", True, True),
     # Match and team level metrics
     "home_possession": ("Home possession", "H poss", "Home team ball possession percentage", "pct", None, False),
     "away_possession": ("Away possession", "A poss", "Away team ball possession percentage", "pct", None, False),
@@ -302,6 +305,7 @@ PLAYER_COLS = ["player_id", "player_name", "club", "team", "team_id", "league", 
                "grades_played", "highest_grade", "u18_player", "hidden_gem", "emerging_senior", "undervalued_performer", "sen_minutes", "res_minutes", "u18_minutes",
                "sen_apps", "n_teams", "borrowed_apps_all",
                "age", "nationality", "flag", "headshot", "height_cm", "date_of_birth", "position_sofa",
+               "sofascore_id", "sofascore_url", "market_value_eur",
                "dribl_url", "club_slug", "club_color", "club_accent"]
 CAREER_COLS = ["player_id", "season", "clubs", "leagues", "played", "started", "minutes", "goals", "yellow_cards", "red_cards",
                "votes", "clean_sheets", "was_goalkeeper"]
@@ -315,7 +319,8 @@ SHORTLIST_COLS = ["rank_in_role", "role", "player_id", "team_id", "player_name",
                   "team_goal_share_pct", "goals_go_ahead", "goals_winner", "goals_late", "votes", "votes_per_app",
                   "votes_per_app_adj", "gd_on_pitch_vs_team", "ga_on_pitch_per90", "clean_sheets", "clean_sheet_pct",
                   "yellow_cards", "red_cards", "sen_minutes", "borrowed_apps", "team_ladder_pos", "ladder_teams", "minutes_est_apps",
-                  "sofascore_rating", "xg", "xg_p90", "xa", "xa_p90", "key_passes_p90", "duel_win_pct"]
+                  "sofascore_rating", "xg", "xg_p90", "xa", "xa_p90", "key_passes_p90", "duel_win_pct",
+                  "sofascore_id", "sofascore_url", "market_value_eur"]
 APPEARANCE_COLS = ["player_id", "team_id", "match_hash_id", "date_local", "round", "league", "is_finals", "opponent", "home_away",
                    "result", "team_gf", "team_ga", "starting", "sub_on_min", "sub_off_min", "minutes", "minutes_estimated",
                    "goals", "goals_open_play", "goals_penalty", "own_goals", "votes", "yellow_cards", "red_cards", "borrowed",
@@ -554,7 +559,9 @@ def main():
     season["undervalued_performer"] = (is_bottom_half & strong_underlying & (season.minutes >= 450)).fillna(False)
     season = season.copy()
 
-    shortlist = shortlist.merge(season[["player_id", "team_id", "age", "emerging_senior", "undervalued_performer"]], on=["player_id", "team_id"], how="left")
+    merge_cols = [c for c in ["age", "emerging_senior", "undervalued_performer", "sofascore_id", "sofascore_url", "market_value_eur"] if c not in shortlist.columns]
+    if merge_cols:
+        shortlist = shortlist.merge(season[["player_id", "team_id"] + merge_cols], on=["player_id", "team_id"], how="left")
 
     def enrich_why(row):
         clauses = [c for c in str(row.why_flagged or "").split("; ") if c]

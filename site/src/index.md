@@ -27,11 +27,6 @@ const gemsOnly = view(withTooltip(Inputs.toggle({label: "💎 Hidden gems only",
 const emergingOnly = view(withTooltip(Inputs.toggle({label: "⚡ Emerging seniors only", value: false}), "U21 players in Senior NPL with Sofascore rating ≥ 7.0 or (xG/90 + xA/90) ≥ 0.40."));
 const undervaluedOnly = view(withTooltip(Inputs.toggle({label: "🎯 Undervalued only", value: false}), "Players on bottom-half NPL teams (min 450 minutes) with duel win rate ≥ 60% or passing accuracy ≥ 80%."));
 ```
-  <p class="muted" style="margin-top: 6px; font-size: 12px; line-height: 1.45;">
-    <b>💎 Gem:</b> Reserves/U18, 0 senior mins.<br>
-    <b>⚡ Emerging:</b> U21 in Senior NPL, rating &ge; 7.0 or (xG+xA)/90 &ge; 0.40.<br>
-    <b>🎯 Undervalued:</b> Bottom-half NPL team, min 450 mins, &ge;60% duels or &ge;80% passes.
-  </p>
   </div>
   <div>
 
@@ -187,10 +182,10 @@ function detail(d) {
     ${d.u18_player ? html`<span class="badge grade">U18 player</span>` : ""}
     ${d.minutes_est_apps > 0 ? html`<span class="badge est" title="${describe("minutes_est_apps")}">${d.minutes_est_apps} apps est. minutes</span>` : ""}
   </div>
-  <p><a href="./player?id=${d.player_id}&team=${d.team_id}"><b>Open full profile →</b></a> · <a href="${d.dribl_url}" target="_blank" rel="noopener">DRIBL ↗</a></p>
+  <p><a href="./player?id=${d.player_id}&team=${d.team_id}"><b>Open full profile →</b></a> · <a href="${d.dribl_url}" target="_blank" rel="noopener">DRIBL ↗</a>${d.sofascore_url ? html` · <a href="${d.sofascore_url}" target="_blank" rel="noopener" style="color:#0284c7;font-weight:600;">Sofascore ↗</a>` : ""}</p>
   <div class="kpi">${k("age")}${k("apps")}${k("starts")}${k("minutes")}${gk ? k("clean_sheets") : k("goals")}${gk ? k("ga_on_pitch_per90") : k("npg_per90")}${k("votes")}${k("team_goal_share_pct")}${k("gd_on_pitch_vs_team")}${k("yellow_cards")}${k("captain_apps")}${k("borrowed_apps")}${k("sen_minutes")}</div>
   ${hasSofa ? html`<div class="kpi" style="margin-top:0.5rem;background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.2);border-radius:6px;padding:6px 8px;">
-    ${d.sofascore_rating ? k("sofascore_rating") : ""}${d.xg > 0 ? k("xg_p90") : ""}${d.xa > 0 ? k("xa_p90") : ""}${d.key_passes_p90 > 0 ? k("key_passes_p90") : ""}${d.pass_acc_pct > 0 ? k("pass_acc_pct") : ""}${d.duel_win_pct > 0 ? k("duel_win_pct") : ""}
+    ${d.sofascore_rating ? k("sofascore_rating") : ""}${d.market_value_eur ? k("market_value_eur") : ""}${d.xg > 0 ? k("xg_p90") : ""}${d.xa > 0 ? k("xa_p90") : ""}${d.key_passes_p90 > 0 ? k("key_passes_p90") : ""}${d.pass_acc_pct > 0 ? k("pass_acc_pct") : ""}${d.duel_win_pct > 0 ? k("duel_win_pct") : ""}
   </div>` : ""}
   <p class="muted" style="margin-top:0.75rem">Grades played: ${d.grades_played} · highest: ${GRADE_NAME[d.highest_grade]} · ${d.n_teams} team${d.n_teams === 1 ? "" : "s"} · team finished ${d.team_ladder_pos ?? "–"}/${d.ladder_teams ?? "–"} (${fmt("team_ppg", d.team_ppg)} PPG)</p>
   <p class="muted">${d.goals_go_ahead} go-ahead · ${d.goals_winner} winners · ${d.goals_equaliser} equalisers · ${d.goals_late} late goals · ${d.goals_penalty} pens · team PPG when starting vs not: ${fmt("ppg_start_diff", d.ppg_start_diff)}</p>`;
@@ -234,8 +229,8 @@ const searched = view(Inputs.search(filtered, {placeholder: "Search player, club
 ```
 
 ```js
-const picked = view(Inputs.table(searched, {columns: tableCols, header: iconHeaders(tableCols), format: {...formats(tableCols), player_name: (v, i) => html`<a href="./player?id=${searched[i].player_id}&team=${searched[i].team_id}">${v}</a>${searched[i].emerging_senior ? html` <span title="Emerging Senior">⚡</span>` : ""}${searched[i].undervalued_performer ? html` <span title="Undervalued Performer">🎯</span>` : ""}`, club: (v) => clubCell(v, 16), league: shortLeagueOnly}, rows: 18, multiple: false,
-  sort: ys, reverse: labels[ys]?.higher_is_better !== false, width: {player_name: 170, club: 150, league: 170}}));
+const picked = view(Inputs.table(searched, {columns: tableCols, header: iconHeaders(tableCols), format: {...formats(tableCols), player_name: (v, i) => html`<a href="./player?id=${searched[i].player_id}&team=${searched[i].team_id}">${v}</a>${searched[i].emerging_senior ? html` <span title="Emerging Senior">⚡</span>` : ""}${searched[i].undervalued_performer ? html` <span title="Undervalued Performer">🎯</span>` : ""}${searched[i].sofascore_url ? html` <a href="${searched[i].sofascore_url}" target="_blank" rel="noopener" title="Open Sofascore profile" style="text-decoration:none;font-size:11px;color:#0284c7;">↗</a>` : ""}`, club: (v) => clubCell(v, 16), league: shortLeagueOnly}, rows: 18, multiple: false,
+  sort: ys, reverse: labels[ys]?.higher_is_better !== false, width: {player_name: 180, club: 150, league: 170}}));
 ```
 
 ```js

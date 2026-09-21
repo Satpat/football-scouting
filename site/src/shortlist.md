@@ -24,11 +24,6 @@ const gemsOnly = view(withTooltip(Inputs.toggle({label: "💎 Hidden gems only",
 const emergingOnly = view(withTooltip(Inputs.toggle({label: "⚡ Emerging seniors only", value: false}), "U21 players in Senior NPL with Sofascore rating ≥ 7.0 or (xG/90 + xA/90) ≥ 0.40."));
 const undervaluedOnly = view(withTooltip(Inputs.toggle({label: "🎯 Undervalued only", value: false}), "Players on bottom-half NPL teams (min 450 minutes) with duel win rate ≥ 60% or passing accuracy ≥ 80%."));
 ```
-  <p class="muted" style="margin-top: 6px; font-size: 12px; line-height: 1.45;">
-    <b>💎 Gem:</b> Reserves/U18, 0 senior mins.<br>
-    <b>⚡ Emerging:</b> U21 in Senior NPL, rating &ge; 7.0 or (xG+xA)/90 &ge; 0.40.<br>
-    <b>🎯 Undervalued:</b> Bottom-half NPL team, min 450 mins, &ge;60% duels or &ge;80% passes.
-  </p>
   </div>
   <div>
 
@@ -86,15 +81,18 @@ const rows = shortlist.filter((d) => d.role === role && division.includes(d.divi
 
 ```js
 const showSofa = (!gemsOnly || emergingOnly || undervaluedOnly) && rows.some((d) => d.sofascore_rating != null || d.xg_p90 != null);
+const hasMarketValue = showSofa && rows.some((d) => d.market_value_eur != null);
 const outfieldCols = [
   "shown_rank", "player_name", "club", "league", "grade", "age", "gem_score",
   ...(showSofa ? ["sofascore_rating", "xg_p90", "xa_p90", "duel_win_pct"] : []),
+  ...(hasMarketValue ? ["market_value_eur"] : []),
   "apps", "minutes", "npg_per90", "team_goal_share_pct", "goals_go_ahead", "goals_winner",
   "votes_per_app", "gd_on_pitch_vs_team", "borrowed_apps", "team_ladder_pos"
 ];
 const gkCols = [
   "shown_rank", "player_name", "club", "league", "grade", "age", "gem_score",
   ...(showSofa ? ["sofascore_rating"] : []),
+  ...(hasMarketValue ? ["market_value_eur"] : []),
   "apps", "minutes", "ga_on_pitch_per90", "clean_sheets", "clean_sheet_pct",
   "votes_per_app", "borrowed_apps", "team_ladder_pos"
 ];
@@ -122,7 +120,7 @@ const gemScoreCell = (v, i) => {
 const ratingPill = (v) => v != null && v > 0
   ? html`<span class="rating-badge ${v >= 7.5 ? 'hi' : v >= 6.8 ? 'mid' : 'low'}">${v.toFixed(1)}</span>`
   : "–";
-const fmts = {...formats(cols), shown_rank: (v) => v, league: shortLeagueOnly, gem_score: gemScoreCell, sofascore_rating: ratingPill, minutes: (v, i) => fmt("minutes", v) + (rows[i].minutes_est_apps > 0 ? "*" : ""), player_name: (v, i) => html`<a href="./player?id=${rows[i].player_id}&team=${rows[i].team_id}">${v}</a>${rows[i].emerging_senior ? html` <span title="Emerging Senior">⚡</span>` : ""}${rows[i].undervalued_performer ? html` <span title="Undervalued Performer">🎯</span>` : ""}`,
+const fmts = {...formats(cols), shown_rank: (v) => v, league: shortLeagueOnly, gem_score: gemScoreCell, sofascore_rating: ratingPill, minutes: (v, i) => fmt("minutes", v) + (rows[i].minutes_est_apps > 0 ? "*" : ""), player_name: (v, i) => html`<a href="./player?id=${rows[i].player_id}&team=${rows[i].team_id}">${v}</a>${rows[i].emerging_senior ? html` <span title="Emerging Senior">⚡</span>` : ""}${rows[i].undervalued_performer ? html` <span title="Undervalued Performer">🎯</span>` : ""}${rows[i].sofascore_url ? html` <a href="${rows[i].sofascore_url}" target="_blank" rel="noopener" title="Open Sofascore profile" style="text-decoration:none;font-size:11px;color:#0284c7;">↗</a>` : ""}`,
 };
 ```
 

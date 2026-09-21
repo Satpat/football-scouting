@@ -33,6 +33,7 @@
     lineups: {},      // eventId -> full lineup & player stats
     incidents: {},    // eventId -> list of incidents (goals, assists, cards)
     statistics: {},   // eventId -> match team statistics (possession, xG)
+    playerProfiles: {}, // playerId -> full bio, preferred foot, attributes
     errors: [],
   };
 
@@ -235,6 +236,45 @@
       };
     },
 
+    // Phase 3b: Fetch detailed player profiles (preferred foot, contract, attribute-overviews)
+    async players() {
+      const playerMap = new Map();
+      for (const lu of Object.values(st.lineups)) {
+        for (const side of ['home', 'away']) {
+          for (const p of lu[side]?.players || []) {
+            const sp = p.player;
+            if (sp && sp.id && !playerMap.has(sp.id)) {
+              playerMap.set(sp.id, sp);
+            }
+          }
+        }
+      }
+      console.log(`\n⚡ Phase 3b: Fetching profile details for ${playerMap.size} unique players...`);
+      st.playerProfiles = st.playerProfiles || {};
+      let i = 0;
+      for (const [pid, sp] of playerMap.entries()) {
+        i++;
+        if (!st.playerProfiles[pid]) {
+          try {
+            const bio = await get(`player/${pid}`, { allow404: true });
+            const attrs = await get(`player/${pid}/attribute-overviews`, { allow404: true });
+            st.playerProfiles[pid] = {
+              ...(bio?.player || {}),
+              attributes: attrs?.playerAttributeOverviews || null,
+            };
+          } catch (e) {
+            st.errors.push({ step: 'player_profile', playerId: pid, error: e.message });
+          }
+          await sleep(DELAY_MS);
+        }
+        if (i % 25 === 0 || i === playerMap.size) {
+          console.log(`  [${i}/${playerMap.size}] Fetched profile for ${sp.name || pid}`);
+        }
+      }
+      console.log(`✅ Phase 3b complete. Collected ${Object.keys(st.playerProfiles).length} player profiles.`);
+      return Object.keys(st.playerProfiles).length;
+    },
+
     // Phase 4: Download JSON file directly to Downloads
     download(filename = 'sofascore_raw_2026.json') {
       const payload = {
@@ -246,6 +286,7 @@
         lineups: st.lineups,
         incidents: st.incidents,
         statistics: st.statistics,
+        playerProfiles: st.playerProfiles,
         errors: st.errors,
       };
 
@@ -268,6 +309,7 @@
       await api.init();
       await api.events();
       await api.details();
+      await api.players();
       api.download();
     }
   };
@@ -278,6 +320,7 @@
   console.log('  await __sofa.runAll()   -> Run all phases & auto-download');
   console.log('  __sofa.status()         -> Inspect current memory state');
   console.log('  await __sofa.details()  -> Run only Phase 3 (lineups/incidents)');
+  console.log('  await __sofa.players()  -> Run only Phase 3b (player profiles & attributes)');
   console.log('  __sofa.download()       -> Download sofascore_raw_2026.json');
   return 'ready';
 })();

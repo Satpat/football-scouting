@@ -59,6 +59,7 @@ const primary = p?.club_color || "#ffffff";
     </div>
   </div>
   <div class="actions">
+    ${p.sofascore_url ? html`<a href="${p.sofascore_url}" target="_blank" rel="noopener" class="sofa-action">Sofascore profile ↗</a>` : ""}
     <a href="${p.dribl_url}" target="_blank" rel="noopener">View on DRIBL ↗</a>
     <a href="./?player=${p.player_id}&team=${p.team_id}">Open in Explorer</a>
   </div>
@@ -77,9 +78,12 @@ const profileCard = () => p ? html`<div class="card">
     <h2>Profile</h2>
     <div class="facts2">
       ${fact("Age", p.age)}
+      ${p.date_of_birth ? fact("Born", fmtDate(p.date_of_birth)) : ""}
       ${p.height_cm ? fact("Height", `${p.height_cm} cm`) : ""}
       ${p.position_sofa ? fact("Position", p.position_sofa) : ""}
+      ${p.market_value_eur ? fact("Market value", fmt("market_value_eur", p.market_value_eur)) : ""}
       ${fact("Nationality", p.flag ? html`<span class="flag" title="${p.nationality}">${p.flag}</span> ${p.nationality}` : p.nationality)}
+      ${p.sofascore_url ? fact("Sofascore", html`<a href="${p.sofascore_url}" target="_blank" rel="noopener" style="color:#0284c7;font-weight:600;">Profile ↗</a>`) : ""}
       ${fact("Shirt", p.jersey)}
       ${fact("Role", p.role)}
       ${fact("Grade", GRADE_NAME[p.grade])}
@@ -264,18 +268,68 @@ const careerTable = html`<table class="stats career-table"><thead><tr><th>Season
     html`<tr class="season-row"><td>${c.season}</td><td>${clubCell(String(c.clubs).split("; ")[0], 18)}</td>${careerStatCols.map((col) => html`<td>${fmt(col, c[col])}</td>`)}</tr>`,
     ...leaguesOf(c).map((l) => html`<tr class="league-row"><td></td><td class="league-name">${GRADE_NAME[leagueGrade(l)] ?? "–"} · ${shortLeagueOnly(l)}</td><td colspan="${careerStatCols.length}"></td></tr>`),
   ])}</tbody></table>`;
-const seasonChartCard = () => p ? html`<div class="card">
-  <h2>Season so far</h2>
-  ${seasonRows.length ? html`<div style="min-height: 280px">${resize((width) => {
-    let g = 0, m = 0;
-    const cum = seasonRows.map((r, i) => ({i: i + 1, date: r.date, goals: (g += r.goals ?? 0), minutes: (m += r.minutes ?? 0), opp: r.side === "home" ? r.away_team : r.home_team, result: r.result, comp: r.league}));
-    return Plot.plot({width, height: 280, marginLeft: 40, x: {label: "Appearance (all competitions) →"}, y: {label: "↑ Cumulative goals", grid: true},
-      marks: [Plot.lineY(cum, {x: "i", y: "goals", stroke: accent, curve: "step-after", strokeWidth: 2}),
-              Plot.dot(cum, {x: "i", y: "goals", fill: (d) => d.result === "W" ? "#2ca02c" : d.result === "D" ? "#999" : "#d62728", r: 4,
-                channels: {Date: (d) => fmtDate(d.date), Opponent: "opp", Result: "result", Competition: "comp", Minutes: "minutes"}, tip: {format: {x: false, y: true}}})]});
-  })}</div>` : html`<p class="muted">No matches recorded.</p>`}
-  <p class="muted">Dot colour shows the match result.</p>
-</div>` : null;
+const chartMode = Mutable("goals");
+const setChartMode = (m) => (chartMode.value = m);
+
+const seasonChartCard = () => {
+  if (!p) return null;
+  const sofaMatches = seasonRows.filter((r) => r.sofascore_rating != null && r.sofascore_rating > 0);
+  const showSofaOption = sofaMatches.length > 0;
+  const activeMode = showSofaOption ? chartMode : "goals";
+
+  return html`<div class="card">
+    <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+      <h2 style="margin:0;">${activeMode === "sofa" ? "Sofascore rating trend" : "Season so far"}</h2>
+      ${showSofaOption ? html`<div style="display:flex; gap:4px;">
+        <button class="mbtn ${activeMode === 'goals' ? 'active' : ''}" style="padding:3px 10px; font-size:11px;" onclick=${() => setChartMode("goals")}>Cumulative goals</button>
+        <button class="mbtn ${activeMode === 'sofa' ? 'active' : ''}" style="padding:3px 10px; font-size:11px;" onclick=${() => setChartMode("sofa")}>Sofascore ratings</button>
+      </div>` : ""}
+    </div>
+    ${activeMode === "sofa" ? html`
+      <div style="min-height: 280px">${resize((width) => {
+        const rated = sofaMatches.map((r, i) => ({
+          i: i + 1,
+          date: shortDate(r.date),
+          opp: r.side === "home" ? r.away_team : r.home_team,
+          rating: r.sofascore_rating,
+          minutes: r.minutes,
+          goals: r.goals,
+          xg: r.xg,
+          xa: r.xa
+        }));
+        const avg = d3.mean(rated, (d) => d.rating) || 7.0;
+        return Plot.plot({
+          width, height: 280, marginLeft: 40,
+          y: {domain: [5.0, 9.5], label: "↑ Match rating", grid: true},
+          x: {label: "Rated match →"},
+          marks: [
+            Plot.ruleY([7.0], {stroke: "#22c55e", strokeDasharray: "3,3"}),
+            Plot.ruleY([avg], {stroke: "#3b82f6", strokeDasharray: "2,2"}),
+            Plot.barY(rated, {
+              x: "i",
+              y: "rating",
+              fill: (d) => d.rating >= 7.5 ? "#16a34a" : d.rating >= 7.0 ? "#22c55e" : d.rating >= 6.5 ? "#eab308" : "#ef4444",
+              channels: {Date: "date", Opponent: "opp", Rating: (d) => d.rating.toFixed(2), Minutes: "minutes", Goals: "goals", xG: "xg", xA: "xa"},
+              tip: {format: {x: false}}
+            }),
+            Plot.text(rated, {x: "i", y: "rating", text: (d) => d.rating.toFixed(1), dy: -8, fontSize: 10, fill: "currentColor"})
+          ]
+        });
+      })}</div>
+      <p class="muted">Green = 7.0+ · Yellow = 6.5–6.9 · Red = &lt;6.5. Dashed green line = 7.0 benchmark; dashed blue = season average.</p>
+    ` : html`
+      ${seasonRows.length ? html`<div style="min-height: 280px">${resize((width) => {
+        let g = 0, m = 0;
+        const cum = seasonRows.map((r, i) => ({i: i + 1, date: r.date, goals: (g += r.goals ?? 0), minutes: (m += r.minutes ?? 0), opp: r.side === "home" ? r.away_team : r.home_team, result: r.result, comp: r.league}));
+        return Plot.plot({width, height: 280, marginLeft: 40, x: {label: "Appearance (all competitions) →"}, y: {label: "↑ Cumulative goals", grid: true},
+          marks: [Plot.lineY(cum, {x: "i", y: "goals", stroke: accent, curve: "step-after", strokeWidth: 2}),
+                  Plot.dot(cum, {x: "i", y: "goals", fill: (d) => d.result === "W" ? "#2ca02c" : d.result === "D" ? "#999" : "#d62728", r: 4,
+                    channels: {Date: (d) => fmtDate(d.date), Opponent: "opp", Result: "result", Competition: "comp", Minutes: "minutes"}, tip: {format: {x: false, y: true}}})]});
+      })}</div>` : html`<p class="muted">No matches recorded.</p>`}
+      <p class="muted">Dot colour shows the match result.</p>
+    `}
+  </div>`;
+};
 const matchesCard = () => p ? html`<div class="card">
   <div class="mtitle"><h2>Match stats</h2>${compInput}</div>
   ${matchList}

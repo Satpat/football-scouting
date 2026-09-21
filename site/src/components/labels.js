@@ -72,9 +72,18 @@ export function label(col) { return labels[col]?.label ?? col; }
 export function short(col) { return labels[col]?.short ?? label(col); }
 export function describe(col) { return labels[col]?.desc ?? ""; }
 
+export function fmtMarketValue(val) {
+  if (val == null || val === "" || Number.isNaN(+val) || +val <= 0) return "–";
+  const num = +val;
+  if (num >= 1_000_000) return `€${(num / 1_000_000).toFixed(1)}M`;
+  if (num >= 1_000) return `€${Math.round(num / 1_000)}k`;
+  return `€${f0(num)}`;
+}
+
 const f0 = d3.format(",d"), f2 = d3.format(".2f"), f1 = d3.format(".1f");
 export function fmt(col, v) {
   if (v == null || v === "" || Number.isNaN(v)) return "–";
+  if (col === "market_value_eur") return fmtMarketValue(v);
   const t = labels[col]?.fmt;
   if (t === "date") return fmtDate(v);
   if (t === "int") return f0(v);

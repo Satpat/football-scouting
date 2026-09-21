@@ -665,6 +665,10 @@ def build_player_season(app: pd.DataFrame, ctx: pd.DataFrame, matches: pd.DataFr
     sofa_prof = (sofa or {}).get("profiles", {})
     if sofa_prof:
         prof_rows = [{"player_id": pid,
+                      "sofascore_id": info.get("sofascore_id"),
+                      "sofascore_slug": info.get("sofascore_slug"),
+                      "sofascore_url": info.get("sofascore_url"),
+                      "market_value_eur": info.get("market_value_eur"),
                       "height_cm": info.get("height_cm"),
                       "date_of_birth": info.get("date_of_birth"),
                       "position_sofa": info.get("position_sofa")}
@@ -672,6 +676,10 @@ def build_player_season(app: pd.DataFrame, ctx: pd.DataFrame, matches: pd.DataFr
         prof_df = pd.DataFrame(prof_rows)
         season = season.merge(prof_df, on="player_id", how="left")
     else:
+        season["sofascore_id"] = None
+        season["sofascore_slug"] = None
+        season["sofascore_url"] = None
+        season["market_value_eur"] = None
         season["height_cm"] = None
         season["date_of_birth"] = None
         season["position_sofa"] = None
@@ -804,8 +812,9 @@ def build_shortlist(season: pd.DataFrame) -> pd.DataFrame:
             "ga_on_pitch_per90", "clean_sheets", "clean_sheet_pct", "yellow_cards", "red_cards",
             "sen_minutes", "borrowed_apps", "team_ladder_pos", "ladder_teams", "minutes_est_apps",
             "sofascore_rating", "xg", "xg_p90", "xa", "xa_p90", "key_passes_p90", "duel_win_pct",
+            "sofascore_id", "sofascore_slug", "sofascore_url", "market_value_eur",
             "player_id", "team_id"]
-    return pool[cols].reset_index(drop=True)
+    return pool[[c for c in cols if c in pool.columns]]
 
 
 # ---------------------------------------------------------------------------

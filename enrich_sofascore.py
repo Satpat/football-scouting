@@ -376,13 +376,19 @@ def build_reconciliation(dribl_raw: dict, sofa_raw: dict, audit: bool = False):
                         if mem_id not in player_profiles:
                             dob_ts = sp_player.get("dateOfBirthTimestamp")
                             dob_str = datetime.fromtimestamp(dob_ts, timezone.utc).strftime("%Y-%m-%d") if dob_ts else None
+                            slug = sp_player.get("slug")
+                            sofa_url = f"https://www.sofascore.com/football/player/{slug}/{sofa_pid}" if (sofa_pid and slug) else (f"https://www.sofascore.com/player/{sofa_pid}" if sofa_pid else None)
+                            mv = sp_player.get("proposedMarketValueRaw", {}).get("value") if sp_player.get("proposedMarketValueRaw") else None
 
                             player_profiles[mem_id] = {
                                 "sofascore_id": sofa_pid,
+                                "sofascore_slug": slug,
+                                "sofascore_url": sofa_url,
                                 "sofascore_name": sp_player.get("name"),
                                 "height_cm": sp_player.get("height"),
                                 "date_of_birth": dob_str,
                                 "position_sofa": sp_player.get("position"),
+                                "market_value_eur": mv,
                                 "nationality": sp_player.get("country", {}).get("name"),
                                 "country_code": sp_player.get("country", {}).get("alpha2"),
                                 "sofascore_image": f"https://img.sofascore.com/api/v1/player/{sofa_pid}/image" if sofa_pid else None,
