@@ -6,7 +6,7 @@ toc: false
 # Player shortlist
 
 ```js
-import {fmt, iconHeaders, formats, shortLeagueOnly, GRADES} from "./components/labels.js";
+import {fmt, iconHeaders, formats, shortLeagueOnly, GRADES, withTooltip} from "./components/labels.js";
 const shortlist = await FileAttachment("./data/shortlist.csv").csv({typed: true});
 const leagues = await FileAttachment("./data/leagues.json").json();
 const notes = await FileAttachment("./data/notes.json").json();
@@ -20,15 +20,14 @@ const notes = await FileAttachment("./data/notes.json").json();
 
 ```js
 const role = view(Inputs.radio(["Outfield", "GK"], {value: "Outfield", label: "Role"}));
-const gemsOnly = view(Inputs.toggle({label: "💎 Hidden gems only", value: true}));
-const emergingOnly = view(Inputs.toggle({label: "⚡ Emerging seniors only", value: false}));
-const undervaluedOnly = view(Inputs.toggle({label: "🎯 Undervalued only", value: false}));
-const u18Only = view(Inputs.toggle({label: "U18 players only", value: false}));
+const gemsOnly = view(withTooltip(Inputs.toggle({label: "💎 Hidden gems only", value: true}), "Active in Reserves/U18 with 0 senior minutes across the season."));
+const emergingOnly = view(withTooltip(Inputs.toggle({label: "⚡ Emerging seniors only", value: false}), "U21 players in Senior NPL with Sofascore rating ≥ 7.0 or (xG/90 + xA/90) ≥ 0.40."));
+const undervaluedOnly = view(withTooltip(Inputs.toggle({label: "🎯 Undervalued only", value: false}), "Players on bottom-half NPL teams (min 450 minutes) with duel win rate ≥ 60% or passing accuracy ≥ 80%."));
 ```
   <p class="muted" style="margin-top: 6px; font-size: 12px; line-height: 1.45;">
     <b>💎 Gem:</b> Reserves/U18, 0 senior mins.<br>
     <b>⚡ Emerging:</b> U21 in Senior NPL, rating &ge; 7.0 or (xG+xA)/90 &ge; 0.40.<br>
-    <b>🎯 Undervalued:</b> Bottom-half team, min 450 mins, &ge;60% duels or &ge;80% passes.
+    <b>🎯 Undervalued:</b> Bottom-half NPL team, min 450 mins, &ge;60% duels or &ge;80% passes.
   </p>
   </div>
   <div>
@@ -80,13 +79,13 @@ const matchesArchetype = (d) => {
 
 const sortKey = sortBy === "Sofascore rating" ? "sofascore_rating" : sortBy === "xG / 90" ? "xg_p90" : "gem_score";
 const rows = shortlist.filter((d) => d.role === role && division.includes(d.division) && gradeSel.includes(d.grade) && leagueSel.includes(d.league) &&
-  matchesArchetype(d) && (!u18Only || d.u18_player) && (club === "(all)" || d.club === club) &&
+  matchesArchetype(d) && (club === "(all)" || d.club === club) &&
   (sortKey === "gem_score" || (d[sortKey] != null && d[sortKey] > 0)))
   .sort((a, b) => d3.descending(a[sortKey] ?? -999, b[sortKey] ?? -999)).slice(0, topN).map((d, i) => ({...d, shown_rank: i + 1}));
 ```
 
 ```js
-const showSofa = (!gemsOnly || emergingOnly) && rows.some((d) => d.sofascore_rating != null || d.xg_p90 != null);
+const showSofa = (!gemsOnly || emergingOnly || undervaluedOnly) && rows.some((d) => d.sofascore_rating != null || d.xg_p90 != null);
 const outfieldCols = [
   "shown_rank", "player_name", "club", "league", "grade", "age", "gem_score",
   ...(showSofa ? ["sofascore_rating", "xg_p90", "xa_p90", "duel_win_pct"] : []),

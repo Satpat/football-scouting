@@ -21,25 +21,37 @@ Extracted ${meta.extracted_at?.slice(0, 10)}: ${meta.matches.toLocaleString()} c
 
 The platform combines two distinct data streams to provide both broad competition coverage and elite-tier analytical depth:
 
-### 1. DRIBL administrative match data (Universal baseline)
-DRIBL is the official competition management platform used by Football SA and SAASL. Across all four divisions and 39 leagues, DRIBL records:
-- **Match participation**: Official team sheets, starters, substitutes, and exact substitution minutes.
-- **Scoring & Discipline**: Goals (with penalty and own-goal flags), yellow and red cards, and captaincy.
-- **Match events & timeline**: Minute-by-minute goal sequences (used to compute equaliser, go-ahead, winner, and late goals).
-- **Official 3-2-1 votes**: Best-on-ground referee/official votes per match.
-- **Squad movement**: "Borrowed" player flags indicating players playing up or down between grades within their club.
+<div class="grid grid-cols-2" style="gap: 1.25rem; margin: 1.25rem 0;">
+  <div class="card">
+    <h3>1. DRIBL administrative match data</h3>
+    <p class="muted"><b>Universal baseline across all 39 leagues</b></p>
+    <p>DRIBL is the official competition management platform used by Football SA and SAASL. Across all four divisions and 39 leagues, DRIBL records:</p>
+    <ul>
+      <li><b>Match participation:</b> Official team sheets, starters, substitutes, and exact substitution minutes.</li>
+      <li><b>Scoring &amp; Discipline:</b> Goals (with penalty and own-goal flags), yellow and red cards, and captaincy.</li>
+      <li><b>Match events &amp; timeline:</b> Minute-by-minute goal sequences (used to compute equaliser, go-ahead, winner, and late goals).</li>
+      <li><b>Official 3-2-1 votes:</b> Best-on-ground referee/official votes per match.</li>
+      <li><b>Squad movement:</b> "Borrowed" player flags indicating players playing up or down between grades within their club.</li>
+    </ul>
+  </div>
 
-### 2. Sofascore advanced event tracking (Elite tiers)
-To capture on-ball actions unavailable in standard administrative scorecards, matches across 7 South Australian tournaments (including Senior NPL and State League 1) are enriched with detailed event data:
-- **Expected metrics**: Expected Goals ($xG$), Expected Assists ($xA$), and $xG$ per shot.
-- **Passing & Creativity**: Accurate passes, passing accuracy %, key passes, big chances created, and long ball completion %.
-- **Duels & Defending**: Ground duels, aerial duels, duel win rate %, tackles, interceptions, recoveries, and clearances.
-- **Goalkeeping**: Saves, saves from inside the box, and save success rate.
-- **Algorithmic match ratings**: Objective 0–10 performance ratings calculated from match events.
-- **Physical profiles**: Verified dates of birth, age, height (cm), player tactical positions, and official player headshots.
-
-> [!NOTE]
-> **Coverage across leagues**: Advanced optical tracking is focused on Senior NPL and tracked leagues. For unmeasured divisions (such as SL2 and SAASL), these metrics cleanly retain `null` (`–`) rather than being filled with zero, ensuring league rankings and scatter plots remain unbiased.
+  <div class="card">
+    <h3>2. Sofascore advanced event tracking</h3>
+    <p class="muted"><b>Elite tiers &amp; Senior NPL</b></p>
+    <p>To capture on-ball actions unavailable in standard administrative scorecards, matches across 7 South Australian tournaments (including Senior NPL and State League 1) are enriched with detailed event data:</p>
+    <ul>
+      <li><b>Expected metrics:</b> Expected Goals ($xG$), Expected Assists ($xA$), and $xG$ per shot.</li>
+      <li><b>Passing &amp; Creativity:</b> Accurate passes, passing accuracy %, key passes, big chances created, and long ball completion %.</li>
+      <li><b>Duels &amp; Defending:</b> Ground duels, aerial duels, duel win rate %, tackles, interceptions, recoveries, and clearances.</li>
+      <li><b>Goalkeeping:</b> Saves, saves from inside the box, and save success rate.</li>
+      <li><b>Algorithmic match ratings:</b> Objective 0–10 performance ratings calculated from match events.</li>
+      <li><b>Physical profiles:</b> Verified dates of birth, age, height (cm), player tactical positions, and official player headshots.</li>
+    </ul>
+    <p class="muted" style="margin-top: 8px; font-size: 12px; border-top: 1px solid var(--theme-foreground-faintest); padding-top: 6px;">
+      <b>Coverage across leagues:</b> Advanced optical tracking covers Senior NPL and tracked leagues. Unmeasured divisions (SL2, SAASL) cleanly retain null (–) rather than zero so league rankings and scatter plots remain unbiased.
+    </p>
+  </div>
+</div>
 
 ---
 
@@ -63,7 +75,7 @@ To assist recruiters and analysts in identifying different player profiles, the 
   <div class="card" style="border-left: 4px solid #7c3aed;">
     <h3>🎯 Undervalued Performer</h3>
     <p class="muted"><b>Efficiency in tough team contexts</b></p>
-    <p>A player on a <b>bottom-half team</b> (ladder position &gt; half of teams, min. 450 minutes) recording a <b>duel win rate &ge; 60%</b> OR <b>passing accuracy &ge; 80%</b>.</p>
+    <p>A player on a <b>bottom-half NPL team</b> (ladder position &gt; half of teams, min. 450 minutes) recording a <b>duel win rate &ge; 60%</b> OR <b>passing accuracy &ge; 80%</b>.</p>
     <p class="muted">Surfaces high-quality contributors whose individual efficiency is masked by poor team results or lower possession sides.</p>
   </div>
 </div>

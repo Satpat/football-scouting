@@ -8,7 +8,7 @@ sql:
 # Player explorer
 
 ```js
-import {labels, label, short, describe, fmt, fmtDate, iconHeaders, formats, metricOptions, groupMetricSelect, crest, clubCell, shortLeague, shortLeagueOnly, GRADES, GRADE_NAME, GRADE_COLORS} from "./components/labels.js";
+import {labels, label, short, describe, fmt, fmtDate, iconHeaders, formats, metricOptions, groupMetricSelect, crest, clubCell, shortLeague, shortLeagueOnly, GRADES, GRADE_NAME, GRADE_COLORS, withTooltip} from "./components/labels.js";
 import {gemMark} from "./components/icons.js";
 const players = await FileAttachment("./data/players.csv").csv({typed: true});
 const leagues = await FileAttachment("./data/leagues.json").json();
@@ -23,14 +23,14 @@ const playerCols = Object.keys(players[0]);
 
 ```js
 const role = view(Inputs.radio(["All", "Outfield", "GK"], {value: "All", label: "Role"}));
-const gemsOnly = view(Inputs.toggle({label: "💎 Hidden gems only", value: false}));
-const emergingOnly = view(Inputs.toggle({label: "⚡ Emerging seniors only", value: false}));
-const undervaluedOnly = view(Inputs.toggle({label: "🎯 Undervalued only", value: false}));
+const gemsOnly = view(withTooltip(Inputs.toggle({label: "💎 Hidden gems only", value: false}), "Active in Reserves/U18 with 0 senior minutes across the season."));
+const emergingOnly = view(withTooltip(Inputs.toggle({label: "⚡ Emerging seniors only", value: false}), "U21 players in Senior NPL with Sofascore rating ≥ 7.0 or (xG/90 + xA/90) ≥ 0.40."));
+const undervaluedOnly = view(withTooltip(Inputs.toggle({label: "🎯 Undervalued only", value: false}), "Players on bottom-half NPL teams (min 450 minutes) with duel win rate ≥ 60% or passing accuracy ≥ 80%."));
 ```
   <p class="muted" style="margin-top: 6px; font-size: 12px; line-height: 1.45;">
     <b>💎 Gem:</b> Reserves/U18, 0 senior mins.<br>
     <b>⚡ Emerging:</b> U21 in Senior NPL, rating &ge; 7.0 or (xG+xA)/90 &ge; 0.40.<br>
-    <b>🎯 Undervalued:</b> Bottom-half team, min 450 mins, &ge;60% duels or &ge;80% passes.
+    <b>🎯 Undervalued:</b> Bottom-half NPL team, min 450 mins, &ge;60% duels or &ge;80% passes.
   </p>
   </div>
   <div>

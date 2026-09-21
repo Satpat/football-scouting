@@ -96,6 +96,13 @@ const ICON_EXEMPT = new Set(["age"]);
 // so every player-stats table in the app reads the same way. Everything else falls back to text.
 export function iconHeaders(cols) { return Object.fromEntries(cols.map((c) => [c, COL_ICONS[c] && isNumericCol(c) && !ICON_EXEMPT.has(c) ? iconHeader(c, label(c)) : label(c)])); }
 export function formats(cols) { return Object.fromEntries(cols.map((c) => [c, (v) => fmt(c, v)])); }
+export function withTooltip(inputElement, text) {
+  if (!inputElement || !text) return inputElement;
+  inputElement.title = text;
+  const lbl = inputElement.querySelector?.("label");
+  if (lbl) lbl.title = text;
+  return inputElement;
+}
 
 // Metric columns grouped into player-facing categories, for the chart-axis dropdowns.
 const METRIC_GROUPS = [

@@ -140,7 +140,7 @@ LABELS = {
     "u18_player": ("U18 player", "U18", "Appeared in an Under 18 league (only age signal available)", "bool", None, False),
     "hidden_gem": ("Hidden gem", "Gem", "Reserves/U18 row with zero senior minutes all season", "bool", None, False),
     "emerging_senior": ("Emerging senior", "Emerging", "U21 player in Senior NPL with Sofascore rating >= 7.0 or xG+xA/90 >= 0.40", "bool", None, False),
-    "undervalued_performer": ("Undervalued performer", "Undervalued", "Player on a bottom-half team (min 450 mins) with >= 60% duel win rate or >= 80% pass accuracy", "bool", None, False),
+    "undervalued_performer": ("Undervalued performer", "Undervalued", "Player on a bottom-half NPL team (min 450 mins) with >= 60% duel win rate or >= 80% pass accuracy", "bool", None, False),
     "sen_minutes": ("Senior minutes (all teams)", "Senior min", "Minutes at senior grade across all teams", "int", True, True),
     "res_minutes": ("Reserves minutes (all teams)", "Res min", "Minutes at reserves grade across all teams", "int", None, True),
     "u18_minutes": ("U18 minutes (all teams)", "U18 min", "Minutes at U18 grade across all teams", "int", None, True),
@@ -548,8 +548,8 @@ def main():
     good_perf = (season.sofascore_rating >= 7.0) | ((season.xg_p90.fillna(0) + season.xa_p90.fillna(0)) >= 0.40)
     season["emerging_senior"] = (is_u21 & is_sen_npl & good_perf).fillna(False)
 
-    # Undervalued Performer: on bottom-half teams (min 450 mins) with duel win rate >= 60% or pass accuracy >= 80%
-    is_bottom_half = season.team_ladder_pos > (season.ladder_teams / 2)
+    # Undervalued Performer: on bottom-half NPL teams (min 450 mins) with duel win rate >= 60% or pass accuracy >= 80%
+    is_bottom_half = (season.division == "NPL") & (season.team_ladder_pos > (season.ladder_teams / 2))
     strong_underlying = (season.duel_win_pct >= 60.0) | (season.pass_acc_pct >= 80.0)
     season["undervalued_performer"] = (is_bottom_half & strong_underlying & (season.minutes >= 450)).fillna(False)
     season = season.copy()
@@ -561,7 +561,7 @@ def main():
         if row.emerging_senior and not any("Emerging Senior" in c for c in clauses):
             clauses.append("Emerging Senior (U21 standout in Senior NPL)")
         if row.undervalued_performer and not any("Undervalued Performer" in c for c in clauses):
-            clauses.append(f"Undervalued Performer on #{row.team_ladder_pos:.0f} team")
+            clauses.append(f"Undervalued Performer on #{row.team_ladder_pos:.0f} NPL team")
         return "; ".join(clauses)
 
     shortlist["why_flagged"] = shortlist.apply(enrich_why, axis=1)

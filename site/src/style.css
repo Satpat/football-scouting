@@ -31,9 +31,22 @@ input[type="checkbox"], input[type="radio"], input[type="range"] { accent-color:
 .section { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 1.5rem 2.5rem; margin: 1.25rem 0; padding: 1.1rem 0; border-top: 1px solid var(--theme-foreground-faintest); border-bottom: 1px solid var(--theme-foreground-faintest); }
 /* wide enough that an Inputs.range group (label + number box + slider, ~360px natural width)
    never has its number input squeezed into an ellipsis */
-.section > div { flex: 1 1 260px; min-width: 240px; }
+.section > div { flex: 1 1 290px; min-width: 270px; }
 .section form { margin: 0; }
-.section label { font-size: 13px; }
+/* Prevent toggle/checkbox labels from wrapping onto multiple lines */
+form[class*="-toggle"],
+form[class*="-checkbox"] {
+  --label-width: auto !important;
+  width: auto !important;
+}
+form[class*="-toggle"] > label,
+form[class*="-checkbox"] > label,
+.section form > label {
+  width: auto !important;
+  max-width: none !important;
+  white-space: nowrap !important;
+  margin-right: 10px;
+}
 .card h2 { margin-top: 0; }
 .kpi { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 0.5rem 1rem; text-align: center; }
 .kpi .v { font-size: 1.5rem; font-weight: 600; line-height: 1.1; }
