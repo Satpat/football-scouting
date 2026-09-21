@@ -27,7 +27,8 @@ const u18Only = view(Inputs.toggle({label: "U18 players only", value: false}));
   <div>
 
 ```js
-const sortBy = view(Inputs.radio(["Gem score", "Sofascore rating", "xG / 90"], {value: "Gem score", label: "Rank by"}));
+const sortOptions = (!gemsOnly || emergingOnly) ? ["Gem score", "Sofascore rating", "xG / 90"] : ["Gem score"];
+const sortBy = view(Inputs.radio(sortOptions, {value: "Gem score", label: "Rank by"}));
 const topN = view(Inputs.range([10, 400], {value: 50, step: 10, label: "Show top N"}));
 ```
   </div>
@@ -71,8 +72,19 @@ const rows = shortlist.filter((d) => d.role === role && division.includes(d.divi
 ```
 
 ```js
-const outfieldCols = ["shown_rank", "player_name", "club", "league", "grade", "age", "gem_score", "sofascore_rating", "xg_p90", "xa_p90", "duel_win_pct", "apps", "minutes", "npg_per90", "team_goal_share_pct", "goals_go_ahead", "goals_winner", "votes_per_app", "gd_on_pitch_vs_team", "borrowed_apps", "team_ladder_pos"];
-const gkCols = ["shown_rank", "player_name", "club", "league", "grade", "age", "gem_score", "sofascore_rating", "apps", "minutes", "ga_on_pitch_per90", "clean_sheets", "clean_sheet_pct", "votes_per_app", "borrowed_apps", "team_ladder_pos"];
+const showSofa = (!gemsOnly || emergingOnly) && rows.some((d) => d.sofascore_rating != null || d.xg_p90 != null);
+const outfieldCols = [
+  "shown_rank", "player_name", "club", "league", "grade", "age", "gem_score",
+  ...(showSofa ? ["sofascore_rating", "xg_p90", "xa_p90", "duel_win_pct"] : []),
+  "apps", "minutes", "npg_per90", "team_goal_share_pct", "goals_go_ahead", "goals_winner",
+  "votes_per_app", "gd_on_pitch_vs_team", "borrowed_apps", "team_ladder_pos"
+];
+const gkCols = [
+  "shown_rank", "player_name", "club", "league", "grade", "age", "gem_score",
+  ...(showSofa ? ["sofascore_rating"] : []),
+  "apps", "minutes", "ga_on_pitch_per90", "clean_sheets", "clean_sheet_pct",
+  "votes_per_app", "borrowed_apps", "team_ladder_pos"
+];
 const cols = role === "GK" ? gkCols : outfieldCols;
 const hdr = {...iconHeaders(cols), shown_rank: "#"};
 const gemScoreCell = (v, i) => {

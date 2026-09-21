@@ -13,6 +13,6 @@ export default {
   toc: false,
   pager: false,
   sidebar: true,
-  footer: "Data: Football SA and SAASL DRIBL match centres, 2026 season (State League 1 & 2, NPL, SAASL). Goals, cards, subs and votes only — no assists, shots or positions are recorded.",
+  footer: "Data: Football SA and SAASL DRIBL match centres (SL1, SL2, NPL, SAASL), enriched with Sofascore advanced event metrics and ratings for Senior NPL.",
   style: "style.css",
 };
