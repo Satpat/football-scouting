@@ -1,33 +1,110 @@
 club,code,slug,crest,logo_url
+AC Unito Adelaide,AUA,ac-unito-adelaide,./assets/crests/ac-unito-adelaide.png,https://ocean.dribl.com/d5ecd7f92ef84ee4a7f0674044285736
+ADFC,ADF,adfc,./assets/crests/adfc.png,https://ocean.dribl.com/8957007b4ec54cbbb00e037849b9075b
+Adelaide Atletico,AAT,adelaide-atletico,./assets/crests/adelaide-atletico.png,https://ocean.dribl.com/a67b467ea89e46eebf3f5b613f9b9d48
 Adelaide Atletico VSC,AAF,adelaide-atletico-vsc,./assets/crests/adelaide-atletico-vsc.png,https://ocean.dribl.com/6760212e5e32404dbb14ef2ade07f04c
 Adelaide Blue Eagles,ABE,adelaide-blue-eagles,./assets/crests/adelaide-blue-eagles.png,https://ocean.dribl.com/cfc1babcd281433593223ff9f093547c
+Adelaide Blue Eagles Amateurs,ABE,adelaide-blue-eagles-amateurs,./assets/crests/adelaide-blue-eagles-amateurs.png,https://ocean.dribl.com/0f6a9e3ca8bf42e59bf7fbd421a7d71b
+Adelaide Brasfoot,BRA,adelaide-brasfoot,./assets/crests/adelaide-brasfoot.png,https://ocean.dribl.com/42848b36a71347f79ac11b5cf4d41a6a
+Adelaide City,ACY,adelaide-city,./assets/crests/adelaide-city.png,https://ocean.dribl.com/f88c9e2b3d6c41d0bee4557e80c22e02
 Adelaide Cobras FC,ACF,adelaide-cobras-fc,./assets/crests/adelaide-cobras-fc.png,https://ocean.dribl.com/ca93bfd65c2e475d95f372e95a9a8b8c
+Adelaide Comets,ACO,adelaide-comets,./assets/crests/adelaide-comets.png,https://ocean.dribl.com/4210841890ef4559b716f8e72c82d195
 Adelaide Croatia Raiders,ACR,adelaide-croatia-raiders,./assets/crests/adelaide-croatia-raiders.png,https://ocean.dribl.com/523ab8411ba0452baac0c5bc12feb9ed
+Adelaide Dragon Sporting Club,ADS,adelaide-dragon-sporting-club,./assets/crests/adelaide-dragon-sporting-club.png,https://ocean.dribl.com/0f163818f9ac425b8be588134281be18
+Adelaide Eagles Soccer Club,AES,adelaide-eagles-soccer-club,./assets/crests/adelaide-eagles-soccer-club.png,https://ocean.dribl.com/97c6787eada74291b9df9926381405c5
 Adelaide Hills Hawks,AHH,adelaide-hills-hawks,./assets/crests/adelaide-hills-hawks.png,https://ocean.dribl.com/dc2204a583744be5a903a519abdf3fa6
+Adelaide Khukuri,AKF,adelaide-khukuri,./assets/crests/adelaide-khukuri.png,https://ocean.dribl.com/443d5b15b3e94f2699e8326c895c774c
 Adelaide Olympic,AOF,adelaide-olympic,./assets/crests/adelaide-olympic.png,https://ocean.dribl.com/9db9f152c44b449f8fed96d0d4e58116
+Adelaide Pumas Soccer Club,APS,adelaide-pumas-soccer-club,./assets/crests/adelaide-pumas-soccer-club.png,https://ocean.dribl.com/6709e5b6cc5b4563aa6fd68ba581ab3e
+Adelaide Red Blue Eagles Football Club,ARB,adelaide-red-blue-eagles-football-club,./assets/crests/adelaide-red-blue-eagles-football-club.png,https://ocean.dribl.com/2f9ec7862c174bd1b6c4902565553c15
 Adelaide Titans Football Club,ATF,adelaide-titans-football-club,./assets/crests/adelaide-titans-football-club.png,https://ocean.dribl.com/beebcb6234214d739d126f5e405ae228
+Adelaide United,AUF,adelaide-united,./assets/crests/adelaide-united.png,https://ocean.dribl.com/3163bcea015d4051b65ea530a9247b22
 Adelaide University,AUN,adelaide-university,./assets/crests/adelaide-university.png,https://ocean.dribl.com/6186579c51094a609043f115aa3dfec8
+Adelaide University Soccer Club,AUS,adelaide-university-soccer-club,./assets/crests/adelaide-university-soccer-club.png,https://ocean.dribl.com/644004c8a6a342e3aeaaa53c0aa9c1c8
+Aldinga Soccer Club,ASC,aldinga-soccer-club,./assets/crests/aldinga-soccer-club.png,https://ocean.dribl.com/875ebd5a266f42acb5ddd3635f74f951
+Andrews Farm Soccer & Community Club,AFS,andrews-farm-soccer-community-club,./assets/crests/andrews-farm-soccer-community-club.png,https://ocean.dribl.com/a5cafc10b5444eeca5b193ef1a6d461e
 Angle Vale,AVS,angle-vale,./assets/crests/angle-vale.png,https://ocean.dribl.com/68d5e94b91de4e1a95d991d5ce5389d0
+Athelstone Soccer Club,ATC,athelstone-soccer-club,./assets/crests/athelstone-soccer-club.png,https://ocean.dribl.com/bc84483f5b01418ca92d68474b371b03
+BIH United,BIH,bih-united,./assets/crests/bih-united.png,https://ocean.dribl.com/339c9a91e91e4f99b79129909e425bd7
+BOSA,BOS,bosa,./assets/crests/bosa.png,https://ocean.dribl.com/9b8fe48ae644484298d31e88812b0c2b
 Barossa United,BUS,barossa-united,./assets/crests/barossa-united.png,https://ocean.dribl.com/cea0910a8d284267911e9d8d3a0b5430
+Blackwood Forest,BLKF,blackwood-forest,./assets/crests/blackwood-forest.png,https://ocean.dribl.com/627c51723e234801a3eeb19dfd9370ed
+Bridgewater SC,BJSC,bridgewater-sc,./assets/crests/bridgewater-sc.png,https://ocean.dribl.com/43d80939d1bb40d3bbcf4e8cc1c85d09
+Brothers United Football Club,BRU,brothers-united-football-club,./assets/crests/brothers-united-football-club.png,https://ocean.dribl.com/60de4fbe6e09456f9e67155cf9afa6ed
+Campbelltown City,CCS,campbelltown-city,./assets/crests/campbelltown-city.png,https://ocean.dribl.com/02f93b14d21f4760a47bab4907cc8451
 Cove FC,CFC,cove-fc,./assets/crests/cove-fc.png,https://ocean.dribl.com/e6806fa573244ea49e145506cf3ffbb1
+Croydon Cougars Sports & Social Club,CCS,croydon-cougars-sports-social-club,./assets/crests/croydon-cougars-sports-social-club.png,https://ocean.dribl.com/658d5bcd94894dde94b09ad574079407
+Croydon FC,CKF,croydon-fc,./assets/crests/croydon-fc.png,https://ocean.dribl.com/4e054e42059240268e453f054a8ffcc1
 Cumberland United,CUN,cumberland-united,./assets/crests/cumberland-united.png,https://ocean.dribl.com/125e869828974b049118d2323e460630
 Eastern United,EUF,eastern-united,./assets/crests/eastern-united.png,https://ocean.dribl.com/efdda88a576e48a5b9c1200b0d08765c
 Elizabeth Downs Soccer Club,EDSFSA,elizabeth-downs-soccer-club,./assets/crests/elizabeth-downs-soccer-club.png,https://ocean.dribl.com/ac5cbc0439154844bc78027c02451322
 Elizabeth Grove,EGS,elizabeth-grove,./assets/crests/elizabeth-grove.png,https://ocean.dribl.com/7827b53fa26248b298ffd4a888e3f015
+Elizabeth Vale Soccer Club,EVS,elizabeth-vale-soccer-club,./assets/crests/elizabeth-vale-soccer-club.png,https://ocean.dribl.com/7dd31b778ea64d418f3bee82aab68981
+F.C Summit,FCS,f-c-summit,./assets/crests/f-c-summit.png,https://ocean.dribl.com/a32bac5f3791425cbade87a06e81638f
+FIZI FC,FIZ,fizi-fc,./assets/crests/fizi-fc.png,https://ocean.dribl.com/a21bcbf8975d46699903f5b1998c4847
+FK Beograd,FKB,fk-beograd,./assets/crests/fk-beograd.png,https://ocean.dribl.com/bc77f9649a614e2b81537e78195b6171
+Football SA State Squads,FSASS,football-sa-state-squads,./assets/crests/football-sa-state-squads.png,https://ocean.dribl.com/5540b649dd104d44b9b29e3516554247
 Fulham United,FUF,fulham-united,./assets/crests/fulham-united.png,https://ocean.dribl.com/85d6d355fc074c61a16a8a0540914571
 Gawler Eagles,GEF,gawler-eagles,./assets/crests/gawler-eagles.png,https://ocean.dribl.com/49d805f304624a0ca937e33b080a478f
 Ghan United,GKC,ghan-united,./assets/crests/ghan-united.png,https://ocean.dribl.com/af6cc93c34d24547b34acd77ec4f317f
+Gleeson Football Club,GFC,gleeson-football-club,./assets/crests/gleeson-football-club.png,https://ocean.dribl.com/a0b97db67735403fa96d96d74b7386f2
+Grange SC,GSC,grange-sc,./assets/crests/grange-sc.png,https://ocean.dribl.com/c8436f9e53524ac7803a18b7ee14146d
+Greenacres United,GU,greenacres-united,./assets/crests/greenacres-united.png,https://ocean.dribl.com/4663c858ebec4d3b88d765c48db34287
+Ingle Farm,IFA,ingle-farm,./assets/crests/ingle-farm.png,https://ocean.dribl.com/2fea3c4f74b04b09bec3c99b6b29aaec
+Macedonia United Lions Socer Club,MUL,macedonia-united-lions-socer-club,./assets/crests/macedonia-united-lions-socer-club.png,https://ocean.dribl.com/b669c236293947a491a6c5d08fd69c0c
+Messinian Association Hawks,MAH,messinian-association-hawks,./assets/crests/messinian-association-hawks.png,https://ocean.dribl.com/3ef5b0c004d24ba88f036f42cdaffceb
+MetroStars,MSF,metrostars,./assets/crests/metrostars.png,https://ocean.dribl.com/82db972a5342429f93fc048172219ed2
 Modbury Jets,MJF,modbury-jets,./assets/crests/modbury-jets.png,https://ocean.dribl.com/55afe9be4d5845f68ccf39fcbfd60289
+Modbury Jets AFC,MJA,modbury-jets-afc,./assets/crests/modbury-jets-afc.png,https://ocean.dribl.com/f50e7f828cd045b899f34b97f9c1e9e4
+Modbury Soccer Club,MSC,modbury-soccer-club,./assets/crests/modbury-soccer-club.png,https://ocean.dribl.com/07ce37dac89e407d9f0c369294464cb1
 Modbury Vista,MVF,modbury-vista,./assets/crests/modbury-vista.png,https://ocean.dribl.com/39510729918b4220bf8324cd0eb29618
+Monarchs Sports Club,MSP,monarchs-sports-club,./assets/crests/monarchs-sports-club.png,https://ocean.dribl.com/6e6817d3bfc54c659132afc3fc1972af
 Mount Barker United,MBU,mount-barker-united,./assets/crests/mount-barker-united.png,https://ocean.dribl.com/d2e7aa4592ed4cb4bd1173a0150c3730
+Munno Para,MPC,munno-para,./assets/crests/munno-para.png,https://ocean.dribl.com/1127b7dbbcb44d3e9414e61bd8a6727b
+Murray Bridge United SC,MBU,murray-bridge-united-sc,./assets/crests/murray-bridge-united-sc.png,https://ocean.dribl.com/9f3b5ee122d345b5aaf0f665ed57dd5e
 Noarlunga United,NLU,noarlunga-united,./assets/crests/noarlunga-united.png,https://ocean.dribl.com/9af9d321ad664b288af863217cf3dbaa
+Noarlunga United Soccer Club,NUS,noarlunga-united-soccer-club,./assets/crests/noarlunga-united-soccer-club.png,https://ocean.dribl.com/0bfd93b00d484a9c94d3524111100e2f
 Northern Demons,NRD,northern-demons,./assets/crests/northern-demons.png,https://ocean.dribl.com/f03f252565074865971dc10f79f7560f
+Northern Wolves Soccer Club,NWS,northern-wolves-soccer-club,./assets/crests/northern-wolves-soccer-club.png,https://ocean.dribl.com/a5e5999aa18b47a697def7a604e0fac1
+Old Ignatians Soccer Club,OIS,old-ignatians-soccer-club,./assets/crests/old-ignatians-soccer-club.png,https://ocean.dribl.com/923b600dcff64ce88187953673c36161
+One Tree Hill Soccer Club,OTH,one-tree-hill-soccer-club,./assets/crests/one-tree-hill-soccer-club.png,https://ocean.dribl.com/ea6411445be8435c9b9b5d1204931836
+Para Hills East,PHE,para-hills-east,./assets/crests/para-hills-east.png,https://ocean.dribl.com/d66de2a3146444539f99a389806ba13a
+Para Hills Knights,PHK,para-hills-knights,./assets/crests/para-hills-knights.png,https://ocean.dribl.com/2c5a4951fee74057915abe03b219da83
+Para Hills United Soccer Club,PHU,para-hills-united-soccer-club,./assets/crests/para-hills-united-soccer-club.png,https://ocean.dribl.com/1ada73efcbba49438a220a8bc59ae5c5
+Para Hills West Soccer Club,PHW,para-hills-west-soccer-club,./assets/crests/para-hills-west-soccer-club.png,https://ocean.dribl.com/6fe5f1066a7342a6a4d82a4940b2b09a
+Parafield Gardens Soccer Club,PGS,parafield-gardens-soccer-club,./assets/crests/parafield-gardens-soccer-club.png,https://ocean.dribl.com/eda3c08921854293a0977db3bc6d1552
+Pitbulls Football Club,PFC,pitbulls-football-club,./assets/crests/pitbulls-football-club.png,https://ocean.dribl.com/d9915db7dfc848e6963834a8db596a6c
+Playford City,PCS,playford-city,./assets/crests/playford-city.png,https://ocean.dribl.com/77ee4c73351d45dda1fe3e5cac5afcbb
 Plympton FC,PFC,plympton-fc,./assets/crests/plympton-fc.png,https://ocean.dribl.com/9bbd997ebe4c42b5af3b6dcf770a0cd6
 Pontian Eagles,PEA,pontian-eagles,./assets/crests/pontian-eagles.png,https://ocean.dribl.com/868e941799cc449ab8a47f471c47ff1e
 Port Adelaide,PAP,port-adelaide,./assets/crests/port-adelaide.png,https://ocean.dribl.com/a8c7bd924469409da2bf133f5a0b367a
+Royal Adelaide FC,RAF,royal-adelaide-fc,./assets/crests/royal-adelaide-fc.png,https://ocean.dribl.com/50b673a1e9dd4792b0e10d5570b3a5f8
+Salisbury Downs Soccer Club,SDSC,salisbury-downs-soccer-club,./assets/crests/salisbury-downs-soccer-club.png,https://ocean.dribl.com/a9d569b8cb324af9b2b987394fe436e4
 Salisbury Inter,SIF,salisbury-inter,./assets/crests/salisbury-inter.png,https://ocean.dribl.com/ec35ebdd8d1947b28313b12986cdf244
+Salisbury Inter Soccer Club,SIS,salisbury-inter-soccer-club,./assets/crests/salisbury-inter-soccer-club.png,https://ocean.dribl.com/65e0cfd331684817a48e15296d8a77d7
+Salisbury Sharks United,SSU,salisbury-sharks-united,./assets/crests/salisbury-sharks-united.png,https://ocean.dribl.com/e8c9a1ebd0934b608fce73999e21c4fd
 Salisbury United,SUS,salisbury-united,./assets/crests/salisbury-united.png,https://ocean.dribl.com/9a01de68a0cd43068bc7aedc28844365
+Salisbury Villa Soccer Club,SVS,salisbury-villa-soccer-club,./assets/crests/salisbury-villa-soccer-club.png,https://ocean.dribl.com/7afb09d8e3244520a785247468f6ddca
+Savoy Soccer Club,SSC,savoy-soccer-club,./assets/crests/savoy-soccer-club.png,https://ocean.dribl.com/b1c2447874eb4586adf919e136bcc7e2
 Seaford Rangers,SRF,seaford-rangers,./assets/crests/seaford-rangers.png,https://ocean.dribl.com/11dfe4e216b84e62a77512d9af734726
+Shaheed Bhagat Singh Football Club,SBS,shaheed-bhagat-singh-football-club,./assets/crests/shaheed-bhagat-singh-football-club.png,https://ocean.dribl.com/ed574958ff7141ad9821258149c9fc14
 South Adelaide,SAF,south-adelaide,./assets/crests/south-adelaide.png,https://ocean.dribl.com/44bb3d0fe13347b7b2b87333c913a1cf
+South Coast United Soccer Club,SCU,south-coast-united-soccer-club,./assets/crests/south-coast-united-soccer-club.png,https://ocean.dribl.com/1fb274db99764bff80fdf85fc770a4a4
+Southern Breakers,SBC,southern-breakers,./assets/crests/southern-breakers.png,https://ocean.dribl.com/97f658a6524b4d5ead4bfe3195179d63
+Southern Knights Football Club,SKF,southern-knights-football-club,./assets/crests/southern-knights-football-club.png,https://ocean.dribl.com/2fb3d60e563a46b1a1c3a954f5d3dc0b
+St Augustines Soccer Club,St Augustines Soccer Club,st-augustines-soccer-club,./assets/crests/st-augustines-soccer-club.png,https://ocean.dribl.com/6921d3b0511c4e0781120cc77d9ff3db
+St Peters Old Collegians Soccer Club,SPO,st-peters-old-collegians-soccer-club,./assets/crests/st-peters-old-collegians-soccer-club.png,https://ocean.dribl.com/12a91e907f054e6c9668a18fc4b972ae
+Stirling Districts,SDS,stirling-districts,./assets/crests/stirling-districts.png,https://ocean.dribl.com/56fceb56e5a6458a8c85664db376defd
+Strathalbyn Strikers FC,SSF,strathalbyn-strikers-fc,./assets/crests/strathalbyn-strikers-fc.png,https://ocean.dribl.com/0304a6ca2e014cafacad12e39c62e867
+Sturt Lions,SLF,sturt-lions,./assets/crests/sturt-lions.png,https://ocean.dribl.com/e6273f7756944d6993e2d2eb173f3f42
+Sturt Marion Thunder Soccer Club,SMT,sturt-marion-thunder-soccer-club,./assets/crests/sturt-marion-thunder-soccer-club.png,https://ocean.dribl.com/db383497d42d4b8ea5036f91a1bf2500
+Tea Tree Gully,TTG,tea-tree-gully,./assets/crests/tea-tree-gully.png,https://ocean.dribl.com/b225ff6df4af4bdbb557aa792f7aa8ea
+The Cove FC,TCF,the-cove-fc,./assets/crests/the-cove-fc.png,https://ocean.dribl.com/a845a5eacd3942579dd087346d69b470
 Vipers FC,VPC,vipers-fc,./assets/crests/vipers-fc.png,https://ocean.dribl.com/149cee738e714ce6a69dc58500d569c2
+Virginia United,VUS,virginia-united,./assets/crests/virginia-united.png,https://ocean.dribl.com/add1a3f138b94f38b66a6c713730a9d2
+W A Raptors Soccer Club,WAR,w-a-raptors-soccer-club,./assets/crests/w-a-raptors-soccer-club.png,https://ocean.dribl.com/64a8bed0ebe548719362a9f4cbd56dcd
+WT Birkalla,WTB,wt-birkalla,./assets/crests/wt-birkalla.png,https://ocean.dribl.com/9ddc2540253b41aba78bc8a6e6b4ec22
+West Adelaide,WAF,west-adelaide,./assets/crests/west-adelaide.png,https://ocean.dribl.com/6aca59c680b34ec8a0d9ea3bb535ac5f
+West Beach Football Club,WBF,west-beach-football-club,./assets/crests/west-beach-football-club.png,https://ocean.dribl.com/b20434e903aa4304803138ff83591780
 Western Strikers,WSF,western-strikers,./assets/crests/western-strikers.png,https://ocean.dribl.com/1a3a05d8defd478f861ab96f9fe8434f
+Westwood Football Club,WFC,westwood-football-club,./assets/crests/westwood-football-club.png,https://ocean.dribl.com/01213a8883d64b6a81933e6fc222fd97

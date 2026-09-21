@@ -16,7 +16,7 @@ const meta = await FileAttachment("./data/meta.json").json();
 const playerCols = Object.keys(players[0]);
 ```
 
-<p class="muted">${meta.matches.toLocaleString()} matches · ${meta.players.toLocaleString()} players · ${meta.appearances.toLocaleString()} appearances · State League 1 &amp; 2, all grades.</p>
+<p class="muted">${meta.matches.toLocaleString()} matches · ${meta.players.toLocaleString()} players · ${meta.appearances.toLocaleString()} appearances · State League 1 &amp; 2, the NPL and SAASL, all grades.</p>
 
 <div class="section">
   <div>
@@ -42,7 +42,7 @@ const yMetric = view(groupMetricSelect(Inputs.select(metricOptions(playerCols), 
   <div>
 
 ```js
-const division = view(Inputs.checkbox(["SL1", "SL2"], {value: ["SL1", "SL2"], label: "Division"}));
+const division = view(Inputs.checkbox(["SL1", "SL2", "NPL", "SAASL"], {value: ["SL1", "SL2", "NPL", "SAASL"], label: "Division"}));
 const gradeSel = view(Inputs.checkbox(GRADES, {value: [...GRADES.values()], label: "Grade"}));
 ```
   </div>

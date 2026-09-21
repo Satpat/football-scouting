@@ -66,7 +66,7 @@
  "division": {
   "label": "Division",
   "short": "Division",
-  "desc": "SL1 = State League 1, SL2 = State League 2",
+  "desc": "SL1 = State League 1, SL2 = State League 2, NPL = National Premier League, SAASL = SA Amateur Soccer League",
   "fmt": "str",
   "higher_is_better": null,
   "metric": false
@@ -1056,9 +1056,9 @@
   "metric": false
  },
  "in_dataset": {
-  "label": "In SL dataset",
-  "short": "In SL",
-  "desc": "Match is one of the SL1/SL2 fixtures in this site's dataset",
+  "label": "In dataset",
+  "short": "In dataset",
+  "desc": "Match is one of the SL1/SL2/NPL/SAASL fixtures in this site's dataset",
   "fmt": "bool",
   "higher_is_better": null,
   "metric": false

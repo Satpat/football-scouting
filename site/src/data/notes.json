@@ -1,7 +1,7 @@
 [
  {
   "topic": "Source",
-  "note": "DRIBL match centre API (fsa.dribl.com), 2026 season, SL1 + SL2 all grades. Extracted with extract_browser.js."
+  "note": "DRIBL match centre API, 2026 season: Football SA (fsa.dribl.com) SL1 + SL2 + NPL (men's) all grades, and SAASL (saasl.dribl.com) Home and Away all grades. Extracted with extract_browser.js."
  },
  {
   "topic": "Positions",
@@ -21,7 +21,7 @@
  },
  {
   "topic": "Game state",
-  "note": "Reconstructed from the match-centre goal timeline. equaliser = level after; go_ahead = takes lead; winner = go-ahead goal after which the team never fell level, in a match it won; late = 75'+."
+  "note": "Reconstructed from the match-centre goal timeline. equaliser = level after; go_ahead = takes lead; winner = go-ahead goal after which the team never fell level, in a match it won; late = 75'+. About 28% of SAASL matches have no goal timeline at all (lineup goal totals are still recorded) \u2014 game-state and the Events sheet undercount there; Football SA (SL1/SL2/NPL) timelines are essentially complete."
  },
  {
   "topic": "On-pitch GD",
@@ -29,11 +29,11 @@
  },
  {
   "topic": "Votes",
-  "note": "Per-match 3-2-1 votes from DRIBL, likely best-on-ground — not shown publicly elsewhere. Recorded for about 249 of 294 matches."
+  "note": "Per-match 3-2-1 votes from DRIBL, likely best-on-ground \u2014 not shown publicly elsewhere. Recorded for about 249 of 294 matches."
  },
  {
   "topic": "Borrowed",
-  "note": "DRIBL's flag for a player borrowed from another team in the club that match — a direct playing up/down signal."
+  "note": "DRIBL's flag for a player borrowed from another team in the club that match \u2014 a direct playing up/down signal."
  },
  {
   "topic": "Pathway",
@@ -41,7 +41,7 @@
  },
  {
   "topic": "Shortlist score",
-  "note": "Eligible: 450+ minutes and 5+ apps. Rates are shrunk toward the league mean, as if starting from 450 minutes / 5 apps, so short bursts don't top the list — then compared as z-scores within league. Outfield weights: non-penalty goals/90 35%, votes/app 25%, on-pitch goal difference 20%, share of team goals 10%, share of team minutes 10%. Goalkeeper weights: goals conceded/90 (inverted) 25%, goals conceded vs team rate (inverted) 15%, clean sheet rate 30%, votes/app 20%, share of team minutes 10%. Hidden gems get +0.3, U18 players +0.15."
+  "note": "Eligible: 450+ minutes and 5+ apps. Rates are shrunk toward the league mean, as if starting from 450 minutes / 5 apps, so short bursts don't top the list \u2014 then compared as z-scores within league. Outfield weights: non-penalty goals/90 35%, votes/app 25%, on-pitch goal difference 20%, share of team goals 10%, share of team minutes 10%. Goalkeeper weights: goals conceded/90 (inverted) 25%, goals conceded vs team rate (inverted) 15%, clean sheet rate 30%, votes/app 20%, share of team minutes 10%. Hidden gems get +0.3, U18 players +0.15."
  },
  {
   "topic": "Ladder / opponent strength",

@@ -25,6 +25,9 @@ export function leagueGrade(leagueName) {
   if (/Reserves|Res\b/i.test(name)) return "RES";
   return name ? "SEN" : undefined;
 }
+// Whether a league is one of this site's graded competitions (SL1/SL2/NPL), as opposed to a
+// cup, trial or youth-pathway match that only shows up in a player's raw match history.
+export function isGradedLeague(leagueName) { return gradeByLeague.has(leagueName); }
 // <img> for a club crest (empty span when unknown so table cells stay aligned)
 export function crest(nameOrSlug, size = 20) {
   const c = clubInfo(nameOrSlug);
@@ -133,13 +136,13 @@ export function groupMetricSelect(form) {
 
 // Compact league / competition names for tables. Strips sponsor names (sponsors change and a
 // player's match history can include junior grades that carry a different sponsor than the
-// senior State League competitions — HPG Homes, Nova, RAA, Hahn and Carl's Jr./Junior all
-// appear in the real data, and the same competition shows up both with and without its
-// sponsor) and normalises every "Under N's" / "UN's" spelling to "UN" so it lines up with
-// the Grade column's own values.
+// senior State League competitions — HPG Homes, Nova, RAA, Hahn, Sportal, Guardian Insurance
+// and Carl's Jr./Junior all appear in the real data, and the same competition shows up both
+// with and without its sponsor) and normalises every "Under N's" / "UN's" spelling to "UN" so
+// it lines up with the Grade column's own values.
 export function shortLeague(name) {
   return String(name ?? "")
-    .replace(/^(HPG Homes|Nova|RAA|Hahn)\s+/, "")
+    .replace(/^(HPG Homes|Nova|RAA|Hahn|Sportal|Guardian Insurance)\s+/, "")
     .replace(/Carl['’]s (?:Jr\.?|Junior)\s*/i, "")
     .replace("State League ", "SL")
     .replace(" - ", " ")

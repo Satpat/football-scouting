@@ -33,7 +33,7 @@ LABELS = {
     "league": ("League", "League", "League the row belongs to", "str", None, False),
     "primary_league": ("League", "League", "Regular-season league", "str", None, False),
     "grade": ("Grade", "Grade", "SEN = Seniors, RES = Reserves, U18 = Under 18s", "str", None, False),
-    "division": ("Division", "Division", "SL1 = State League 1, SL2 = State League 2", "str", None, False),
+    "division": ("Division", "Division", "SL1 = State League 1, SL2 = State League 2, NPL = National Premier League, SAASL = SA Amateur Soccer League", "str", None, False),
     "role": ("Role", "Role", "Goalkeeper or outfield (DRIBL records no other positions)", "str", None, False),
     "jersey": ("Jersey", "#", "Most common shirt number", "str", None, False),
     "is_finals": ("Finals", "Finals", "Finals-series match", "bool", None, False),
@@ -165,7 +165,7 @@ LABELS = {
     "side": ("Side", "Side", "home or away", "str", None, False),
     "score": ("Score", "Score", "Home – away full-time score", "str", None, False),
     "did_play": ("Played", "Played", "Took part in the match", "bool", None, False),
-    "in_dataset": ("In SL dataset", "In SL", "Match is one of the SL1/SL2 fixtures in this site's dataset", "bool", None, False),
+    "in_dataset": ("In dataset", "In dataset", "Match is one of the SL1/SL2/NPL/SAASL fixtures in this site's dataset", "bool", None, False),
     "code": ("Club code", "Code", "DRIBL club code", "str", None, False),
     "slug": ("Club key", "Key", "Crest file key", "str", None, False),
     "crest": ("Crest", "Crest", "Crest image path", "str", None, False),
@@ -257,7 +257,9 @@ def league_order(leagues: pd.DataFrame) -> list:
         region = "North" if "North" in name else "South" if "South" in name else ""
         rows.append({"league": name, "division": r["division"], "grade": r["grade"], "region": region,
                      "is_finals": bool(r["is_finals"]),
-                     "short": name.replace("HPG Homes State League ", "SL").replace(" - ", " ").replace("Under 18's", "U18")
+                     "short": name.replace("HPG Homes State League ", "SL").replace("RAA ", "").replace("Sportal ", "")
+                                  .replace("Guardian Insurance ", "").replace(" - ", " ")
+                                  .replace("Under 18's", "U18").replace("Reserves", "Res")
                                   .replace("Finals Series", "Finals").replace("Final Series", "Finals")})
     rows.sort(key=lambda r: (r["is_finals"], r["division"], r["region"], GRADE_ORDER[r["grade"]]))
     return rows
@@ -336,6 +338,8 @@ def member_match_frame(member_matches: dict, known_matches: set, player_teams: d
     for borrowed players, so the side is resolved from the player's known teams, then clubs."""
     rows = []
     strip = lambda t: str(t or "").replace(" Male", "").replace(" Female", "")
+    # DRIBL returns minutes=false (not null) for some SAASL matches where it wasn't recorded.
+    as_minutes = lambda v: None if isinstance(v, bool) else v
     for pid, ms in member_matches.items():
         teams, clubs = player_teams.get(pid, set()), player_clubs.get(pid, set())
         for m in ms:
@@ -367,7 +371,7 @@ def member_match_frame(member_matches: dict, known_matches: set, player_teams: d
                          "home_club": m.get("home_club_name"), "away_club": m.get("away_club_name"),
                          "home_score": hs, "away_score": as_, "score": f"{hs}–{as_}" if hs is not None and as_ is not None else "",
                          "side": side, "result": result, "borrowed_side": borrowed_side, "did_play": bool(m.get("played")), "starting": bool(m.get("started")),
-                         "minutes": m.get("minutes"), "goals": m.get("goals"), "yellow_cards": m.get("yellow_card_count"),
+                         "minutes": as_minutes(m.get("minutes")), "goals": m.get("goals"), "yellow_cards": m.get("yellow_card_count"),
                          "red_cards": m.get("red_card_count"), "votes": m.get("votes"), "is_captain": bool(m.get("is_captain")),
                          "is_goalkeeper": bool(m.get("is_goalkeeper")), "clean_sheet": bool(m.get("clean_sheet")),
                          "match_hash_id": m.get("match_hash_id"), "in_dataset": m.get("match_hash_id") in known_matches})

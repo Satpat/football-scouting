@@ -1,16 +1,29 @@
-// DRIBL enriched extraction — run inside the browser pane on https://fsa.dribl.com
-// (Cloudflare blocks non-browser clients). Paste the whole file into the JS console,
+// DRIBL enriched extraction — run inside the browser pane on the relevant *.dribl.com
+// site (Cloudflare blocks non-browser clients). Paste the whole file into the JS console,
 // then run the phases one at a time:
 //   await __v2.leagues();  await __v2.results();  await __v2.matchcentres();
 //   await __v2.members();  await __v2.ladders();
 //   __v2.dump('meta'); __v2.dump('mc'); __v2.dump('members', 0, 3); ... (see dump())
 // Each phase stores its output on window.__v2.state so a failed phase can be re-run.
+//
+// This site now pulls from two separate DRIBL tenants, each with its own site/tenant/
+// season id — run this script separately on each origin with that source's constants:
+//
+//   Football SA (fsa.dribl.com) — SL1, SL2, NPL men's:
+//     TENANT = '3pmvvjLmvJ', SEASON = '7MNGzMbmAz'
+//     COMPS = ['vbd911WYd4', 'gld4ppz2dW', '08NOppXWKZ']
+//     (NPL Women's, 'LBdDxx9Jdb', is a separate competition, intentionally not included)
+//
+//   SAASL (saasl.dribl.com) — Home and Away only (excludes SAASL Cups and preseason
+//   trials/shields, same "no trials/cups" convention as the Football SA leagues):
+//     TENANT = 'V8dnR1odwL', SEASON = '7MNGzzEmAz'
+//     COMPS = ['1pN6ppZAd0']
 
 (() => {
   const B = 'https://mc-api.dribl.com/api/';
   const TENANT = '3pmvvjLmvJ';
   const SEASON = '7MNGzMbmAz';
-  const COMPS = ['vbd911WYd4', 'gld4ppz2dW']; // SL1, SL2
+  const COMPS = ['vbd911WYd4', 'gld4ppz2dW', '08NOppXWKZ']; // SL1, SL2, NPL (men's) — see header for the SAASL alternative
   const TZ = 'Australia/Adelaide';
   const BATCH = 15;
 

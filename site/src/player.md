@@ -7,7 +7,7 @@ sql:
 ---
 
 ```js
-import {label, short, describe, fmt, fmtDate, toDate, crest, clubCell, clubInfo, percentile, shortLeague, shortLeagueOnly, leagueGrade, isNumericCol, GRADE_NAME} from "./components/labels.js";
+import {label, short, describe, fmt, fmtDate, toDate, crest, clubCell, clubInfo, percentile, shortLeague, shortLeagueOnly, leagueGrade, isGradedLeague, isNumericCol, GRADE_NAME} from "./components/labels.js";
 import {radar} from "./components/radar.js";
 import {icon, iconHeader, gemMark} from "./components/icons.js";
 const players = await FileAttachment("./data/players.csv").csv({typed: true});
@@ -147,7 +147,7 @@ const matchRows = allMatches.filter((r) => r.did_play).filter((r) => compSel ===
   .map((r) => ({...r, opponent: r.side === "home" ? r.away_team : r.side === "away" ? r.home_team : `${r.home_team} v ${r.away_team}`,
     opponent_club: r.side === "home" ? r.away_club : r.side === "away" ? r.home_club : null,
     own: r.side === "home" ? r.home_score : r.away_score, opp: r.side === "home" ? r.away_score : r.home_score,
-    ha: r.side === "home" ? "H" : r.side === "away" ? "A" : "–", cup: !/State League/.test(r.league)}));
+    ha: r.side === "home" ? "H" : r.side === "away" ? "A" : "–", cup: !isGradedLeague(r.league)}));
 const PAGE = 10;
 ```
 

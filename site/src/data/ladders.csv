@@ -1,4 +1,22 @@
 league,grade,division,is_finals,position,team_id,team,club,played,won,drawn,lost,goals_for,goals_against,goal_difference,points
+Guardian Insurance Over 35's Blue,SEN,SAASL,false,1,ld44MyvpdW,Western Strikers Over 35's Over 35's,Western Strikers,18,16,1,1,91,16,75,49
+Guardian Insurance Over 35's Blue,SEN,SAASL,false,2,bd9XPr4lK4,Ingle Farm Over 35's Over 35's,Ingle Farm,18,14,0,4,99,30,69,42
+Guardian Insurance Over 35's Blue,SEN,SAASL,false,3,2KpvXe6qmY,Adelaide Brasfoot Over 35's Over 35's,Adelaide Brasfoot,18,13,1,4,63,17,46,40
+Guardian Insurance Over 35's Blue,SEN,SAASL,false,4,8NOD0xe7KZ,Modbury Jets AFC Over 35's Over 35's,Modbury Jets AFC,18,11,0,7,77,39,38,33
+Guardian Insurance Over 35's Blue,SEN,SAASL,false,5,jdyexWGLd5,BOSA Over 35's Over 35's,BOSA,18,9,1,8,61,46,15,28
+Guardian Insurance Over 35's Blue,SEN,SAASL,false,6,jmaV1aZMNR,Salisbury Inter Soccer Club Over 35's Over 35's 1,Salisbury Inter Soccer Club,18,7,2,9,35,38,-3,23
+Guardian Insurance Over 35's Blue,SEN,SAASL,false,7,Ome0aQ2vd0,Tea Tree Gully Over 35's Over 35's 1,Tea Tree Gully,18,5,2,11,49,57,-8,17
+Guardian Insurance Over 35's Blue,SEN,SAASL,false,8,nmYyA6wxmz,Old Ignatians Soccer Club Over 35's Over 35's,Old Ignatians Soccer Club,18,5,2,11,40,73,-33,17
+Guardian Insurance Over 35's Blue,SEN,SAASL,false,9,MNGolVXENA,West Beach Football Club Over 35's Over 35's,West Beach Football Club,18,5,1,12,56,69,-13,16
+Guardian Insurance Over 35's Blue,SEN,SAASL,false,10,am1QM1Xqmw,Gawler Eagles Over 35's Over 35's,Gawler Eagles,18,0,0,18,10,196,-186,0
+Guardian Insurance Over 35's Red,SEN,SAASL,false,1,ld4OgP6eKW,Munno Para Over 35's Over 35's,Munno Para,14,12,0,2,65,17,48,36
+Guardian Insurance Over 35's Red,SEN,SAASL,false,2,jmaBDBRqNR,Salisbury Inter Soccer Club Over 35's Over 35's 2,Salisbury Inter Soccer Club,14,11,2,1,42,16,26,35
+Guardian Insurance Over 35's Red,SEN,SAASL,false,3,8NOD0xGBKZ,Pitbulls Football Club Over 35's Over 35's,Pitbulls Football Club,14,6,1,7,36,36,0,19
+Guardian Insurance Over 35's Red,SEN,SAASL,false,4,WdgplpLpmR,Tea Tree Gully Over 35's Over 35's 2,Tea Tree Gully,14,5,3,6,38,32,6,18
+Guardian Insurance Over 35's Red,SEN,SAASL,false,5,yKJbMb1AKY,Greenacres United Over 35's Over 35's,Greenacres United,14,5,2,7,33,40,-7,17
+Guardian Insurance Over 35's Red,SEN,SAASL,false,6,pN6Oy1g2K0,Para Hills West Soccer Club Over 35's Over 35's,Para Hills West Soccer Club,14,5,2,7,32,39,-7,17
+Guardian Insurance Over 35's Red,SEN,SAASL,false,7,MNGogMxBNA,Gleeson Football Club Over 35's Over 35's,Gleeson Football Club,14,4,1,9,25,46,-21,13
+Guardian Insurance Over 35's Red,SEN,SAASL,false,8,lNbjQj1pNx,Andrews Farm Soccer & Community Club Over 35's Over 35's,Andrews Farm Soccer & Community Club,14,2,1,11,16,61,-45,7
 HPG Homes State League 1,SEN,SL1,false,1,jdyeg5X3d5,Adelaide Croatia Raiders Senior Men's SL1,Adelaide Croatia Raiders,22,15,2,5,56,26,30,47
 HPG Homes State League 1,SEN,SL1,false,2,bd9Xa4GeK4,Modbury Jets Senior Men's SL1,Modbury Jets,22,13,5,4,46,20,26,44
 HPG Homes State League 1,SEN,SL1,false,3,gdMvq09OmE,Adelaide Olympic Senior Men's SL1,Adelaide Olympic,22,14,1,7,42,25,17,43
@@ -115,3 +133,221 @@ HPG Homes State League 2 South - Under 18's,U18,SL2,false,7,jmaVQnpYNR,Noarlunga
 HPG Homes State League 2 South - Under 18's,U18,SL2,false,8,nmYyqPJbmz,Adelaide Titans Football Club Under 18's SL2,Adelaide Titans Football Club,18,3,2,13,24,70,-46,11
 HPG Homes State League 2 South - Under 18's,U18,SL2,false,9,BdD1qX9xmb,Ghan United Under 18's SL2,Ghan United,18,3,0,15,26,83,-57,9
 HPG Homes State League 2 South - Under 18's,U18,SL2,false,10,gdMvqxbQmE,Mount Barker United Under 18's SL2,Mount Barker United,18,2,0,16,23,96,-73,6
+RAA NPL,SEN,NPL,false,1,1K3YaO1RmQ,Adelaide City Senior Men's NPL,Adelaide City,22,14,6,2,44,16,28,48
+RAA NPL,SEN,NPL,false,2,MNGoqa6QNA,WT Birkalla Senior Men's NPL,WT Birkalla,22,15,2,5,55,27,28,47
+RAA NPL,SEN,NPL,false,3,EN2OalerKq,MetroStars Senior Men's NPL,MetroStars,22,13,5,4,53,23,30,44
+RAA NPL,SEN,NPL,false,4,am1qak1Xmw,Playford City Senior Men's NPL,Playford City,22,10,5,7,42,31,11,35
+RAA NPL,SEN,NPL,false,5,BdD1qgVxmb,FK Beograd Senior Men's NPL,FK Beograd,22,10,3,9,35,30,5,33
+RAA NPL,SEN,NPL,false,6,Pmrkxw1ANo,Croydon FC Senior Men's NPL,Croydon FC,22,8,6,8,46,41,5,30
+RAA NPL,SEN,NPL,false,7,PmjnVw1jmZ,Adelaide United Senior Men's NPL,Adelaide United,22,7,8,7,33,32,1,29
+RAA NPL,SEN,NPL,false,8,emA12xB9mB,Campbelltown City Senior Men's NPL,Campbelltown City,22,8,5,9,35,36,-1,29
+RAA NPL,SEN,NPL,false,9,jmaVQk9qNR,Sturt Lions Senior Men's NPL,Sturt Lions,22,8,3,11,35,36,-1,27
+RAA NPL,SEN,NPL,false,10,pmvzBJnRmv,West Adelaide Senior Men's NPL,West Adelaide,22,6,7,9,40,44,-4,25
+RAA NPL,SEN,NPL,false,11,nmYyq1Bbmz,Adelaide Comets Senior Men's NPL,Adelaide Comets,22,5,5,12,25,38,-13,20
+RAA NPL,SEN,NPL,false,12,8NODqewzKZ,Para Hills Knights Senior Men's NPL,Para Hills Knights,22,0,1,21,14,103,-89,1
+RAA NPL Reserves,RES,NPL,false,1,pmvzBWaRmv,MetroStars Men's Reserves NPL,MetroStars,22,18,3,1,76,21,55,57
+RAA NPL Reserves,RES,NPL,false,2,am1qakEnmw,Campbelltown City Men's Reserves NPL,Campbelltown City,22,17,3,2,74,23,51,54
+RAA NPL Reserves,RES,NPL,false,3,jdyeg5jPd5,Adelaide United Men's Reserves NPL,Adelaide United,22,12,1,9,76,49,27,37
+RAA NPL Reserves,RES,NPL,false,4,PmrkxwMENo,WT Birkalla Men's Reserves NPL,WT Birkalla,22,12,1,9,64,47,17,37
+RAA NPL Reserves,RES,NPL,false,5,2Kpv3rLWmY,Sturt Lions Men's Reserves NPL,Sturt Lions,22,11,3,8,60,45,15,36
+RAA NPL Reserves,RES,NPL,false,6,PmjnVwM5mZ,Para Hills Knights Men's Reserves NPL,Para Hills Knights,22,10,3,9,41,39,2,33
+RAA NPL Reserves,RES,NPL,false,7,MNGoqaALNA,Croydon FC Men's Reserves NPL,Croydon FC,22,10,1,11,34,37,-3,31
+RAA NPL Reserves,RES,NPL,false,8,bd9Xa4gZK4,Adelaide Comets Men's Reserves NPL,Adelaide Comets,22,9,3,10,57,50,7,30
+RAA NPL Reserves,RES,NPL,false,9,ld4OaGMOKW,Adelaide City Men's Reserves NPL,Adelaide City,22,5,5,12,43,56,-13,20
+RAA NPL Reserves,RES,NPL,false,10,MNGoq5rLNA,West Adelaide Men's Reserves NPL,West Adelaide,22,6,2,14,21,67,-46,20
+RAA NPL Reserves,RES,NPL,false,11,ld4OaGL0KW,FK Beograd Men's Reserves NPL,FK Beograd,22,5,2,15,29,65,-36,17
+RAA NPL Reserves,RES,NPL,false,12,emA12xV1mB,Playford City Men's Reserves NPL,Playford City,22,3,1,18,28,104,-76,10
+RAA NPL Under 18's,U18,NPL,false,1,4KLnqa7pmq,Campbelltown City Under 18's NPL,Campbelltown City,22,18,3,1,85,21,64,57
+RAA NPL Under 18's,U18,NPL,false,2,MNGoqa7zNA,MetroStars Under 18's NPL,MetroStars,22,16,4,2,84,21,63,52
+RAA NPL Under 18's,U18,NPL,false,3,BdD1qg74mb,FK Beograd Under 18's NPL,FK Beograd,22,13,3,6,57,41,16,42
+RAA NPL Under 18's,U18,NPL,false,4,Ome0kvMPd0,Adelaide City Under 18's NPL,Adelaide City,22,12,3,7,52,44,8,39
+RAA NPL Under 18's,U18,NPL,false,5,2Kpv3wBPmY,Football SA State Squads Under 18's NPL,Football SA State Squads,22,10,4,8,69,54,15,34
+RAA NPL Under 18's,U18,NPL,false,6,pN6OaQeQK0,Croydon FC Under 18's NPL,Croydon FC,22,9,6,7,45,45,0,33
+RAA NPL Under 18's,U18,NPL,false,7,jdyeg5Qbd5,WT Birkalla Under 18's NPL,WT Birkalla,22,9,3,10,60,47,13,30
+RAA NPL Under 18's,U18,NPL,false,8,EN2OalxEKq,Adelaide Comets Under 18's NPL,Adelaide Comets,22,8,5,9,51,51,0,29
+RAA NPL Under 18's,U18,NPL,false,9,jdyegGbEd5,Sturt Lions Under 18's,Sturt Lions,22,6,3,13,53,78,-25,21
+RAA NPL Under 18's,U18,NPL,false,10,1K3YaOeqmQ,Playford City Under 18's NPL,Playford City,22,3,4,15,36,80,-44,13
+RAA NPL Under 18's,U18,NPL,false,11,bd9Xa4xJK4,Para Hills Knights Under 18's NPL,Para Hills Knights,22,3,4,15,24,76,-52,13
+RAA NPL Under 18's,U18,NPL,false,12,MNGoq52zNA,West Adelaide Under 18's,West Adelaide,22,3,2,17,27,85,-58,11
+Saturday Division Eight,SEN,SAASL,false,1,EN2OLGZrKq,The Cove FC All Age Men (Sat) Division Eight,The Cove FC,21,20,0,1,89,12,77,60
+Saturday Division Eight,SEN,SAASL,false,2,emA1zqpQmB,Aldinga Soccer Club All Age Men (Sat) Division Eight,Aldinga Soccer Club,21,16,1,4,94,22,72,49
+Saturday Division Eight,SEN,SAASL,false,3,emAeJeEbmB,Stirling Districts All Age Men (Sat) Division Eight 1,Stirling Districts,21,13,3,5,71,31,40,42
+Saturday Division Eight,SEN,SAASL,false,4,Pmrke4M5No,Stirling Districts All Age Men (Sat) Division Eight 2,Stirling Districts,21,12,1,8,57,48,9,36
+Saturday Division Eight,SEN,SAASL,false,5,nmYZ09MzNz,Bridgewater SC All Age Men (Sat) Division Eight,Bridgewater SC,21,7,3,11,45,58,-13,23
+Saturday Division Eight,SEN,SAASL,false,6,nmYyA6bYmz,F.C Summit All Age Men (Sat) Division Eight,F.C Summit,21,4,2,15,33,76,-43,14
+Saturday Division Eight,SEN,SAASL,false,7,ZNQxlxwGmx,Blackwood Forest All Age Men (Sat) Division Eight,Blackwood Forest,21,4,2,15,35,103,-68,13
+Saturday Division Eight,SEN,SAASL,false,8,lNb38O0DKx,Strathalbyn Strikers FC All Age Men (Sat) Division Eight,Strathalbyn Strikers FC,21,1,2,18,13,87,-74,4
+Saturday Division Seven,SEN,SAASL,false,1,am1qBy5Wmw,Messinian Association Hawks All Age Men (Sat) Division Seven,Messinian Association Hawks,21,16,5,0,91,19,72,53
+Saturday Division Seven,SEN,SAASL,false,2,PmjnpAL3mZ,BOSA All Age Men (Sat) Division Seven,BOSA,21,13,3,5,64,34,30,42
+Saturday Division Seven,SEN,SAASL,false,3,AN0D4xxzN6,Sturt Marion Thunder Soccer Club All Age Men (Sat) Division Seven,Sturt Marion Thunder Soccer Club,21,11,5,5,57,35,22,38
+Saturday Division Seven,SEN,SAASL,false,4,4KLz17EGmq,Modbury Jets AFC All Age Men (Sat) Division Seven,Modbury Jets AFC,21,10,7,4,51,25,26,36
+Saturday Division Seven,SEN,SAASL,false,5,pmvzZY7Rmv,Barossa United All Age Men (Sat) Division Seven,Barossa United,21,7,5,9,49,72,-23,25
+Saturday Division Seven,SEN,SAASL,false,6,vmZwgExlNq,Old Ignatians Soccer Club All Age Men (Sat) Division Seven,Old Ignatians Soccer Club,21,6,4,11,39,55,-16,22
+Saturday Division Seven,SEN,SAASL,false,7,pmvzZx9omv,Pitbulls Football Club All Age Men (Sat) Division Seven,Pitbulls Football Club,21,2,3,16,24,75,-51,8
+Saturday Division Seven,SEN,SAASL,false,8,jdyexWa3d5,Adelaide Atletico All Age Men (Sun) Division Seven,Adelaide Atletico,21,1,4,16,11,71,-60,6
+Saturday Division Six,SEN,SAASL,false,1,Ome0aPQPd0,Monarchs Sports Club All Age Men (Sat) Division Six,Monarchs Sports Club,18,15,0,3,70,29,41,45
+Saturday Division Six,SEN,SAASL,false,2,gdMve3eDmE,St Augustines Soccer Club All Age Men (Sat) Division Six,St Augustines Soccer Club,18,14,2,2,83,17,66,44
+Saturday Division Six,SEN,SAASL,false,3,pmvzZYj6mv,Adelaide Brasfoot All Age Men (Sat) Division Six,Adelaide Brasfoot,18,13,2,3,59,28,31,41
+Saturday Division Six,SEN,SAASL,false,4,emA1zM41mB,Gleeson Football Club All Age Men (Sat) Division Six,Gleeson Football Club,18,10,4,4,45,26,19,34
+Saturday Division Six,SEN,SAASL,false,5,gdMve3kBmE,Elizabeth Grove ,Elizabeth Grove,18,9,2,7,59,45,14,29
+Saturday Division Six,SEN,SAASL,false,6,vmZwgEgLNq,Salisbury Sharks United All Age Men (Sat) Division Six,Salisbury Sharks United,18,7,1,10,38,42,-4,22
+Saturday Division Six,SEN,SAASL,false,7,ld446alBdW,Adelaide Red Blue Eagles Football Club All Age Men (Sat) Division Six,Adelaide Red Blue Eagles Football Club,18,4,1,13,20,68,-48,13
+Saturday Division Six,SEN,SAASL,false,8,BdD1vOogmb,Old Ignatians Soccer Club All Age Men (Sat) Division Six,Old Ignatians Soccer Club,18,3,3,12,27,88,-61,12
+Saturday Division Six,SEN,SAASL,false,9,nmYykb8rmz,Adelaide University Soccer Club All Age Men (Sat) Division Six,Adelaide University Soccer Club,18,2,4,12,29,46,-17,10
+Saturday Division Six,SEN,SAASL,false,10,8NOD0Y7bKZ,Grange SC All Age Men (Sat) Division Six,Grange SC,18,3,1,14,16,57,-41,10
+Saturday Division Three Blue,SEN,SAASL,false,1,emA1z4VMmB,The Cove FC All Age Men (Sat) Division Three,The Cove FC,18,11,4,3,66,23,43,37
+Saturday Division Three Blue,SEN,SAASL,false,2,PmjnpqEQmZ,Stirling Districts All Age Men (Sat) Division Three,Stirling Districts,18,10,4,4,37,19,18,34
+Saturday Division Three Blue,SEN,SAASL,false,3,PmjnvrgZmZ,F.C Summit All Age Men (Sat) Division Three,F.C Summit,18,8,3,7,50,41,9,27
+Saturday Division Three Blue,SEN,SAASL,false,4,BdD1vvbJmb,Adelaide Blue Eagles Amateurs All Age Men (Sat) Division Three,Adelaide Blue Eagles Amateurs,18,9,2,7,44,43,1,26
+Saturday Division Three Blue,SEN,SAASL,false,5,PmjnvqykmZ,Brothers United Football Club All Age Men (Sat) Division Three,Brothers United Football Club,18,8,1,9,34,40,-6,25
+Saturday Division Three Blue,SEN,SAASL,false,6,8NOD0YLnKZ,Murray Bridge United SC All Age Men (Sat) Division Three,Murray Bridge United SC,18,4,3,11,32,58,-26,15
+Saturday Division Three Blue,SEN,SAASL,false,7,Pmrk9l6pNo,Strathalbyn Strikers FC All Age Men (Sat) Division Three,Strathalbyn Strikers FC,18,3,3,12,28,67,-39,12
+Saturday Division Three Red,SEN,SAASL,false,1,pN6Oy1PAK0,Northern Wolves Soccer Club All Age Men (Sat) Division Three,Northern Wolves Soccer Club,18,13,3,2,63,36,27,42
+Saturday Division Three Red,SEN,SAASL,false,2,Pmrk905VNo,FIZI FC All Age Men (Sat) Division Three,FIZI FC,18,11,3,4,51,25,26,36
+Saturday Division Three Red,SEN,SAASL,false,3,gdMveeOxmE,One Tree Hill Soccer Club All Age Men (Sat) Division Three,One Tree Hill Soccer Club,18,7,4,7,38,48,-10,25
+Saturday Division Three Red,SEN,SAASL,false,4,lNb38yEwKx,BIH United All Age Men (Sat) Division Three,BIH United,17,6,4,7,47,39,8,22
+Saturday Division Three Red,SEN,SAASL,false,5,2KpvXe59mY,ADFC All Age Men (Sat) Division Three,ADFC,17,5,4,8,33,42,-9,19
+Saturday Division Three Red,SEN,SAASL,false,6,bd9XPr88K4,Salisbury Downs Soccer Club All Age Men (Sat) Division Three,Salisbury Downs Soccer Club,18,5,1,12,34,56,-22,16
+Saturday Division Three Red,SEN,SAASL,false,7,vmZwgWJMNq,Adelaide Dragon Sporting Club All Age Men (Sat) Division Three,Adelaide Dragon Sporting Club,18,4,3,11,26,46,-20,15
+Saturday Division Three Reserves Blue,RES,SAASL,false,1,emA1DqAgmB,Stirling Districts All Age Men (Sat) Division Three Reserves,Stirling Districts,18,15,3,0,75,11,64,47
+Saturday Division Three Reserves Blue,RES,SAASL,false,2,jdyexW3Ed5,The Cove FC All Age Men (Sat) Division Three Reserves,The Cove FC,18,12,2,4,79,24,55,38
+Saturday Division Three Reserves Blue,RES,SAASL,false,3,pmvzZZb6mv,Adelaide Blue Eagles Amateurs All Age Men (Sat) Division Three Reserves,Adelaide Blue Eagles Amateurs,18,11,2,5,43,30,13,35
+Saturday Division Three Reserves Blue,RES,SAASL,false,4,lNb38y76Kx,Strathalbyn Strikers FC All Age Men (Sat) Division Three Reserves,Strathalbyn Strikers FC,18,6,1,11,21,53,-32,18
+Saturday Division Three Reserves Blue,RES,SAASL,false,5,jmaV17g7NR,Murray Bridge United SC All Age Men (Sat) Division Three Reserves,Murray Bridge United SC,18,5,1,12,37,63,-26,15
+Saturday Division Three Reserves Blue,RES,SAASL,false,6,2KpvX4OqmY,Brothers United Football Club All Age Men (Sat) Division Three Reserves,Brothers United Football Club,18,4,3,11,25,61,-36,14
+Saturday Division Three Reserves Blue,RES,SAASL,false,7,ld4OgxZOKW,F.C Summit All Age Men (Sat) Division Three Reserves,F.C Summit,18,3,2,13,27,65,-38,11
+Saturday Division Three Reserves Red,RES,SAASL,false,1,MNGolVpzNA,FIZI FC All Age Men (Sat) Division Three Reserves,FIZI FC,18,14,2,2,68,20,48,44
+Saturday Division Three Reserves Red,RES,SAASL,false,2,Pmrk90kLNo,Northern Wolves Soccer Club All Age Men (Sat) Division Three Reserves,Northern Wolves Soccer Club,18,13,2,3,79,32,47,41
+Saturday Division Three Reserves Red,RES,SAASL,false,3,4KLn99O7mq,One Tree Hill Soccer Club All Age Men (Sat) Division Three Reserves,One Tree Hill Soccer Club,18,9,2,7,56,39,17,28
+Saturday Division Three Reserves Red,RES,SAASL,false,4,4KLn9ZzGmq,Salisbury Downs Soccer Club All Age Men (Sat) Division Three Reserves,Salisbury Downs Soccer Club,18,8,3,7,45,35,10,27
+Saturday Division Three Reserves Red,RES,SAASL,false,5,8NOD0xXWKZ,ADFC All Age Men (Sat) Division Three Reserves,ADFC,18,5,2,11,33,77,-44,16
+Saturday Division Three Reserves Red,RES,SAASL,false,6,Pmjnvln3mZ,Adelaide Dragon Sporting Club All Age Men (Sat) Division Three Reserves,Adelaide Dragon Sporting Club,18,5,1,12,32,64,-32,15
+Saturday Division Three Reserves Red,RES,SAASL,false,7,lNb38ElgKx,BIH United All Age Men (Sat) Division Three Reserves,BIH United,18,2,2,14,31,77,-46,7
+Saturday Division Two Reserves,RES,SAASL,false,1,MNGolDABNA,Adelaide University Soccer Club All Age Men (Sat) Division Two Reserves,Adelaide University Soccer Club,16,12,0,4,52,20,32,36
+Saturday Division Two Reserves,RES,SAASL,false,2,jdyexWqEd5,Adelaide Brasfoot All Age Men (Sat) Division Two Reserves,Adelaide Brasfoot,16,11,3,2,48,19,29,36
+Saturday Division Two Reserves,RES,SAASL,false,3,MNGollgLNA,Adelaide Red Blue Eagles Football Club All Age Men (Sat) Division Two Reserves,Adelaide Red Blue Eagles Football Club,16,8,3,5,32,26,6,27
+Saturday Division Two Reserves,RES,SAASL,false,4,4KLn9k8gmq,Grange SC All Age Men (Sat) Division Two Reserves,Grange SC,16,8,2,6,44,35,9,26
+Saturday Division Two Reserves,RES,SAASL,false,5,PmjnvvBBmZ,Gleeson Football Club All Age Men (Sat) Division Two Reserves,Gleeson Football Club,16,6,4,6,24,30,-6,22
+Saturday Division Two Reserves,RES,SAASL,false,6,pmvzZxz5mv,Salisbury Sharks United All Age Men (Sat) Division Two Reserves,Salisbury Sharks United,16,6,3,7,38,36,2,21
+Saturday Division Two Reserves,RES,SAASL,false,7,2KpvXXnWmY,Monarchs Sports Club All Age Men (Sat) Division Two Reserves,Monarchs Sports Club,16,6,2,8,22,21,1,20
+Saturday Division Two Reserves,RES,SAASL,false,8,am1qBZLXmw,Southern Breakers All Age Men (Sat) Division Two Reserves,Southern Breakers,16,5,0,11,16,52,-36,15
+Saturday Division Two Reserves,RES,SAASL,false,9,1K3YAAp9mQ,Angle Vale All Age Men (Sat) Division Two Reserves,Angle Vale,16,0,3,13,13,50,-37,3
+Saturday Division Two Reserves,RES,SAASL,false,10,gdMveeAOmE,Salisbury Villa Soccer Club All Age Men (Sat) Division Two Reserves,Salisbury Villa Soccer Club,0,0,0,0,0,0,0,0
+Sportal Saturday Division Two,SEN,SAASL,false,1,PmjnvvpkmZ,Adelaide Brasfoot All Age Men (Sat) Division Two,Adelaide Brasfoot,18,15,1,2,64,14,50,46
+Sportal Saturday Division Two,SEN,SAASL,false,2,BdD1vwPwmb,Grange SC All Age Men (Sat) Division Two,Grange SC,17,10,6,1,48,24,24,36
+Sportal Saturday Division Two,SEN,SAASL,false,3,vmZwgj7bNq,Adelaide University Soccer Club All Age Men (Sat) Division Two,Adelaide University Soccer Club,18,11,3,4,53,34,19,36
+Sportal Saturday Division Two,SEN,SAASL,false,4,8NOD00p7KZ,Adelaide Red Blue Eagles Football Club All Age Men (Sat) Division Two,Adelaide Red Blue Eagles Football Club,18,9,2,7,50,40,10,29
+Sportal Saturday Division Two,SEN,SAASL,false,5,pmvzZZQ5mv,Monarchs Sports Club All Age Men (Sat) Division Two,Monarchs Sports Club,18,8,4,6,48,38,10,28
+Sportal Saturday Division Two,SEN,SAASL,false,6,Pmjnvrx6mZ,Gleeson Football Club All Age Men (Sat) Division Two,Gleeson Football Club,18,8,3,7,52,43,9,27
+Sportal Saturday Division Two,SEN,SAASL,false,7,pmvzZV28mv,Southern Breakers All Age Men (Sat) Division Two,Southern Breakers,17,8,1,8,33,32,1,25
+Sportal Saturday Division Two,SEN,SAASL,false,8,8NOD0xkvKZ,Salisbury Sharks United All Age Men (Sat) Division Two,Salisbury Sharks United,18,6,2,10,31,40,-9,20
+Sportal Saturday Division Two,SEN,SAASL,false,9,ld4OgA60KW,Angle Vale All Age Men (Sat) Division Two,Angle Vale,18,0,4,14,18,57,-39,4
+Sportal Saturday Division Two,SEN,SAASL,false,10,2KpvXX0bmY,Salisbury Villa Soccer Club All Age Men (Sat) Division Two,Salisbury Villa Soccer Club,18,0,2,16,10,85,-75,2
+Sportal Saturday Premier A,SEN,SAASL,false,1,Ome0aP2ed0,South Coast United Soccer Club All Age Men (Sat) Premier A,South Coast United Soccer Club,18,12,4,2,60,17,43,40
+Sportal Saturday Premier A,SEN,SAASL,false,2,PmjnvqP9mZ,Modbury Jets AFC All Age Men (Sat) Premier A,Modbury Jets AFC,18,12,1,5,57,34,23,37
+Sportal Saturday Premier A,SEN,SAASL,false,3,emA1zM5MmB,BOSA All Age Men (Sat) Premier A,BOSA,18,9,4,5,41,33,8,31
+Sportal Saturday Premier A,SEN,SAASL,false,4,EN2OL3WlKq,Old Ignatians Soccer Club All Age Men (Sat) Premier A,Old Ignatians Soccer Club,18,8,2,8,38,37,1,26
+Sportal Saturday Premier A,SEN,SAASL,false,5,1K3YAoJOmQ,Croydon Cougars Sports & Social Club All Age Men (Sat) Premier A,Croydon Cougars Sports & Social Club,18,8,1,9,41,51,-10,25
+Sportal Saturday Premier A,SEN,SAASL,false,6,Ome0aajbd0,Sturt Marion Thunder Soccer Club All Age Men (Sat) Premier A,Sturt Marion Thunder Soccer Club,18,7,3,8,34,41,-7,24
+Sportal Saturday Premier A,SEN,SAASL,false,7,pmvzZVYymv,Messinian Association Hawks All Age Men (Sat) Premier A,Messinian Association Hawks,18,7,0,11,32,47,-15,21
+Sportal Saturday Premier A,SEN,SAASL,false,8,pN6Oybg7K0,Pitbulls Football Club All Age Men (Sat) Premier A,Pitbulls Football Club,18,6,2,10,25,33,-8,20
+Sportal Saturday Premier A,SEN,SAASL,false,9,BdD1vwQQmb,St Peters Old Collegians Soccer Club All Age Men (Sat) Premier A,St Peters Old Collegians Soccer Club,18,5,4,9,34,38,-4,19
+Sportal Saturday Premier A,SEN,SAASL,false,10,8NOD0VDzKZ,Adelaide Pumas Soccer Club All Age Men (Sat) Premier A,Adelaide Pumas Soccer Club,18,4,3,11,25,56,-31,15
+Sportal Saturday Premier B,SEN,SAASL,false,1,gdMvelwpmE,Modbury Jets AFC All Age Men (Sat) Premier B,Modbury Jets AFC,18,15,2,1,55,17,38,47
+Sportal Saturday Premier B,SEN,SAASL,false,2,Ome0aPled0,Messinian Association Hawks All Age Men (Sat) Premier B,Messinian Association Hawks,18,15,0,3,79,35,44,45
+Sportal Saturday Premier B,SEN,SAASL,false,3,pmvzZV1ymv,BOSA All Age Men (Sat) Premier B,BOSA,18,13,2,3,85,32,53,40
+Sportal Saturday Premier B,SEN,SAASL,false,4,8NOD0YJ7KZ,St Peters Old Collegians Soccer Club All Age Men (Sat) Premier B,St Peters Old Collegians Soccer Club,18,11,2,5,60,33,27,35
+Sportal Saturday Premier B,SEN,SAASL,false,5,8NOD0YgWKZ,Old Ignatians Soccer Club All Age Men (Sat) Premier B,Old Ignatians Soccer Club,18,7,3,8,53,41,12,24
+Sportal Saturday Premier B,SEN,SAASL,false,6,vmZwggnRNq,Sturt Marion Thunder Soccer Club All Age Men (Sat) Premier B,Sturt Marion Thunder Soccer Club,18,7,2,9,33,35,-2,23
+Sportal Saturday Premier B,SEN,SAASL,false,7,2KpvX4GzmY,Pitbulls Football Club All Age Men (Sat) Premier B,Pitbulls Football Club,18,6,3,9,44,28,16,20
+Sportal Saturday Premier B,SEN,SAASL,false,8,4KLn9kjGmq,South Coast United Soccer Club All Age Men (Sat) Premier B,South Coast United Soccer Club,18,3,3,12,48,75,-27,11
+Sportal Saturday Premier B,SEN,SAASL,false,9,vmZwgGrBNq,Croydon Cougars Sports & Social Club All Age Men (Sat) Premier B,Croydon Cougars Sports & Social Club,18,2,1,15,15,123,-108,7
+Sportal Saturday Premier B,SEN,SAASL,false,10,2KpvX4abmY,Adelaide Pumas Soccer Club All Age Men (Sat) Premier B,Adelaide Pumas Soccer Club,18,1,2,15,25,78,-53,4
+Sportal Saturday Premier C,SEN,SAASL,false,1,nmYyAxP1mz,BOSA All Age Men (Sat) Premier C,BOSA,16,14,1,1,60,8,52,43
+Sportal Saturday Premier C,SEN,SAASL,false,2,vmZwgjelNq,Modbury Jets AFC All Age Men (Sat) Premier C,Modbury Jets AFC,16,11,4,1,56,12,44,37
+Sportal Saturday Premier C,SEN,SAASL,false,3,pmvzZY15mv,St Peters Old Collegians Soccer Club All Age Men (Sat) Premier C,St Peters Old Collegians Soccer Club,16,8,3,5,26,21,5,27
+Sportal Saturday Premier C,SEN,SAASL,false,4,pN6OybvQK0,Sturt Marion Thunder Soccer Club All Age Men (Sat) Premier C,Sturt Marion Thunder Soccer Club,16,6,4,6,36,27,9,22
+Sportal Saturday Premier C,SEN,SAASL,false,5,gdMvelGBmE,Old Ignatians Soccer Club All Age Men (Sat) Premier C,Old Ignatians Soccer Club,16,5,4,7,23,27,-4,19
+Sportal Saturday Premier C,SEN,SAASL,false,6,1K3YALJOmQ,Pitbulls Football Club All Age Men (Sat) Premier C,Pitbulls Football Club,16,5,5,6,20,27,-7,19
+Sportal Saturday Premier C,SEN,SAASL,false,7,4KLn9kV2mq,Adelaide Pumas Soccer Club All Age Men (Sat) Premier C,Adelaide Pumas Soccer Club,16,5,3,8,16,35,-19,18
+Sportal Saturday Premier C,SEN,SAASL,false,8,pmvzZZXomv,Messinian Association Hawks All Age Men (Sat) Premier C,Messinian Association Hawks,16,2,3,11,16,44,-28,9
+Sportal Saturday Premier C,SEN,SAASL,false,9,pmvzZVMomv,South Coast United Soccer Club All Age Men (Sat) Premier C,South Coast United Soccer Club,16,2,1,13,11,63,-52,6
+Sportal Saturday Premier C,SEN,SAASL,false,10,8NOD0YRBKZ,Croydon Cougars Sports & Social Club All Age Men (Sat) Premier C,Croydon Cougars Sports & Social Club,0,0,0,0,0,0,0,0
+Sportal Sunday Division Two,SEN,SAASL,false,1,nmYyAxyYmz,Southern Knights Football Club All Age Men (Sun) Division Two,Southern Knights Football Club,18,13,2,3,48,16,32,41
+Sportal Sunday Division Two,SEN,SAASL,false,2,nmYyAPxamz,Adelaide Eagles Soccer Club All Age Men (Sun) Division Two,Adelaide Eagles Soccer Club,18,12,2,4,51,29,22,38
+Sportal Sunday Division Two,SEN,SAASL,false,3,nmYyA643mz,Parafield Gardens Soccer Club All Age Men (Sun) Division Two,Parafield Gardens Soccer Club,18,12,2,4,37,26,11,38
+Sportal Sunday Division Two,SEN,SAASL,false,4,Ome0a1r0d0,Elizabeth Vale Soccer Club All Age Men (Sun) Division Two,Elizabeth Vale Soccer Club,18,11,4,3,45,23,22,37
+Sportal Sunday Division Two,SEN,SAASL,false,5,gdMvelv1mE,Salisbury Inter Soccer Club All Age Men (Sun) Division Two,Salisbury Inter Soccer Club,18,7,1,10,37,39,-2,22
+Sportal Sunday Division Two,SEN,SAASL,false,6,emA1zMebmB,AC Unito Adelaide All Age Men (Sun) Division Two,AC Unito Adelaide,18,7,1,10,36,40,-4,22
+Sportal Sunday Division Two,SEN,SAASL,false,7,pmvzZYz8mv,Adelaide Khukuri All Age Men (Sun) Division Two,Adelaide Khukuri,18,6,3,9,38,57,-19,21
+Sportal Sunday Division Two,SEN,SAASL,false,8,ld4OgPbOKW,Seaford Rangers All Age Men (Sun) Division Two,Seaford Rangers,18,6,2,10,36,42,-6,20
+Sportal Sunday Division Two,SEN,SAASL,false,9,jmaV1a33NR,Athelstone Soccer Club All Age Men (Sun) Division Two,Athelstone Soccer Club,18,5,3,10,38,46,-8,18
+Sportal Sunday Division Two,SEN,SAASL,false,10,MNGolV3QNA,Munno Para All Age Men (Sun) Division Two,Munno Para,18,0,2,16,21,69,-48,2
+Sportal Sunday Premier A,SEN,SAASL,false,1,Ome0azR6d0,Para Hills West Soccer Club All Age Men (Sun) Premier A,Para Hills West Soccer Club,16,11,3,2,53,18,35,36
+Sportal Sunday Premier A,SEN,SAASL,false,2,lNb387EoKx,Para Hills East All Age Men (Sun) Premier A,Para Hills East,16,10,3,3,39,17,22,33
+Sportal Sunday Premier A,SEN,SAASL,false,3,ld4OgEEAKW,Modbury Soccer Club All Age Men (Sun) Premier A,Modbury Soccer Club,16,9,3,4,37,21,16,30
+Sportal Sunday Premier A,SEN,SAASL,false,4,jmaV1gX0NR,Tea Tree Gully All Age Men (Sun) Premier A,Tea Tree Gully,16,9,3,4,37,24,13,30
+Sportal Sunday Premier A,SEN,SAASL,false,5,pN6OyoWOK0,Ingle Farm All Age Men (Sun) Premier A,Ingle Farm,16,7,3,6,29,28,1,24
+Sportal Sunday Premier A,SEN,SAASL,false,6,nmYyAoQrmz,Savoy Soccer Club All Age Men (Sun) Premier A,Savoy Soccer Club,16,5,3,8,30,41,-11,18
+Sportal Sunday Premier A,SEN,SAASL,false,7,jdyexR4Ad5,W A Raptors Soccer Club All Age Men (Sun) Premier A,W A Raptors Soccer Club,16,5,2,9,22,44,-22,17
+Sportal Sunday Premier A,SEN,SAASL,false,8,BdD1vwkGmb,West Beach Football Club All Age Men (Sun) Premier A,West Beach Football Club,16,2,5,9,17,35,-18,11
+Sportal Sunday Premier A,SEN,SAASL,false,9,Pmjnv9r3mZ,Para Hills United Soccer Club All Age Men (Sun) Premier A,Para Hills United Soccer Club,16,1,1,14,14,50,-36,4
+Sportal Sunday Premier B,SEN,SAASL,false,1,Ome0R64jd0,Tea Tree Gully All Age Men (Sun) Premier B,Tea Tree Gully,16,14,0,2,74,20,54,42
+Sportal Sunday Premier B,SEN,SAASL,false,2,BdD1vXO1mb,Para Hills West Soccer Club All Age Men (Sun) Premier B,Para Hills West Soccer Club,16,11,3,2,47,8,39,36
+Sportal Sunday Premier B,SEN,SAASL,false,3,EN2OL3neKq,West Beach Football Club All Age Men (Sun) Premier B,West Beach Football Club,16,11,2,3,42,18,24,35
+Sportal Sunday Premier B,SEN,SAASL,false,4,1K3YAobYmQ,W A Raptors Soccer Club All Age Men (Sun) Premier B,W A Raptors Soccer Club,16,6,4,6,33,28,5,22
+Sportal Sunday Premier B,SEN,SAASL,false,5,ld4OgEP2KW,Ingle Farm All Age Men (Sun) Premier B,Ingle Farm,16,7,1,8,31,27,4,22
+Sportal Sunday Premier B,SEN,SAASL,false,6,am1qB7vzmw,Modbury Soccer Club All Age Men (Sun) Premier B,Modbury Soccer Club,16,6,2,8,27,41,-14,20
+Sportal Sunday Premier B,SEN,SAASL,false,7,8NOD0b0WKZ,Para Hills East All Age Men (Sun) Premier B,Para Hills East,16,5,3,8,24,36,-12,18
+Sportal Sunday Premier B,SEN,SAASL,false,8,2KpvXoezmY,Savoy Soccer Club All Age Men (Sun) Premier B,Savoy Soccer Club,16,2,2,12,12,68,-56,8
+Sportal Sunday Premier B,SEN,SAASL,false,9,lNb38vL3Kx,Para Hills United Soccer Club All Age Men (Sun) Premier B,Para Hills United Soccer Club,16,1,1,14,7,51,-44,4
+Sportal Sunday Premier C,SEN,SAASL,false,1,4KLn9o9Gmq,Tea Tree Gully All Age Men (Sun) Premier C 1,Tea Tree Gully,18,15,1,2,98,13,85,46
+Sportal Sunday Premier C,SEN,SAASL,false,2,jdyex96Ed5,Para Hills West Soccer Club All Age Men (Sun) Premier C,Para Hills West Soccer Club,18,13,3,2,68,21,47,42
+Sportal Sunday Premier C,SEN,SAASL,false,3,Pmjnvl1ZmZ,West Beach Football Club All Age Men (Sun) Premier C,West Beach Football Club,18,11,2,5,50,35,15,35
+Sportal Sunday Premier C,SEN,SAASL,false,4,ld4OgQ40KW,Ingle Farm All Age Men (Sun) Premier C,Ingle Farm,18,9,0,9,33,43,-10,27
+Sportal Sunday Premier C,SEN,SAASL,false,5,Pmrk90npNo,W A Raptors Soccer Club All Age Men (Sun) Premier C,W A Raptors Soccer Club,18,8,2,8,47,41,6,26
+Sportal Sunday Premier C,SEN,SAASL,false,6,pN6OWJBDK0,Modbury Soccer Club All Age Men (Sun) Premier C,Modbury Soccer Club,18,8,1,9,49,37,12,25
+Sportal Sunday Premier C,SEN,SAASL,false,7,jmaV1nWMNR,Para Hills East All Age Men (Sun) Premier C,Para Hills East,18,8,1,9,24,37,-13,25
+Sportal Sunday Premier C,SEN,SAASL,false,8,8NOD8lPzKZ,Savoy Soccer Club All Age Men (Sun) Premier C,Savoy Soccer Club,18,2,9,7,15,42,-27,15
+Sportal Sunday Premier C,SEN,SAASL,false,9,Ome0aVnPd0,Tea Tree Gully All Age Men (Sun) Premier C 2 - Under 18's,Tea Tree Gully,18,3,3,12,21,74,-53,12
+Sportal Sunday Premier C,SEN,SAASL,false,10,nmYyQ3aYmz,Para Hills United Soccer Club All Age Men (Sun) Premier C,Para Hills United Soccer Club,18,1,2,15,14,76,-62,5
+Sunday Division Seven,SEN,SAASL,false,1,am1qB54Xmw,Noarlunga United Soccer Club All Age Men (Sun) Division Seven,Noarlunga United Soccer Club,16,15,0,1,67,7,60,45
+Sunday Division Seven,SEN,SAASL,false,2,2KpvXexbmY,FK Beograd All Age Men (Sun) Division Seven,FK Beograd,16,12,2,2,76,21,55,38
+Sunday Division Seven,SEN,SAASL,false,3,OmeXnDOjd0,Royal Adelaide FC All Age Men (Sun) Division Seven,Royal Adelaide FC,16,11,1,4,84,25,59,34
+Sunday Division Seven,SEN,SAASL,false,4,emAexpL8mB,Shaheed Bhagat Singh Football Club All Age Men (Sun) Division Seven,Shaheed Bhagat Singh Football Club,16,8,4,4,48,40,8,28
+Sunday Division Seven,SEN,SAASL,false,5,nmYykBaamz,W A Raptors Soccer Club All Age Men (Sun) Division Seven,W A Raptors Soccer Club,16,7,3,6,33,40,-7,24
+Sunday Division Seven,SEN,SAASL,false,6,emAexLgxmB,Greenacres United All Age Men (Sun) Division Seven,Greenacres United,16,6,1,9,26,50,-24,19
+Sunday Division Seven,SEN,SAASL,false,7,nmYykBBDmz,Salisbury Inter Soccer Club All Age Men (Sun) Division Seven,Salisbury Inter Soccer Club,16,2,2,12,30,89,-59,8
+Sunday Division Seven,SEN,SAASL,false,8,Pmjnvlk9mZ,Tea Tree Gully All Age Men (Sun) Division Seven,Tea Tree Gully,16,1,4,11,23,68,-45,7
+Sunday Division Seven,SEN,SAASL,false,9,Pmjnvq2QmZ,Ingle Farm All Age Men (Sun) Division Six,Ingle Farm,16,0,3,13,8,55,-47,3
+Sunday Division Six,SEN,SAASL,false,1,pmvzZxELmv,Para Hills West Soccer Club All Age Men (Sun) Division Six,Para Hills West Soccer Club,16,14,1,1,46,9,37,43
+Sunday Division Six,SEN,SAASL,false,2,emA1z0b9mB,Tea Tree Gully All Age Men (Sun) Division Six,Tea Tree Gully,16,12,2,2,59,16,43,38
+Sunday Division Six,SEN,SAASL,false,3,bd9XPrqeK4,Elizabeth Vale Soccer Club All Age Men (Sun) Division Six,Elizabeth Vale Soccer Club,16,10,0,6,38,33,5,30
+Sunday Division Six,SEN,SAASL,false,4,nmYyA5Wbmz,Seaford Rangers All Age Men (Sun) Division Six,Seaford Rangers,16,7,3,6,36,34,2,24
+Sunday Division Six,SEN,SAASL,false,5,8NOD0xJ1KZ,Salisbury Inter Soccer Club All Age Men (Sun) Division Six,Salisbury Inter Soccer Club,16,7,1,8,29,35,-6,22
+Sunday Division Six,SEN,SAASL,false,6,2KpvXeVWmY,Adelaide Khukuri All Age Men (Sun) Division Six,Adelaide Khukuri,16,6,2,8,26,43,-17,20
+Sunday Division Six,SEN,SAASL,false,7,8NOXX0gWKZ,Athelstone Soccer Club All Age Men (Sun) Division Six,Athelstone Soccer Club,16,4,1,11,21,40,-19,12
+Sunday Division Six,SEN,SAASL,false,8,pmvzb6G5mv,Parafield Gardens Soccer Club All Age Men (Sun) Division Six,Parafield Gardens Soccer Club,16,4,0,12,22,49,-27,12
+Sunday Division Six,SEN,SAASL,false,9,nmYyA6vzmz,Munno Para All Age Men (Sun) Division Six,Munno Para,16,2,2,12,16,34,-18,7
+Sunday Division Six,SEN,SAASL,false,10,MNGolnXzNA,Adelaide Eagles Soccer Club All Age Men (Sun) Division Six,Adelaide Eagles Soccer Club,0,0,0,0,0,0,0,0
+Sunday Division Three,SEN,SAASL,false,1,ld44GWwedW,Greenacres United All Age Men (Sun) Division Three,Greenacres United,20,18,1,1,83,14,69,55
+Sunday Division Three,SEN,SAASL,false,2,bd9XPlpeK4,Andrews Farm Soccer & Community Club All Age Men (Sun) Division Three,Andrews Farm Soccer & Community Club,20,14,1,5,67,40,27,43
+Sunday Division Three,SEN,SAASL,false,3,nmYyA69pmz,Macedonia United Lions Socer Club All Age Men (Sun) Division Three,Macedonia United Lions Socer Club,20,13,3,4,69,31,38,42
+Sunday Division Three,SEN,SAASL,false,4,Pmrk9jlLNo,Elizabeth Downs Soccer Club All Age Men (Sun) Division Three,Elizabeth Downs Soccer Club,20,6,1,13,29,77,-48,19
+Sunday Division Three,SEN,SAASL,false,5,EN2OL6YlKq,Virginia United All Age Men (Sun) Division Three,Virginia United,20,3,2,15,29,60,-31,11
+Sunday Division Three,SEN,SAASL,false,6,jdyexPePd5,Westwood Football Club All Age Men (Sun) Division Three,Westwood Football Club,20,1,2,17,15,70,-55,5
+Sunday Division Three Reserves,RES,SAASL,false,1,bd9W4e5lN4,Greenacres United All Age Men (Sun) Division Three Reserves,Greenacres United,16,16,0,0,76,13,63,48
+Sunday Division Three Reserves,RES,SAASL,false,2,Pmrk90YrNo,Westwood Football Club All Age Men (Sun) Division Three Reserves,Westwood Football Club,16,7,1,8,34,43,-9,22
+Sunday Division Three Reserves,RES,SAASL,false,3,bd9XPrY8K4,Macedonia United Lions Socer Club All Age Men (Sun) Division Three Reserves,Macedonia United Lions Socer Club,16,5,3,8,48,58,-10,18
+Sunday Division Three Reserves,RES,SAASL,false,4,BdD1vo04mb,Andrews Farm Soccer & Community Club All Age Men (Sun) Division Three Reserves,Andrews Farm Soccer & Community Club,16,5,2,9,34,46,-12,17
+Sunday Division Three Reserves,RES,SAASL,false,5,nmYyAbl3mz,Elizabeth Downs Soccer Club All Age Men (Sun) Division Three Reserves,Elizabeth Downs Soccer Club,16,4,0,12,27,59,-32,12
+Sunday Division Two Reserves,RES,SAASL,false,1,pmvzZVj6mv,Southern Knights Football Club All Age Men (Sun) Division Two Reserves,Southern Knights Football Club,18,13,2,3,71,37,34,41
+Sunday Division Two Reserves,RES,SAASL,false,2,8NOD0xR2KZ,Seaford Rangers All Age Men (Sun) Division Two Reserves,Seaford Rangers,18,12,3,3,52,19,33,39
+Sunday Division Two Reserves,RES,SAASL,false,3,jdyexRG3d5,Salisbury Inter Soccer Club All Age Men (Sun) Division Two Reserves,Salisbury Inter Soccer Club,18,12,2,4,54,20,34,38
+Sunday Division Two Reserves,RES,SAASL,false,4,MNGolDyQNA,Elizabeth Vale Soccer Club All Age Men (Sun) Division Two Reserves,Elizabeth Vale Soccer Club,18,11,0,7,53,35,18,33
+Sunday Division Two Reserves,RES,SAASL,false,5,ld4OgEleKW,Adelaide Eagles Soccer Club All Age Men (Sun) Division Two Reserves,Adelaide Eagles Soccer Club,18,8,2,8,49,50,-1,26
+Sunday Division Two Reserves,RES,SAASL,false,6,ld4OgPvAKW,Parafield Gardens Soccer Club All Age Men (Sun) Division Two Reserves,Parafield Gardens Soccer Club,18,7,3,8,32,39,-7,24
+Sunday Division Two Reserves,RES,SAASL,false,7,MNGolV9BNA,Athelstone Soccer Club All Age Men (Sun) Division Two Reserves,Athelstone Soccer Club,18,5,5,8,34,45,-11,20
+Sunday Division Two Reserves,RES,SAASL,false,8,Pmrk90WENo,Munno Para All Age Men (Sun) Division Two Reserves,Munno Para,18,4,2,12,34,54,-20,14
+Sunday Division Two Reserves,RES,SAASL,false,9,2KpvX4wWmY,Adelaide Khukuri All Age Men (Sun) Division Two Reserves,Adelaide Khukuri,18,4,2,12,23,70,-47,13
+Sunday Division Two Reserves,RES,SAASL,false,10,Ome0a1v7d0,AC Unito Adelaide All Age Men (Sun) Division Two Reserves,AC Unito Adelaide,18,2,3,13,25,58,-33,8

@@ -1,5 +1,221 @@
 [
  {
+  "league": "RAA NPL",
+  "division": "NPL",
+  "grade": "SEN",
+  "region": "",
+  "is_finals": false,
+  "short": "NPL"
+ },
+ {
+  "league": "RAA NPL Reserves",
+  "division": "NPL",
+  "grade": "RES",
+  "region": "",
+  "is_finals": false,
+  "short": "NPL Res"
+ },
+ {
+  "league": "RAA NPL Under 18's",
+  "division": "NPL",
+  "grade": "U18",
+  "region": "",
+  "is_finals": false,
+  "short": "NPL U18"
+ },
+ {
+  "league": "Guardian Insurance Over 35's Blue",
+  "division": "SAASL",
+  "grade": "SEN",
+  "region": "",
+  "is_finals": false,
+  "short": "Over 35's Blue"
+ },
+ {
+  "league": "Guardian Insurance Over 35's Red",
+  "division": "SAASL",
+  "grade": "SEN",
+  "region": "",
+  "is_finals": false,
+  "short": "Over 35's Red"
+ },
+ {
+  "league": "Saturday Div 3 - Red & Blue Play Off",
+  "division": "SAASL",
+  "grade": "SEN",
+  "region": "",
+  "is_finals": false,
+  "short": "Saturday Div 3 Red & Blue Play Off"
+ },
+ {
+  "league": "Saturday Division Eight",
+  "division": "SAASL",
+  "grade": "SEN",
+  "region": "",
+  "is_finals": false,
+  "short": "Saturday Division Eight"
+ },
+ {
+  "league": "Saturday Division Seven",
+  "division": "SAASL",
+  "grade": "SEN",
+  "region": "",
+  "is_finals": false,
+  "short": "Saturday Division Seven"
+ },
+ {
+  "league": "Saturday Division Six",
+  "division": "SAASL",
+  "grade": "SEN",
+  "region": "",
+  "is_finals": false,
+  "short": "Saturday Division Six"
+ },
+ {
+  "league": "Saturday Division Three Blue",
+  "division": "SAASL",
+  "grade": "SEN",
+  "region": "",
+  "is_finals": false,
+  "short": "Saturday Division Three Blue"
+ },
+ {
+  "league": "Saturday Division Three Red",
+  "division": "SAASL",
+  "grade": "SEN",
+  "region": "",
+  "is_finals": false,
+  "short": "Saturday Division Three Red"
+ },
+ {
+  "league": "Sportal Saturday Division Two",
+  "division": "SAASL",
+  "grade": "SEN",
+  "region": "",
+  "is_finals": false,
+  "short": "Saturday Division Two"
+ },
+ {
+  "league": "Sportal Saturday Premier A",
+  "division": "SAASL",
+  "grade": "SEN",
+  "region": "",
+  "is_finals": false,
+  "short": "Saturday Premier A"
+ },
+ {
+  "league": "Sportal Saturday Premier B",
+  "division": "SAASL",
+  "grade": "SEN",
+  "region": "",
+  "is_finals": false,
+  "short": "Saturday Premier B"
+ },
+ {
+  "league": "Sportal Saturday Premier C",
+  "division": "SAASL",
+  "grade": "SEN",
+  "region": "",
+  "is_finals": false,
+  "short": "Saturday Premier C"
+ },
+ {
+  "league": "Sportal Sunday Division Two",
+  "division": "SAASL",
+  "grade": "SEN",
+  "region": "",
+  "is_finals": false,
+  "short": "Sunday Division Two"
+ },
+ {
+  "league": "Sportal Sunday Premier A",
+  "division": "SAASL",
+  "grade": "SEN",
+  "region": "",
+  "is_finals": false,
+  "short": "Sunday Premier A"
+ },
+ {
+  "league": "Sportal Sunday Premier B",
+  "division": "SAASL",
+  "grade": "SEN",
+  "region": "",
+  "is_finals": false,
+  "short": "Sunday Premier B"
+ },
+ {
+  "league": "Sportal Sunday Premier C",
+  "division": "SAASL",
+  "grade": "SEN",
+  "region": "",
+  "is_finals": false,
+  "short": "Sunday Premier C"
+ },
+ {
+  "league": "Sunday Division Seven",
+  "division": "SAASL",
+  "grade": "SEN",
+  "region": "",
+  "is_finals": false,
+  "short": "Sunday Division Seven"
+ },
+ {
+  "league": "Sunday Division Six",
+  "division": "SAASL",
+  "grade": "SEN",
+  "region": "",
+  "is_finals": false,
+  "short": "Sunday Division Six"
+ },
+ {
+  "league": "Sunday Division Three",
+  "division": "SAASL",
+  "grade": "SEN",
+  "region": "",
+  "is_finals": false,
+  "short": "Sunday Division Three"
+ },
+ {
+  "league": "Saturday Division Three Reserves Blue",
+  "division": "SAASL",
+  "grade": "RES",
+  "region": "",
+  "is_finals": false,
+  "short": "Saturday Division Three Res Blue"
+ },
+ {
+  "league": "Saturday Division Three Reserves Red",
+  "division": "SAASL",
+  "grade": "RES",
+  "region": "",
+  "is_finals": false,
+  "short": "Saturday Division Three Res Red"
+ },
+ {
+  "league": "Saturday Division Two Reserves",
+  "division": "SAASL",
+  "grade": "RES",
+  "region": "",
+  "is_finals": false,
+  "short": "Saturday Division Two Res"
+ },
+ {
+  "league": "Sunday Division Three Reserves",
+  "division": "SAASL",
+  "grade": "RES",
+  "region": "",
+  "is_finals": false,
+  "short": "Sunday Division Three Res"
+ },
+ {
+  "league": "Sunday Division Two Reserves",
+  "division": "SAASL",
+  "grade": "RES",
+  "region": "",
+  "is_finals": false,
+  "short": "Sunday Division Two Res"
+ },
+ {
   "league": "HPG Homes State League 1",
   "division": "SL1",
   "grade": "SEN",
@@ -13,7 +229,7 @@
   "grade": "RES",
   "region": "",
   "is_finals": false,
-  "short": "SL1 Reserves"
+  "short": "SL1 Res"
  },
  {
   "league": "HPG Homes State League 1 Under 18's",
@@ -37,7 +253,7 @@
   "grade": "RES",
   "region": "North",
   "is_finals": false,
-  "short": "SL2 North Reserves"
+  "short": "SL2 North Res"
  },
  {
   "league": "HPG Homes State League 2 North - Under 18's",
@@ -61,7 +277,7 @@
   "grade": "RES",
   "region": "South",
   "is_finals": false,
-  "short": "SL2 South Reserves"
+  "short": "SL2 South Res"
  },
  {
   "league": "HPG Homes State League 2 South - Under 18's",
@@ -85,7 +301,7 @@
   "grade": "RES",
   "region": "",
   "is_finals": true,
-  "short": "SL2 (Reserves) Finals"
+  "short": "SL2 (Res) Finals"
  },
  {
   "league": "HPG Homes State League 2 (18s) Final Series",

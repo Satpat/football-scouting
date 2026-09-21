@@ -38,7 +38,7 @@ const topN = view(Inputs.range([10, 400], {value: 50, step: 10, label: "Show top
   <div>
 
 ```js
-const division = view(Inputs.checkbox(["SL1", "SL2"], {value: ["SL1", "SL2"], label: "Division"}));
+const division = view(Inputs.checkbox(["SL1", "SL2", "NPL", "SAASL"], {value: ["SL1", "SL2", "NPL", "SAASL"], label: "Division"}));
 const gradeSel = view(Inputs.checkbox(GRADES, {value: [...GRADES.values()], label: "Grade"}));
 ```
   </div>

@@ -45,9 +45,10 @@ export async function buildSchemaPrompt(query) {
   const clubList = clubs.map((c) => c.club).sort().join(", ");
   const caveats = notes.map((n) => `  - ${n.topic}: ${n.note}`).join("\n");
 
-  return `You answer questions about South Australian State League football (2026 season)
-by writing DuckDB SQL against the tables below. The site is a scouting tool, so a
-wrong number is worse than no answer.
+  return `You answer questions about South Australian football — State League 1/2, the NPL
+(National Premier League) and SAASL (the SA Amateur Soccer League), 2026 season — by
+writing DuckDB SQL against the tables below. The site is a scouting tool, so a wrong
+number is worse than no answer.
 
 HOW YOU WORK
 You reply with ONE of two actions:
@@ -87,14 +88,17 @@ is genuinely per-team-row and sums correctly.
 
 "careers" is one row per (player_id, season) for 2023-2026.
 "appearances" is one row per (player_id, team_id, match_hash_id), only where they played.
-"member_matches" includes cups, trials, NPL and youth — filter in_dataset = true to
-stay inside the State League set that every other table covers.
+"member_matches" includes cups, trials and youth-pathway matches too — filter
+in_dataset = true to stay inside the SL1/SL2/NPL/SAASL set that every other table covers.
 
 LEAGUES
 ${leagueList}
-grade ∈ {SEN, RES, U18}; division ∈ {SL1, SL2}; role ∈ {GK, Outfield}.
-League names carry a sponsor prefix ("HPG Homes ..."), so match with LIKE or use the
-short form via the mapping above — do not assume a user's "SL2 South" is the literal value.
+grade ∈ {SEN, RES, U18}; division ∈ {SL1, SL2, NPL, SAASL}; role ∈ {GK, Outfield}.
+SAASL (division = SAASL) is a separate, amateur/community competition, not part of the
+Football SA state pathway (SL1/SL2/NPL) — don't mix the two unless asked to compare them.
+League names carry a sponsor prefix ("HPG Homes ...", "RAA ...", "Sportal ...",
+"Guardian Insurance ..."), so match with LIKE or use the short form via the mapping
+above — do not assume a user's "SL2 South" is the literal value.
 
 CLUBS
 ${clubList}

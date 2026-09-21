@@ -51,8 +51,16 @@ def grade_of(league: str) -> str:
     return "SEN"
 
 
+DIVISION_BY_COMPETITION = {
+    "HPG Homes State League 1": "SL1",
+    "HPG Homes State League 2": "SL2",
+    "RAA National Premier League": "NPL",
+    "Home and Away": "SAASL",  # SAASL's (saasl.dribl.com) regular season competition
+}
+
+
 def division_of(competition: str) -> str:
-    return "SL1" if "League 1" in competition else "SL2"
+    return DIVISION_BY_COMPETITION.get(competition, competition)
 
 
 def to_int(x):
@@ -608,13 +616,15 @@ def build_shortlist(season: pd.DataFrame) -> pd.DataFrame:
 # ---------------------------------------------------------------------------
 
 NOTES = [
-    ("Source", "DRIBL match centre API (fsa.dribl.com), 2026 season, SL1 + SL2 all grades. Extracted with extract_browser.js."),
+    ("Source", "DRIBL match centre API, 2026 season: Football SA (fsa.dribl.com) SL1 + SL2 + NPL (men's) all grades, "
+               "and SAASL (saasl.dribl.com) Home and Away all grades. Extracted with extract_browser.js."),
     ("Positions", "DRIBL does not record positions or formations for these leagues (1 player of ~530 sampled). Only GK vs outfield is known."),
     ("Minutes", "Starters: sub-off minute (or red card) else match length. Subs: match length minus sub-on minute. Bench unused: 0."),
     ("Minutes estimated", "U18 leagues rarely record sub minutes. When missing, we assume a sub came on at 70', and a starter on a "
                           "side with no recorded subs played the full match. Flagged in minutes_estimated / minutes_est_apps."),
     ("Goals", "From the lineup goals list. Own goals excluded from 'goals'; penalties split out. Non-pen goals per 90 = goals_open_play / minutes * 90."),
-    ("Game state", "Reconstructed from the match-centre goal timeline. equaliser = level after; go_ahead = takes lead; winner = go-ahead goal after which the team never fell level, in a match it won; late = 75'+."),
+    ("Game state", "Reconstructed from the match-centre goal timeline. equaliser = level after; go_ahead = takes lead; winner = go-ahead goal after which the team never fell level, in a match it won; late = 75'+. "
+                   "About 28% of SAASL matches have no goal timeline at all (lineup goal totals are still recorded) — game-state and the Events sheet undercount there; Football SA (SL1/SL2/NPL) timelines are essentially complete."),
     ("On-pitch GD", "Goals for/against while the player was on (using the minute window). gd_on_pitch_vs_team subtracts the team's regular-season GD per match."),
     ("Votes", "Per-match 3-2-1 votes from DRIBL, likely best-on-ground — not shown publicly elsewhere. Recorded for about 249 of 294 matches."),
     ("Borrowed", "DRIBL's flag for a player borrowed from another team in the club that match — a direct playing up/down signal."),

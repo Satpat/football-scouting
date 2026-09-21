@@ -10,7 +10,7 @@ const notes = await FileAttachment("./data/notes.json").json();
 const meta = await FileAttachment("./data/meta.json").json();
 ```
 
-Source: Football SA's DRIBL match centre (fsa.dribl.com), 2026 season, HPG Homes State League 1 and State League 2 — Seniors, Reserves and Under 18s plus the finals series. Extracted ${meta.extracted_at?.slice(0, 10)}: ${meta.matches.toLocaleString()} completed matches, ${meta.appearances.toLocaleString()} appearances, ${meta.players.toLocaleString()} players across ${meta.teams} teams.
+Source: DRIBL match centres for two SA governing bodies, 2026 season — Football SA (fsa.dribl.com): HPG Homes State League 1, State League 2 and the RAA National Premier League (men's), Seniors/Reserves/Under 18s plus the finals series; and SAASL, the South Australian Amateur Soccer League (saasl.dribl.com): the Home and Away regular season across all its Saturday and Sunday grades. Extracted ${meta.extracted_at?.slice(0, 10)}: ${meta.matches.toLocaleString()} completed matches, ${meta.appearances.toLocaleString()} appearances, ${meta.players.toLocaleString()} players across ${meta.teams} teams.
 
 ## What DRIBL records — and what it doesn't
 

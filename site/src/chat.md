@@ -52,7 +52,7 @@ display(modelSel);
   <p class="muted">Every answer is produced by a real SQL query, shown under it. Fast is right for almost everything; escalate if an answer looks wrong.</p>
   </div>
   <div>
-  <p class="muted"><b>${meta.players.toLocaleString()}</b> players · <b>${meta.matches.toLocaleString()}</b> matches · <b>${meta.appearances.toLocaleString()}</b> appearances · State League 1 &amp; 2, all grades, ${meta.season}.</p>
+  <p class="muted"><b>${meta.players.toLocaleString()}</b> players · <b>${meta.matches.toLocaleString()}</b> matches · <b>${meta.appearances.toLocaleString()}</b> appearances · State League 1 &amp; 2, the NPL and SAASL, all grades, ${meta.season}.</p>
   <p class="muted">Try: “top 10 scorers in SL1 Seniors”, “which U18s have senior minutes?”, “best goals per 90 over 600 minutes”, “compare the top two goalkeepers by clean sheet rate”.</p>
   </div>
 </div>

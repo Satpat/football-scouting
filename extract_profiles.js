@@ -1,11 +1,15 @@
-// DRIBL member-profile extraction — run inside the browser pane on https://fsa.dribl.com
-// after the match extraction. Gives age, nationality, headshot, club colours, per-season
-// career rows and every match this season (including cups/trials).
+// DRIBL member-profile extraction — run inside the browser pane on the same origin used
+// for the match extraction (fsa.dribl.com or saasl.dribl.com). Gives age, nationality,
+// headshot, club colours, per-season career rows and every match this season (including
+// cups/trials).
 //
 //   window.__p.ids = [...player ids...];       // unique user_hash_id values from players.csv
 //   await __p.profiles(); await __p.careers(); await __p.matches();
 //   __p.dump('profiles'); __p.dump('careers'); __p.dump('matches', 0, 3); ...
 // Then: python merge_dumps.py <dump files> -o output/dribl_profiles_2026.json
+//
+// TENANT/SEASON must match the source this run's ids came from — see extract_browser.js's
+// header for both sources' ids (Football SA: 3pmvvjLmvJ / 7MNGzMbmAz; SAASL: V8dnR1odwL / 7MNGzzEmAz).
 
 (() => {
   const B = 'https://mc-api.dribl.com/api/';
