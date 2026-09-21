@@ -75,6 +75,8 @@ const profileCard = () => p ? html`<div class="card">
     <h2>Profile</h2>
     <div class="facts2">
       ${fact("Age", p.age)}
+      ${p.height_cm ? fact("Height", `${p.height_cm} cm`) : ""}
+      ${p.position_sofa ? fact("Position", p.position_sofa) : ""}
       ${fact("Nationality", p.flag ? html`<span class="flag" title="${p.nationality}">${p.flag}</span> ${p.nationality}` : p.nationality)}
       ${fact("Shirt", p.jersey)}
       ${fact("Role", p.role)}
@@ -92,6 +94,10 @@ const profileCard = () => p ? html`<div class="card">
     <h2><span class="h2-crest">${crest(p.club, 22)}</span> ${shortLeague(p.league)} 2026 <span class="muted">— ${p.club ?? ""}</span></h2>
     <div class="tiles2">
       ${tile("apps", p.apps)}${tile("starts", p.starts)}${tile("minutes", p.minutes)}${tile("goals", p.goals)}
+      ${p.assists > 0 ? tile("assists", p.assists) : ""}
+      ${p.sofascore_rating ? tile("sofascore_rating", p.sofascore_rating) : ""}
+      ${p.xg > 0 ? tile("xg", p.xg) : ""}
+      ${p.xa > 0 ? tile("xa", p.xa) : ""}
       ${tile("goals_open_play", p.goals_open_play)}${tile("goals_penalty", p.goals_penalty)}${tile("votes", p.votes)}
       ${tile("yellow_cards", p.yellow_cards, cardGlyph("y"))}${tile("red_cards", p.red_cards, cardGlyph("r"))}
       ${p.role === "GK" ? tile("clean_sheets", p.clean_sheets) : tile("goals_go_ahead", p.goals_go_ahead)}
@@ -102,6 +108,33 @@ const profileCard = () => p ? html`<div class="card">
       ${tile("minutes_share_pct", p.minutes_share_pct)}${tile("gd_on_pitch_vs_team", p.gd_on_pitch_vs_team)}
       ${p.role === "GK" ? tile("ga_on_pitch_per90", p.ga_on_pitch_per90) : tile("ppg_start_diff", p.ppg_start_diff)}
     </div>
+    ${(p.sofascore_rating != null || p.passes_total > 0 || p.duels_total > 0) ? html`
+    <h3 style="margin-top:1.25rem; margin-bottom: 0.5rem; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--theme-foreground-muted);">Sofascore Advanced Metrics</h3>
+    <div class="tiles2">
+      ${p.xg_p90 > 0 ? tile("xg_p90", p.xg_p90) : ""}
+      ${p.xa_p90 > 0 ? tile("xa_p90", p.xa_p90) : ""}
+      ${p.finishing_delta != null && p.xg > 0 ? tile("finishing_delta", p.finishing_delta) : ""}
+      ${p.key_passes_p90 > 0 ? tile("key_passes_p90", p.key_passes_p90) : ""}
+      ${p.big_chances_created > 0 ? tile("big_chances_created", p.big_chances_created) : ""}
+      ${p.passes_p90 > 0 ? tile("passes_p90", p.passes_p90) : ""}
+      ${p.pass_acc_pct > 0 ? tile("pass_acc_pct", p.pass_acc_pct) : ""}
+      ${p.long_ball_acc_pct > 0 ? tile("long_ball_acc_pct", p.long_ball_acc_pct) : ""}
+      ${p.duels_p90 > 0 ? tile("duels_p90", p.duels_p90) : ""}
+      ${p.duel_win_pct > 0 ? tile("duel_win_pct", p.duel_win_pct) : ""}
+      ${p.aerial_win_pct > 0 ? tile("aerial_win_pct", p.aerial_win_pct) : ""}
+      ${p.tackles_p90 > 0 ? tile("tackles_p90", p.tackles_p90) : ""}
+      ${p.interceptions_p90 > 0 ? tile("interceptions_p90", p.interceptions_p90) : ""}
+      ${p.recoveries_p90 > 0 ? tile("recoveries_p90", p.recoveries_p90) : ""}
+      ${p.defensive_actions_p90 > 0 ? tile("defensive_actions_p90", p.defensive_actions_p90) : ""}
+      ${p.dribbles_p90 > 0 ? tile("dribbles_p90", p.dribbles_p90) : ""}
+      ${p.dribble_success_pct > 0 ? tile("dribble_success_pct", p.dribble_success_pct) : ""}
+      ${p.shots_p90 > 0 ? tile("shots_p90", p.shots_p90) : ""}
+      ${p.shot_acc_pct > 0 ? tile("shot_acc_pct", p.shot_acc_pct) : ""}
+      ${p.xg_per_shot > 0 ? tile("xg_per_shot", p.xg_per_shot) : ""}
+      ${p.role === "GK" && p.saves > 0 ? tile("saves", p.saves) : ""}
+      ${p.role === "GK" && p.saves_p90 > 0 ? tile("saves_p90", p.saves_p90) : ""}
+      ${p.role === "GK" && p.saves_inside_box > 0 ? tile("saves_inside_box", p.saves_inside_box) : ""}
+    </div>` : ""}
     ${p.minutes_est_apps > 0 ? html`<p class="muted">${p.minutes_est_apps} of ${p.apps} appearances have estimated minutes (subs not recorded).</p>` : ""}
     ${rowsFor.filter((r) => r.apps > 0).length > 1 ? html`<details><summary class="muted">All teams this season</summary><div class="table-scroll">${seasonTable(rowsFor.filter((r) => r.apps > 0).sort((a, b) => b.minutes - a.minutes))}</div></details>` : ""}
     </div>
@@ -110,16 +143,42 @@ const profileCard = () => p ? html`<div class="card">
 ```
 
 ```js
+const radarMode = Mutable("Standard");
+const setRadarMode = (m) => (radarMode.value = m);
+```
+
+```js
 const TRAITS = [
   ["npg_per90", false], ["votes_per_app", false], ["minutes_share_pct", false], ["team_goal_share_pct", false],
   ["gd_on_pitch_vs_team", false], ["yellows_per90", true],
 ];
 const GK_TRAITS = [["ga_on_pitch_per90", true], ["clean_sheet_pct", false], ["votes_per_app", false], ["minutes_share_pct", false], ["gd_on_pitch_vs_team", false], ["yellows_per90", true]];
+
+const ADV_TRAITS = [
+  ["xg_p90", false], ["xa_p90", false], ["key_passes_p90", false],
+  ["pass_acc_pct", false], ["duel_win_pct", false], ["defensive_actions_p90", false]
+];
+const ADV_GK_TRAITS = [
+  ["saves_p90", false], ["clean_sheet_pct", false], ["pass_acc_pct", false],
+  ["long_ball_acc_pct", false], ["ga_on_pitch_per90", true], ["sofascore_rating", false]
+];
+
+const hasSofaTraits = p && (p.duels_total > 0 || p.passes_total > 0 || (p.role === "GK" && p.saves > 0));
+const isAdv = hasSofaTraits && radarMode === "Advanced";
+const activeList = isAdv ? (p.role === "GK" ? ADV_GK_TRAITS : ADV_TRAITS) : (p.role === "GK" ? GK_TRAITS : TRAITS);
 const peers = p ? players.filter((d) => d.league === p.league && d.role === p.role && d.minutes >= 450) : [];
-const traits = p ? (p.role === "GK" ? GK_TRAITS : TRAITS).map(([col, invert]) => ({col, invert, value: p[col], pct: percentile(peers.map((d) => d[col]), p[col], invert)})) : [];
+const advPeers = isAdv ? peers.filter((d) => (d.duels_total > 0 || d.saves > 0)) : peers;
+const traits = p ? activeList.map(([col, invert]) => ({col, invert, value: p[col], pct: percentile(advPeers.map((d) => d[col]), p[col], invert)})) : [];
+
 const traitsCard = () => p ? html`<div class="card">
-  <h2>Player traits</h2>
-  <p class="muted" style="margin-top:-0.5rem">Percentile vs ${peers.length} ${p.role === "GK" ? "goalkeepers" : "outfield players"} in this league with 450+ minutes. Cards and goals conceded are inverted.</p>
+  <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+    <h2 style="margin:0;">Player traits</h2>
+    ${hasSofaTraits ? html`<div style="display:flex; gap:4px;">
+      <button class="mbtn ${radarMode === 'Standard' ? 'active' : ''}" style="padding:3px 10px; font-size:11px;" onclick=${() => setRadarMode("Standard")}>Standard</button>
+      <button class="mbtn ${radarMode === 'Advanced' ? 'active' : ''}" style="padding:3px 10px; font-size:11px;" onclick=${() => setRadarMode("Advanced")}>Sofascore Advanced</button>
+    </div>` : ""}
+  </div>
+  <p class="muted" style="margin-top:-0.25rem">Percentile vs ${advPeers.length} ${p.role === "GK" ? "goalkeepers" : "outfield players"} in this league with 450+ minutes${isAdv ? " and Sofascore data" : ""}. Cards and goals conceded are inverted.</p>
   <div class="radar-wrap" style="max-width: 440px; margin: 0 auto;">${resize((width) => radar(traits.map((t) => ({...t, label: label(t.col).replace(" per 90", "/90").replace("Best-on-ground ", "").replace("On-pitch goal difference vs team", "GD vs team").replace("Share of team ", "Team ")})), {size: Math.min(width, 380), accent, levels: 3}))}</div>
 </div>` : null;
 ```
@@ -160,12 +219,19 @@ const setPage = (n) => (page.value = Math.max(0, Math.min(n, Math.ceil(matchRows
 const pageRows = matchRows.slice(page * PAGE, page * PAGE + PAGE);
 const shortDate = (v) => { const d = toDate(v); return d ? d3.timeFormat("%-d %b")(d) : "–"; };
 const voteBadge = (v) => v > 0 ? html`<span class="vote v${v}">${v}</span>` : html`<span class="muted">–</span>`;
+const ratingPill = (v) => v != null && v > 0
+  ? html`<span class="rating-badge ${v >= 7.5 ? 'hi' : v >= 6.8 ? 'mid' : 'low'}">${v.toFixed(1)}</span>`
+  : html`<span class="muted">–</span>`;
+const hasAnySofaMatches = matchRows.some((r) => r.sofascore_rating != null || r.xg != null);
+
 const matchList = html`<div class="mlist">
-  <div class="mrow mhead">
+  <div class="mrow ${hasAnySofaMatches ? 'has-sofa' : ''} mhead">
     <span></span><span>Opponent</span><span>Grade</span><span>League</span><span></span>
-    ${["minutes", "goals", "votes", "yellow_cards", "red_cards"].map((c) => html`<span>${iconHeader(c, label(c))}</span>`)}
+    ${hasAnySofaMatches
+      ? ["minutes", "goals", "votes", "sofascore_rating", "xg", "yellow_cards", "red_cards"].map((c) => html`<span>${iconHeader(c, label(c))}</span>`)
+      : ["minutes", "goals", "votes", "yellow_cards", "red_cards"].map((c) => html`<span>${iconHeader(c, label(c))}</span>`)}
   </div>
-  ${pageRows.map((r) => html`<div class="mrow">
+  ${pageRows.map((r) => html`<div class="mrow ${hasAnySofaMatches ? 'has-sofa' : ''}">
     <span class="mdate">${shortDate(r.date)} <span class="ha-pill">${r.ha}</span></span>
     <span class="mopp">${crest(r.opponent_club, 20)} ${r.opponent_club ?? r.opponent}</span>
     <span>${leagueGrade(r.league) ?? "–"}</span>
@@ -174,6 +240,8 @@ const matchList = html`<div class="mlist">
     <span>${fmt("minutes", r.minutes)}</span>
     <span>${r.goals || "0"}</span>
     <span>${voteBadge(r.votes ?? 0)}</span>
+    ${hasAnySofaMatches ? html`<span>${ratingPill(r.sofascore_rating)}</span>` : ""}
+    ${hasAnySofaMatches ? html`<span>${r.xg != null ? r.xg.toFixed(2) : "–"}</span>` : ""}
     <span>${r.yellow_cards ? html`${cardGlyph("y")} ${r.yellow_cards}` : "0"}</span>
     <span>${r.red_cards ? html`${cardGlyph("r")} ${r.red_cards}` : "0"}</span>
   </div>`)}

@@ -24,6 +24,7 @@ import numpy as np
 import pandas as pd
 
 RAW = Path("output/dribl_raw_2026_v2.json")
+SOFA_ENRICHED = Path("output/sofascore_enriched_2026.json")
 OUT = Path("output/dribl_scouting_2026.xlsx")
 SPLIT_DIR = Path("output")
 
@@ -96,7 +97,19 @@ def load_raw(path: Path) -> dict:
         return json.load(f)
 
 
-def build_matches(raw: dict) -> pd.DataFrame:
+def load_sofascore(path: Path = SOFA_ENRICHED) -> dict:
+    if path.exists():
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception as e:
+            print(f"Warning: could not load {path}: {e}")
+            return {}
+    return {}
+
+
+def build_matches(raw: dict, sofa: dict = None) -> pd.DataFrame:
+    sofa_m = (sofa or {}).get("matches", {})
     rows = []
     for f in raw["fixtures"]:
         m = raw["mc"].get(f["match_hash_id"])
@@ -107,6 +120,7 @@ def build_matches(raw: dict) -> pd.DataFrame:
         )
         match_len = 120 if has_et else 90
         dt_utc = pd.to_datetime(m["date"], utc=True)
+        sm = sofa_m.get(f["match_hash_id"], {})
         rows.append({
             "match_hash_id": f["match_hash_id"],
             "fixture_id": f["hash_id"],
@@ -143,6 +157,22 @@ def build_matches(raw: dict) -> pd.DataFrame:
             "matchsheet_confirmed": bool(m.get("matchsheet_home_team_confirmed") and m.get("matchsheet_away_team_confirmed")),
             "n_events": len(m.get("match_events", [])),
             "referee": next((r.get("name") for r in m.get("referees", []) if r.get("role") == "cr"), None),
+            "home_possession": sm.get("home_possession") or sm.get("home_ballPossession"),
+            "away_possession": sm.get("away_possession") or sm.get("away_ballPossession"),
+            "home_xg": sm.get("home_xg") or sm.get("home_expectedGoals"),
+            "away_xg": sm.get("away_xg") or sm.get("away_expectedGoals"),
+            "home_shots": sm.get("home_shots") or sm.get("home_totalShotsOnGoal"),
+            "away_shots": sm.get("away_shots") or sm.get("away_totalShotsOnGoal"),
+            "home_shots_on_target": sm.get("home_shots_on_target"),
+            "away_shots_on_target": sm.get("away_shots_on_target"),
+            "home_corners": sm.get("home_corners"),
+            "away_corners": sm.get("away_corners"),
+            "home_fouls": sm.get("home_fouls"),
+            "away_fouls": sm.get("away_fouls"),
+            "home_passes": sm.get("home_passes"),
+            "away_passes": sm.get("away_passes"),
+            "home_accurate_passes": sm.get("home_accurate_passes"),
+            "away_accurate_passes": sm.get("away_accurate_passes"),
         })
     df = pd.DataFrame(rows)
     return df.sort_values(["league", "date_utc"]).reset_index(drop=True)
@@ -236,10 +266,11 @@ def goal_timeline(m: dict, match_len: int) -> list:
 # appearances
 # ---------------------------------------------------------------------------
 
-def build_appearances(raw: dict, matches: pd.DataFrame, ladders: pd.DataFrame) -> pd.DataFrame:
+def build_appearances(raw: dict, matches: pd.DataFrame, ladders: pd.DataFrame, sofa: dict = None) -> pd.DataFrame:
     meta = matches.set_index("match_hash_id")
     reg = ladders[~ladders["is_finals"]].set_index("team_id")
     timelines = {mid: goal_timeline(raw["mc"][mid], int(meta.loc[mid, "match_len"])) for mid in meta.index}
+    sofa_apps = (sofa or {}).get("appearances", {})
 
     rows = []
     for key, players in raw["members"].items():
@@ -316,6 +347,7 @@ def build_appearances(raw: dict, matches: pd.DataFrame, ladders: pd.DataFrame) -
             full_match = playing and start == 0 and end == match_len
 
             opp_lad = reg.loc[opp] if opp in reg.index else None
+            sa = sofa_apps.get(f"{mid}:{p['user_hash_id']}", {})
             rows.append({
                 "player_id": p["user_hash_id"],
                 "player_name": f"{p.get('first_name', '')} {p.get('last_name', '')}".strip(),
@@ -340,6 +372,39 @@ def build_appearances(raw: dict, matches: pd.DataFrame, ladders: pd.DataFrame) -
                 "gf_on_pitch": gf_on, "ga_on_pitch": ga_on,
                 "clean_sheet": bool(full_match and ga_on == 0),
                 "yellow_cards": yellows, "red_cards": reds,
+                "sofascore_rating": sa.get("sofascore_rating"),
+                "assists": sa.get("assists", 0),
+                "xg": sa.get("xg", 0.0),
+                "xa": sa.get("xa", 0.0),
+                "key_passes": sa.get("key_passes", 0),
+                "big_chances_created": sa.get("big_chances_created", 0),
+                "big_chances_missed": sa.get("big_chances_missed", 0),
+                "passes_total": sa.get("passes_total", 0),
+                "passes_acc": sa.get("passes_acc", 0),
+                "pass_acc_pct": round(sa.get("passes_acc", 0) / sa["passes_total"] * 100, 1) if sa.get("passes_total", 0) > 0 else None,
+                "long_balls_total": sa.get("long_balls_total", 0),
+                "long_balls_acc": sa.get("long_balls_acc", 0),
+                "duels_won": sa.get("duels_won", 0),
+                "duels_total": sa.get("duels_total", 0),
+                "duel_win_pct": round(sa.get("duels_won", 0) / sa["duels_total"] * 100, 1) if sa.get("duels_total", 0) > 0 else None,
+                "aerials_won": sa.get("aerials_won", 0),
+                "aerials_total": sa.get("aerials_total", 0),
+                "aerial_win_pct": round(sa.get("aerials_won", 0) / sa["aerials_total"] * 100, 1) if sa.get("aerials_total", 0) > 0 else None,
+                "tackles": sa.get("tackles", 0),
+                "interceptions": sa.get("interceptions", 0),
+                "recoveries": sa.get("recoveries", 0),
+                "clearances": sa.get("clearances", 0),
+                "defensive_actions": sa.get("tackles", 0) + sa.get("interceptions", 0),
+                "dribbles_won": sa.get("dribbles_won", 0),
+                "dribbles_total": sa.get("dribbles_total", 0),
+                "dribble_success_pct": round(sa.get("dribbles_won", 0) / sa["dribbles_total"] * 100, 1) if sa.get("dribbles_total", 0) > 0 else None,
+                "touches": sa.get("touches", 0),
+                "dispossessed": sa.get("dispossessed", 0),
+                "shots_total": sa.get("shots_total", 0),
+                "shots_on_target": sa.get("shots_on_target", 0),
+                "saves": sa.get("saves", 0),
+                "saves_inside_box": sa.get("saves_inside_box", 0),
+                "has_sofascore": bool(sa.get("sofascore_rating") is not None or sa.get("passes_total", 0) > 0 or sa.get("duels_total", 0) > 0),
             })
     df = pd.DataFrame(rows)
     return df.sort_values(["league", "team", "date_local", "player_name"]).reset_index(drop=True)
@@ -353,8 +418,10 @@ def build_team_context(matches: pd.DataFrame, app: pd.DataFrame, ladders: pd.Dat
     sides = []
     for side, opp in (("home", "away"), ("away", "home")):
         s = matches[["match_hash_id", "league", "grade", "division", "is_finals", "match_len",
-                     f"{side}_team_id", f"{side}_team", f"{side}_club", f"{side}_score", f"{opp}_score"]].copy()
-        s.columns = ["match_hash_id", "league", "grade", "division", "is_finals", "match_len", "team_id", "team", "club", "gf", "ga"]
+                     f"{side}_team_id", f"{side}_team", f"{side}_club", f"{side}_score", f"{opp}_score",
+                     f"{side}_possession", f"{side}_xg", f"{opp}_xg"]].copy()
+        s.columns = ["match_hash_id", "league", "grade", "division", "is_finals", "match_len",
+                     "team_id", "team", "club", "gf", "ga", "possession", "xg", "xga"]
         sides.append(s)
     tm = pd.concat(sides, ignore_index=True)
     tm["points"] = np.select([tm.gf > tm.ga, tm.gf == tm.ga], [3, 1], 0)
@@ -366,13 +433,22 @@ def build_team_context(matches: pd.DataFrame, app: pd.DataFrame, ladders: pd.Dat
         matches=("match_hash_id", "count"), finals_matches=("is_finals", "sum"),
         possible_minutes=("match_len", "sum"), gf=("gf", "sum"), ga=("ga", "sum"),
     )
-    rr_stats = rr.groupby("team_id").agg(rr_matches=("match_hash_id", "count"), rr_points=("points", "sum"),
-                                         rr_gf=("gf", "sum"), rr_ga=("ga", "sum"))
+    rr_stats = rr.groupby("team_id").agg(
+        rr_matches=("match_hash_id", "count"), rr_points=("points", "sum"),
+        rr_gf=("gf", "sum"), rr_ga=("ga", "sum"),
+        avg_possession_pct=("possession", lambda x: round(float(x.dropna().mean()), 1) if len(x.dropna()) else np.nan),
+        rr_xg=("xg", lambda x: round(float(x.dropna().sum()), 2) if len(x.dropna()) else np.nan),
+        rr_xga=("xga", lambda x: round(float(x.dropna().sum()), 2) if len(x.dropna()) else np.nan),
+    )
     ctx = ctx.join(primary).join(rr_stats)
     ctx["ppg"] = ctx.rr_points / ctx.rr_matches
     ctx["gf_per_match"] = ctx.rr_gf / ctx.rr_matches
     ctx["ga_per_match"] = ctx.rr_ga / ctx.rr_matches
     ctx["gd_per_match"] = ctx.gf_per_match - ctx.ga_per_match
+    ctx["team_xg_per_match"] = np.where(ctx.rr_xg.notna(), round(ctx.rr_xg / ctx.rr_matches, 2), np.nan)
+    ctx["team_xga_per_match"] = np.where(ctx.rr_xga.notna(), round(ctx.rr_xga / ctx.rr_matches, 2), np.nan)
+    ctx["team_xgd_per_match"] = np.where(ctx.team_xg_per_match.notna() & ctx.team_xga_per_match.notna(),
+                                         round(ctx.team_xg_per_match - ctx.team_xga_per_match, 2), np.nan)
 
     reg = ladders[~ladders.is_finals].set_index("team_id")[["position", "n_teams", "top_half", "points"]]
     reg.columns = ["ladder_pos", "ladder_teams", "ladder_top_half", "ladder_points"]
@@ -394,7 +470,7 @@ def build_team_context(matches: pd.DataFrame, app: pd.DataFrame, ladders: pd.Dat
 # player season
 # ---------------------------------------------------------------------------
 
-def build_player_season(app: pd.DataFrame, ctx: pd.DataFrame, matches: pd.DataFrame) -> pd.DataFrame:
+def build_player_season(app: pd.DataFrame, ctx: pd.DataFrame, matches: pd.DataFrame, sofa: dict = None) -> pd.DataFrame:
     played = app[app.playing]
     g = app.groupby(["player_id", "team_id"])
     season = g.agg(
@@ -421,10 +497,38 @@ def build_player_season(app: pd.DataFrame, ctx: pd.DataFrame, matches: pd.DataFr
         yellow_cards=("yellow_cards", "sum"), red_cards=("red_cards", "sum"), ban_apps=("has_ban", "sum"),
         wins=("points", lambda x: int((x == 3).sum())), points_when_playing=("points", "sum"),
         team_goals_in_apps=("team_gf", "sum"), team_ga_in_apps=("team_ga", "sum"),
+        assists=("assists", "sum"),
+        xg=("xg", "sum"),
+        xa=("xa", "sum"),
+        key_passes=("key_passes", "sum"),
+        big_chances_created=("big_chances_created", "sum"),
+        big_chances_missed=("big_chances_missed", "sum"),
+        passes_total=("passes_total", "sum"),
+        passes_acc=("passes_acc", "sum"),
+        long_balls_total=("long_balls_total", "sum"),
+        long_balls_acc=("long_balls_acc", "sum"),
+        duels_won=("duels_won", "sum"),
+        duels_total=("duels_total", "sum"),
+        aerials_won=("aerials_won", "sum"),
+        aerials_total=("aerials_total", "sum"),
+        tackles=("tackles", "sum"),
+        interceptions=("interceptions", "sum"),
+        recoveries=("recoveries", "sum"),
+        clearances=("clearances", "sum"),
+        dribbles_won=("dribbles_won", "sum"),
+        dribbles_total=("dribbles_total", "sum"),
+        touches=("touches", "sum"),
+        dispossessed=("dispossessed", "sum"),
+        shots_total=("shots_total", "sum"),
+        shots_on_target=("shots_on_target", "sum"),
+        saves=("saves", "sum"),
+        saves_inside_box=("saves_inside_box", "sum"),
+        sofascore_apps=("has_sofascore", "sum"),
+        sofascore_rating=("sofascore_rating", lambda x: round(float(x.dropna().mean()), 2) if len(x.dropna()) else np.nan),
     ).reset_index()
     season = season.merge(pg, on=["player_id", "team_id"], how="left")
     for c in pg.columns:
-        if c not in ("player_id", "team_id") and season[c].dtype.kind in "fi":
+        if c not in ("player_id", "team_id", "sofascore_rating") and season[c].dtype.kind in "fi":
             season[c] = season[c].fillna(0)
 
     # team context
@@ -432,15 +536,84 @@ def build_player_season(app: pd.DataFrame, ctx: pd.DataFrame, matches: pd.DataFr
                                     "gd_per_match", "ladder_pos", "ladder_teams", "gf", "ga", "rr_matches"]]
     tc.columns = ["league", "team_matches", "team_possible_minutes", "team_ppg", "team_gf_per_match", "team_ga_per_match",
                   "team_gd_per_match", "team_ladder_pos", "ladder_teams", "team_goals", "team_goals_against", "team_rr_matches"]
-    season = season.merge(tc, left_on="team_id", right_index=True, how="left")
+    season = season.merge(tc, left_on="team_id", right_index=True, how="left").copy()
 
     per90 = lambda n: np.where(season.minutes > 0, n / season.minutes * 90, np.nan)
+    pct = lambda num, den: np.where(den > 0, np.round(num / den * 100, 1), np.nan)
+
     season["sub_apps"] = season.apps - season.starts
     season["availability_pct"] = season.squad_named / season.team_matches * 100
     season["minutes_share_pct"] = season.minutes / season.team_possible_minutes * 100
     season["start_rate_pct"] = np.where(season.apps > 0, season.starts / season.apps * 100, np.nan)
     season["goals_per90"] = per90(season.goals)
     season["npg_per90"] = per90(season.goals_open_play)
+    season["assists_p90"] = per90(season.assists)
+    season["xg_p90"] = per90(season.xg)
+    season["xa_p90"] = per90(season.xa)
+    season["key_passes_p90"] = per90(season.key_passes)
+    season["goal_involvements"] = season.goals + season.assists
+    season["goal_involvements_p90"] = per90(season.goal_involvements)
+    season["finishing_delta"] = np.where(season.xg > 0, np.round(season.goals - season.xg, 2), np.nan)
+    season["assist_delta"] = np.where(season.xa > 0, np.round(season.assists - season.xa, 2), np.nan)
+
+    # Passing & Distribution
+    season["passes_p90"] = per90(season.passes_total)
+    season["pass_acc_pct"] = pct(season.passes_acc, season.passes_total)
+    season["long_balls_p90"] = per90(season.long_balls_total)
+    season["long_ball_acc_pct"] = pct(season.long_balls_acc, season.long_balls_total)
+
+    # Duels & Physicality
+    season["duels_p90"] = per90(season.duels_total)
+    season["duel_win_pct"] = pct(season.duels_won, season.duels_total)
+    season["aerials_p90"] = per90(season.aerials_total)
+    season["aerial_win_pct"] = pct(season.aerials_won, season.aerials_total)
+
+    # Defending & Ball Winning
+    season["tackles_p90"] = per90(season.tackles)
+    season["interceptions_p90"] = per90(season.interceptions)
+    season["recoveries_p90"] = per90(season.recoveries)
+    season["clearances_p90"] = per90(season.clearances)
+    season["defensive_actions"] = season.tackles + season.interceptions
+    season["defensive_actions_p90"] = per90(season.defensive_actions)
+
+    # Dribbling & Ball Carrying
+    season["dribbles_p90"] = per90(season.dribbles_won)
+    season["dribble_success_pct"] = pct(season.dribbles_won, season.dribbles_total)
+    season["touches_p90"] = per90(season.touches)
+
+    # Shooting
+    season["shots_p90"] = per90(season.shots_total)
+    season["shot_acc_pct"] = pct(season.shots_on_target, season.shots_total)
+    season["xg_per_shot"] = np.where(season.shots_total > 0, np.round(season.xg / season.shots_total, 2), np.nan)
+
+    # Goalkeeping
+    season["saves_p90"] = per90(season.saves)
+
+    has_sofa = season.sofascore_apps > 0
+    # For players without Sofascore data, keep Sofascore-specific metrics as np.nan
+    sofa_rate_cols = [
+        "assists", "assists_p90",
+        "xg", "xg_p90", "xa", "xa_p90", "key_passes", "key_passes_p90",
+        "big_chances_created", "big_chances_missed",
+        "passes_total", "passes_acc", "passes_p90", "pass_acc_pct",
+        "long_balls_total", "long_balls_acc", "long_balls_p90", "long_ball_acc_pct",
+        "duels_won", "duels_total", "duels_p90", "duel_win_pct",
+        "aerials_won", "aerials_total", "aerials_p90", "aerial_win_pct",
+        "tackles", "tackles_p90", "interceptions", "interceptions_p90",
+        "recoveries", "recoveries_p90", "clearances", "clearances_p90",
+        "defensive_actions", "defensive_actions_p90",
+        "dribbles_won", "dribbles_total", "dribbles_p90", "dribble_success_pct",
+        "touches", "touches_p90", "dispossessed",
+        "shots_total", "shots_on_target", "shots_p90", "shot_acc_pct", "xg_per_shot",
+        "finishing_delta", "assist_delta",
+    ]
+    for sc in sofa_rate_cols:
+        season[sc] = np.where(has_sofa, season[sc], np.nan)
+    season["goal_involvements"] = np.where(has_sofa, season.goals + season.assists.fillna(0), np.nan)
+    season["goal_involvements_p90"] = np.where(has_sofa, per90(season.goal_involvements), np.nan)
+    season["saves"] = np.where(has_sofa & season.is_goalkeeper, season.saves, np.nan)
+    season["saves_p90"] = np.where(has_sofa & season.is_goalkeeper, season.saves_p90, np.nan)
+    season["saves_inside_box"] = np.where(has_sofa & season.is_goalkeeper, season.saves_inside_box, np.nan)
     season["team_goal_share_pct"] = np.where(season.team_goals > 0, season.goals / season.team_goals * 100, np.nan)
     season["goals_per_sub_90"] = np.where(season.sub_minutes > 0, season.goals_as_sub / season.sub_minutes * 90, np.nan)
     season["votes_per_app"] = np.where(season.apps > 0, season.votes / season.apps, np.nan)
@@ -488,6 +661,20 @@ def build_player_season(app: pd.DataFrame, ctx: pd.DataFrame, matches: pd.DataFr
         lambda r: GRADE_RANK.get(r.highest_grade, 0) > GRADE_RANK[r.grade] if isinstance(r.highest_grade, str) else False, axis=1)
     season["is_goalkeeper"] = season.is_goalkeeper.fillna(False).astype(bool)
     season["role"] = np.where(season.is_goalkeeper, "GK", "Outfield")
+
+    sofa_prof = (sofa or {}).get("profiles", {})
+    if sofa_prof:
+        prof_rows = [{"player_id": pid,
+                      "height_cm": info.get("height_cm"),
+                      "date_of_birth": info.get("date_of_birth"),
+                      "position_sofa": info.get("position_sofa")}
+                     for pid, info in sofa_prof.items()]
+        prof_df = pd.DataFrame(prof_rows)
+        season = season.merge(prof_df, on="player_id", how="left")
+    else:
+        season["height_cm"] = None
+        season["date_of_birth"] = None
+        season["position_sofa"] = None
 
     cols_first = ["player_id", "player_name", "club", "team", "league", "grade", "division", "role", "jersey",
                   "apps", "starts", "sub_apps", "bench_unused", "squad_named", "minutes", "minutes_est_apps",
@@ -597,6 +784,14 @@ def build_shortlist(season: pd.DataFrame) -> pd.DataFrame:
             bits.append(f"borrowed x{r.borrowed_apps:.0f}")
         if r.minutes_est_apps >= r.apps / 2:
             bits.append("minutes estimated (subs not recorded)")
+        if pd.notna(r.get("finishing_delta")) and r.get("finishing_delta") >= 3.0:
+            bits.append(f"+{r.finishing_delta:.1f} xG overperformance")
+        if pd.notna(r.get("sofascore_rating")) and r.get("sofascore_rating") >= 7.4:
+            bits.append(f"avg Sofascore rating {r.sofascore_rating:.2f}")
+        if pd.notna(r.get("duel_win_pct")) and r.get("duel_win_pct") >= 65 and r.get("duels_total", 0) >= 30:
+            bits.append(f"{r.duel_win_pct:.0f}% duels won")
+        if pd.notna(r.get("key_passes_p90")) and r.get("key_passes_p90") >= 2.0:
+            bits.append(f"{r.key_passes_p90:.1f} key passes/90")
         return "; ".join(bits)
 
     pool["why_flagged"] = pool.apply(why, axis=1)
@@ -607,7 +802,9 @@ def build_shortlist(season: pd.DataFrame) -> pd.DataFrame:
             "apps", "starts", "minutes", "minutes_share_pct", "goals", "goals_open_play", "npg_per90", "npg_per90_adj", "team_goal_share_pct",
             "goals_go_ahead", "goals_winner", "goals_late", "votes", "votes_per_app", "votes_per_app_adj", "gd_on_pitch_vs_team",
             "ga_on_pitch_per90", "clean_sheets", "clean_sheet_pct", "yellow_cards", "red_cards",
-            "sen_minutes", "borrowed_apps", "team_ladder_pos", "ladder_teams", "minutes_est_apps", "player_id", "team_id"]
+            "sen_minutes", "borrowed_apps", "team_ladder_pos", "ladder_teams", "minutes_est_apps",
+            "sofascore_rating", "xg", "xg_p90", "xa", "xa_p90", "key_passes_p90", "duel_win_pct",
+            "player_id", "team_id"]
     return pool[cols].reset_index(drop=True)
 
 
@@ -677,15 +874,18 @@ def run_checks(raw, matches, app, season, events):
           f"{((season.minutes >= MIN_MINUTES) & (season.grade != 'SEN') & (season.sen_minutes == 0)).sum()}")
 
 
-def compute(raw_path: Path = RAW) -> dict:
+def compute(raw_path: Path = RAW, sofa_path: Path = SOFA_ENRICHED) -> dict:
     """Build every table from the raw dump and return them (no files written)."""
     raw = load_raw(raw_path)
-    matches = build_matches(raw)
+    sofa = load_sofascore(sofa_path)
+    if sofa:
+        print(f"Loaded Sofascore enrichment from {sofa_path}")
+    matches = build_matches(raw, sofa)
     ladders = build_ladders(raw)
     events = build_events(raw, matches)
-    app = build_appearances(raw, matches, ladders)
+    app = build_appearances(raw, matches, ladders, sofa)
     ctx = build_team_context(matches, app, ladders)
-    season = build_player_season(app, ctx, matches)
+    season = build_player_season(app, ctx, matches, sofa)
     shortlist = build_shortlist(season)
     print(f"matches {len(matches)}, appearances {len(app)} (playing {int(app.playing.sum())}), events {len(events)}, "
           f"ladders {len(ladders)}, teams {len(ctx)}, player-seasons {len(season)}, shortlist {len(shortlist)}")

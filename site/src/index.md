@@ -30,8 +30,22 @@ const gemsOnly = view(Inputs.toggle({label: "Hidden gems only", value: false}));
   <div>
 
 ```js
-const xMetric = view(groupMetricSelect(Inputs.select(metricOptions(playerCols), {value: "minutes", label: "X axis"})));
-const yMetric = view(groupMetricSelect(Inputs.select(metricOptions(playerCols), {value: "goals", label: "Y axis"})));
+const PRESETS = {
+  custom: {label: "Custom axes", x: null, y: null},
+  finishing: {label: "Finishing (xG vs Goals/90)", x: "xg_p90", y: "goals_per90"},
+  creation: {label: "Creation (Key passes vs xA/90)", x: "key_passes_p90", y: "xa_p90"},
+  defending: {label: "Ball Winning (Int vs Tackles/90)", x: "interceptions_p90", y: "tackles_p90"},
+  duels: {label: "Duels (Duels/90 vs Win %)", x: "duels_p90", y: "duel_win_pct"},
+  retention: {label: "Retention (Passes/90 vs Pass %)", x: "passes_p90", y: "pass_acc_pct"},
+};
+const preset = view(Inputs.radio(new Map(Object.entries(PRESETS).map(([k, v]) => [v.label, k])), {value: "custom", label: "Preset"}));
+```
+  </div>
+  <div>
+
+```js
+const xMetric = view(groupMetricSelect(Inputs.select(metricOptions(playerCols), {value: "minutes", label: "X axis", disabled: preset !== "custom"})));
+const yMetric = view(groupMetricSelect(Inputs.select(metricOptions(playerCols), {value: "goals", label: "Y axis", disabled: preset !== "custom"})));
 ```
   </div>
 </div>
@@ -84,7 +98,8 @@ const filtered = players.filter((d) =>
   division.includes(d.division) && gradeSel.includes(d.grade) && leagueSel.includes(d.league) &&
   (role === "All" || d.role === role) && d.minutes >= minMinutes && d.apps >= minApps && (!gemsOnly || d.hidden_gem)
 );
-const xs = defenseView ? "minutes" : xMetric, ys = defenseView ? defenseMetric : yMetric;
+const xs = preset !== "custom" ? PRESETS[preset].x : (defenseView ? "minutes" : xMetric);
+const ys = preset !== "custom" ? PRESETS[preset].y : (defenseView ? defenseMetric : yMetric);
 const withXY = filtered.filter((d) => d[xs] != null && d[ys] != null);
 const yReversed = labels[ys]?.higher_is_better === false;
 const rankY = yReversed ? d3.ascending : d3.descending;
@@ -98,10 +113,12 @@ const setSelected = (d) => (selected.value = d);
 
 ```js
 const tipChannels = {Player: "player_name", Club: "club", Team: "team", League: "league", Age: "age", Apps: "apps", Minutes: "minutes",
-  Goals: "goals", "NP goals/90": "npg_per90", Votes: "votes", "Senior mins": "sen_minutes"};
+  Goals: "goals", "NP goals/90": "npg_per90", Votes: "votes", "Senior mins": "sen_minutes",
+  Rating: "sofascore_rating", xG: "xg", xA: "xa"};
 const tipFormat = {x: (v) => fmt(xs, v), y: (v) => fmt(ys, v), fill: (g) => GRADE_NAME[g], stroke: false, strokeWidth: false,
   League: shortLeague, Minutes: (v) => fmt("minutes", v), Apps: (v) => fmt("apps", v), Goals: (v) => fmt("goals", v),
-  "NP goals/90": (v) => fmt("npg_per90", v), Votes: (v) => fmt("votes", v), "Senior mins": (v) => fmt("sen_minutes", v)};
+  "NP goals/90": (v) => fmt("npg_per90", v), Votes: (v) => fmt("votes", v), "Senior mins": (v) => fmt("sen_minutes", v),
+  Rating: (v) => fmt("sofascore_rating", v), xG: (v) => fmt("xg", v), xA: (v) => fmt("xa", v)};
 function chart(width) {
   const p = Plot.plot({
     width, height: 560, grid: true, inset: 12, marginLeft: 50,
@@ -145,11 +162,15 @@ function chart(width) {
 function detail(d) {
   const k = (col) => html`<div><div class="v">${fmt(col, d[col])}</div><div class="l">${short(col)}</div></div>`;
   const gk = d.role === "GK";
+  const hasSofa = d.sofascore_rating != null || d.xg > 0 || d.passes_total > 0;
   return html`<h2 style="display:flex;align-items:center;gap:8px">${crest(d.club, 28)} <a href="./player?id=${d.player_id}&team=${d.team_id}">${d.player_name}</a></h2>
   <p>${d.club} · ${GRADE_NAME[d.grade]} · ${shortLeague(d.league)} · age ${d.age ?? "–"}</p>
   <div class="badges"><span class="badge grade">${GRADE_NAME[d.grade]} · ${d.division}</span>${d.hidden_gem ? gemMark() : ""}${d.u18_player ? html`<span class="badge grade">U18 player</span>` : ""}${d.minutes_est_apps > 0 ? html`<span class="badge est" title="${describe("minutes_est_apps")}">${d.minutes_est_apps} apps est. minutes</span>` : ""}</div>
   <p><a href="./player?id=${d.player_id}&team=${d.team_id}"><b>Open full profile →</b></a> · <a href="${d.dribl_url}" target="_blank" rel="noopener">DRIBL ↗</a></p>
   <div class="kpi">${k("age")}${k("apps")}${k("starts")}${k("minutes")}${gk ? k("clean_sheets") : k("goals")}${gk ? k("ga_on_pitch_per90") : k("npg_per90")}${k("votes")}${k("team_goal_share_pct")}${k("gd_on_pitch_vs_team")}${k("yellow_cards")}${k("captain_apps")}${k("borrowed_apps")}${k("sen_minutes")}</div>
+  ${hasSofa ? html`<div class="kpi" style="margin-top:0.5rem;background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.2);border-radius:6px;padding:6px 8px;">
+    ${d.sofascore_rating ? k("sofascore_rating") : ""}${d.xg > 0 ? k("xg_p90") : ""}${d.xa > 0 ? k("xa_p90") : ""}${d.key_passes_p90 > 0 ? k("key_passes_p90") : ""}${d.pass_acc_pct > 0 ? k("pass_acc_pct") : ""}${d.duel_win_pct > 0 ? k("duel_win_pct") : ""}
+  </div>` : ""}
   <p class="muted" style="margin-top:0.75rem">Grades played: ${d.grades_played} · highest: ${GRADE_NAME[d.highest_grade]} · ${d.n_teams} team${d.n_teams === 1 ? "" : "s"} · team finished ${d.team_ladder_pos ?? "–"}/${d.ladder_teams ?? "–"} (${fmt("team_ppg", d.team_ppg)} PPG)</p>
   <p class="muted">${d.goals_go_ahead} go-ahead · ${d.goals_winner} winners · ${d.goals_equaliser} equalisers · ${d.goals_late} late goals · ${d.goals_penalty} pens · team PPG when starting vs not: ${fmt("ppg_start_diff", d.ppg_start_diff)}</p>`;
 }
@@ -157,13 +178,13 @@ function detail(d) {
 
 ```js
 const matchRows = selected
-  ? (await sql`SELECT date_local, round, league, opponent, home_away, result, team_gf, team_ga, starting, sub_on_min, sub_off_min, minutes, minutes_estimated, goals, goals_penalty, votes, yellow_cards, red_cards, borrowed, is_captain, gf_on_pitch, ga_on_pitch, clean_sheet
+  ? (await sql`SELECT date_local, round, league, opponent, home_away, result, team_gf, team_ga, starting, sub_on_min, sub_off_min, minutes, minutes_estimated, goals, assists, sofascore_rating, xg, xa, key_passes, goals_penalty, votes, yellow_cards, red_cards, clean_sheet
        FROM appearances WHERE player_id = ${selected.player_id} AND team_id = ${selected.team_id} ORDER BY date_local`).toArray().map((r) => r.toJSON())
   : [];
 ```
 
 ```js
-const matchCols = ["date_local", "round", "opponent", "home_away", "result", "team_gf", "team_ga", "starting", "sub_on_min", "sub_off_min", "minutes", "minutes_estimated", "goals", "goals_penalty", "votes", "yellow_cards", "red_cards", "borrowed", "is_captain", "gf_on_pitch", "ga_on_pitch", "clean_sheet"];
+const matchCols = ["date_local", "round", "opponent", "home_away", "result", "team_gf", "team_ga", "starting", "minutes", "goals", "assists", "sofascore_rating", "xg", "xa", "key_passes", "votes", "yellow_cards", "red_cards", "clean_sheet"];
 ```
 
 <div class="grid grid-cols-3" style="grid-auto-rows: auto;">
@@ -187,7 +208,7 @@ const matchCols = ["date_local", "round", "opponent", "home_away", "result", "te
 ## Players shown
 
 ```js
-const tableCols = ["player_name", "club", "league", "grade", "age", "role", "apps", "starts", "minutes", "goals", "npg_per90", "team_goal_share_pct", "votes", "votes_per_app", "gd_on_pitch_vs_team", "clean_sheets", "ga_on_pitch_per90", "yellow_cards", "red_cards", "captain_apps", "borrowed_apps", "sen_minutes", "hidden_gem"];
+const tableCols = ["player_name", "club", "league", "grade", "age", "role", "apps", "starts", "minutes", "goals", "npg_per90", "sofascore_rating", "xg_p90", "xa_p90", "duel_win_pct", "pass_acc_pct", "votes", "votes_per_app", "gd_on_pitch_vs_team", "clean_sheets", "hidden_gem"];
 const searched = view(Inputs.search(filtered, {placeholder: "Search player, club or team…", columns: ["player_name", "club", "team"]}));
 ```
 

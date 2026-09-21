@@ -28,27 +28,51 @@ const grade = view(Inputs.select(GRADES, {value: "SEN", label: "Grade"}));
 const selected = leagues.find((l) => compOf(l) === comp && l.grade === grade);
 const league = selected?.league;
 const ladder = ladders.filter((d) => d.league === league).sort((a, b) => a.position - b.position);
-const ladderCols = ["position", "team", "played", "won", "drawn", "lost", "goals_for", "goals_against", "goal_difference", "points"];
 const teamRows = teams.filter((d) => d.primary_league === league).map((d) => ({...d, crestHref: crestHref[clubInfo(d.club)?.slug]}));
+const hasXg = teamRows.some((d) => d.team_xg_per_match != null && d.team_xg_per_match > 0);
+const enrichedLadder = ladder.map((l) => {
+  const t = teamRows.find((tr) => tr.team_id === l.team_id || tr.team === l.team);
+  return {
+    ...l,
+    team_xg_per_match: t?.team_xg_per_match,
+    team_xga_per_match: t?.team_xga_per_match,
+    avg_possession_pct: t?.avg_possession_pct,
+  };
+});
+const ladderCols = hasXg
+  ? ["position", "team", "played", "won", "drawn", "lost", "goals_for", "goals_against", "points", "team_xg_per_match", "team_xga_per_match", "avg_possession_pct"]
+  : ["position", "team", "played", "won", "drawn", "lost", "goals_for", "goals_against", "goal_difference", "points"];
+const chartMode = view(Inputs.radio(["Actual (GF vs GA)", "Expected (xG vs xGA)"], {value: "Actual (GF vs GA)", label: "Chart view", disabled: !hasXg}));
+```
+
+```js
+const useXg = hasXg && chartMode === "Expected (xG vs xGA)";
+const xCol = useXg ? "team_xga_per_match" : "ga_per_match";
+const yCol = useXg ? "team_xg_per_match" : "gf_per_match";
+const xLabel = useXg ? "Expected goals against (xGA) per match ←" : "Goals against per match ←";
+const yLabel = useXg ? "↑ Expected goals for (xG) per match" : "↑ Goals for per match";
+const tipChannels = useXg
+  ? {Team: "team", "xG/match": "team_xg_per_match", "xGA/match": "team_xga_per_match", "xGD/match": "team_xgd_per_match", "Possession %": "avg_possession_pct", PPG: "ppg", Position: "ladder_pos"}
+  : {Team: "team", PPG: "ppg", Position: "ladder_pos", "Players used": "players_used", "Borrowed in": "borrowed_in_apps"};
 ```
 
 <div class="grid grid-ladder" style="grid-auto-rows: auto;">
   <div class="card ladder">
     <h2>${selected?.short ?? `${comp} ${GRADE_NAME[grade]}`} ladder</h2>
-    ${ladder.length
-      ? Inputs.table(ladder, {columns: ladderCols, header: shortHeaders(ladderCols), format: {...formats(ladderCols), team: teamFmt}, rows: 20, select: false, layout: "auto"})
+    ${enrichedLadder.length
+      ? Inputs.table(enrichedLadder, {columns: ladderCols, header: shortHeaders(ladderCols), format: {...formats(ladderCols), team: teamFmt}, rows: 20, select: false, layout: "auto"})
       : html`<p class="muted">No ladder recorded for ${comp} ${GRADE_NAME[grade]}.</p>`}
   </div>
 
   <div class="card">
     <h2>Attack vs defence (regular season)</h2>
-    <p class="muted">Goals for per match vs goals against per match. Top-right is good.</p>
+    <p class="muted">${useXg ? "Expected goals created vs expected goals conceded per match (Sofascore data). Top-right is good." : "Goals for per match vs goals against per match. Top-right is good."}</p>
     <div style="min-height: 420px">${resize((width) => Plot.plot({width, height: 420, grid: true, inset: 24,
-      x: {label: "Goals against per match ←", reverse: true}, y: {label: "↑ Goals for per match"},
+      x: {label: xLabel, reverse: true}, y: {label: yLabel},
       marks: [
-        Plot.dot(teamRows, {x: "ga_per_match", y: "gf_per_match", r: 14, fillOpacity: 0, channels: {Team: "team", PPG: "ppg", Position: "ladder_pos", "Players used": "players_used", "Borrowed in": "borrowed_in_apps"}, tip: true}),
-        Plot.image(teamRows.filter((d) => d.crestHref), {x: "ga_per_match", y: "gf_per_match", src: "crestHref", width: 26, height: 26}),
-        Plot.text(teamRows.filter((d) => !d.crestHref), {x: "ga_per_match", y: "gf_per_match", text: "club", dy: -10, fontSize: 10, stroke: "var(--theme-background)", strokeWidth: 3, fill: "currentColor"})
+        Plot.dot(teamRows, {x: xCol, y: yCol, r: 14, fillOpacity: 0, channels: tipChannels, tip: true}),
+        Plot.image(teamRows.filter((d) => d.crestHref), {x: xCol, y: yCol, src: "crestHref", width: 26, height: 26}),
+        Plot.text(teamRows.filter((d) => !d.crestHref), {x: xCol, y: yCol, text: "club", dy: -10, fontSize: 10, stroke: "var(--theme-background)", strokeWidth: 3, fill: "currentColor"})
       ]}))}</div>
   </div>
 </div>

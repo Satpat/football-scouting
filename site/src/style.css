@@ -216,11 +216,19 @@ details summary { cursor: pointer; margin: 0.5rem 0; }
 .brw-slot { display: inline-flex; color: var(--theme-foreground-muted); }
 .vote { display: inline-block; min-width: 26px; padding: 2px 6px; border-radius: 6px; font-weight: 700; font-size: 12px; color: #111; }
 .vote.v3 { background: #f2c200; } .vote.v2 { background: #c0c6cc; } .vote.v1 { background: #d99a5b; }
-.mnav { display: flex; justify-content: space-between; align-items: center; padding: 10px 0 0; }
 .mbtn { background: var(--theme-background-alt); color: var(--theme-foreground); border: 1px solid var(--theme-foreground-faintest); border-radius: 999px; padding: 6px 14px; font: inherit; cursor: pointer; }
 .mbtn:disabled { opacity: 0.4; cursor: default; }
 .mbtn:focus-visible { outline: 2px solid var(--theme-foreground); outline-offset: 2px; }
-@media (max-width: 720px) { .mrow { grid-template-columns: 64px minmax(110px, 170px) 42px 70px 80px repeat(5, 34px); font-size: 12px; } }
+.mbtn.active { background: var(--theme-foreground); color: var(--theme-background); }
+.mrow.has-sofa { display: grid; grid-template-columns: 74px minmax(130px, 190px) 52px 80px 90px repeat(7, 44px); align-items: center; gap: 4px; padding: 7px 0; border-bottom: 1px solid var(--theme-foreground-faintest); }
+.rating-badge { display: inline-block; min-width: 28px; padding: 2px 5px; border-radius: 4px; font-weight: 700; font-size: 11px; text-align: center; }
+.rating-badge.hi { background: #16a34a; color: #fff; }
+.rating-badge.mid { background: #2563eb; color: #fff; }
+.rating-badge.low { background: #ea580c; color: #fff; }
+@media (max-width: 720px) {
+  .mrow { grid-template-columns: 64px minmax(110px, 170px) 42px 70px 80px repeat(5, 34px); font-size: 12px; }
+  .mrow.has-sofa { grid-template-columns: 64px minmax(100px, 150px) 42px 60px 70px repeat(7, 34px); font-size: 12px; }
+}
 
 /* gem score: hover/focus reveals why the player was flagged, instead of a permanent text column */
 .gem-tip { position: relative; display: inline-block; cursor: help; border-bottom: 1px dotted var(--theme-foreground-faint); }

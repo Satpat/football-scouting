@@ -27,6 +27,7 @@ const u18Only = view(Inputs.toggle({label: "U18 players only", value: false}));
   <div>
 
 ```js
+const sortBy = view(Inputs.radio(["Gem score", "Sofascore rating", "xG / 90"], {value: "Gem score", label: "Rank by"}));
 const topN = view(Inputs.range([10, 400], {value: 50, step: 10, label: "Show top N"}));
 ```
   </div>
@@ -60,14 +61,15 @@ const club = view(Inputs.select(clubs, {value: "(all)", label: "Club"}));
 </details>
 
 ```js
+const sortKey = sortBy === "Sofascore rating" ? "sofascore_rating" : sortBy === "xG / 90" ? "xg_p90" : "gem_score";
 const rows = shortlist.filter((d) => d.role === role && division.includes(d.division) && gradeSel.includes(d.grade) && leagueSel.includes(d.league) &&
-  (!gemsOnly || d.hidden_gem) && (!u18Only || d.u18_player) && (club === "(all)" || d.club === club))
-  .sort((a, b) => d3.descending(a.gem_score, b.gem_score)).slice(0, topN).map((d, i) => ({...d, shown_rank: i + 1}));
+  (!gemsOnly || d.hidden_gem) && (!u18Only || d.u18_player) && (club === "(all)" || d.club === club) && (sortKey === "gem_score" || (d[sortKey] != null && d[sortKey] > 0)))
+  .sort((a, b) => d3.descending(a[sortKey] ?? -999, b[sortKey] ?? -999)).slice(0, topN).map((d, i) => ({...d, shown_rank: i + 1}));
 ```
 
 ```js
-const outfieldCols = ["shown_rank", "player_name", "club", "league", "grade", "age", "gem_score", "apps", "minutes", "npg_per90", "team_goal_share_pct", "goals_go_ahead", "goals_winner", "votes_per_app", "gd_on_pitch_vs_team", "borrowed_apps", "team_ladder_pos"];
-const gkCols = ["shown_rank", "player_name", "club", "league", "grade", "age", "gem_score", "apps", "minutes", "ga_on_pitch_per90", "clean_sheets", "clean_sheet_pct", "votes_per_app", "borrowed_apps", "team_ladder_pos"];
+const outfieldCols = ["shown_rank", "player_name", "club", "league", "grade", "age", "gem_score", "sofascore_rating", "xg_p90", "xa_p90", "duel_win_pct", "apps", "minutes", "npg_per90", "team_goal_share_pct", "goals_go_ahead", "goals_winner", "votes_per_app", "gd_on_pitch_vs_team", "borrowed_apps", "team_ladder_pos"];
+const gkCols = ["shown_rank", "player_name", "club", "league", "grade", "age", "gem_score", "sofascore_rating", "apps", "minutes", "ga_on_pitch_per90", "clean_sheets", "clean_sheet_pct", "votes_per_app", "borrowed_apps", "team_ladder_pos"];
 const cols = role === "GK" ? gkCols : outfieldCols;
 const hdr = {...iconHeaders(cols), shown_rank: "#"};
 const gemScoreCell = (v, i) => {
@@ -89,7 +91,10 @@ const gemScoreCell = (v, i) => {
   }
   return wrap;
 };
-const fmts = {...formats(cols), shown_rank: (v) => v, league: shortLeagueOnly, gem_score: gemScoreCell, minutes: (v, i) => fmt("minutes", v) + (rows[i].minutes_est_apps > 0 ? "*" : ""), player_name: (v, i) => html`<a href="./player?id=${rows[i].player_id}&team=${rows[i].team_id}">${v}</a>`,
+const ratingPill = (v) => v != null && v > 0
+  ? html`<span class="rating-badge ${v >= 7.5 ? 'hi' : v >= 6.8 ? 'mid' : 'low'}">${v.toFixed(1)}</span>`
+  : "–";
+const fmts = {...formats(cols), shown_rank: (v) => v, league: shortLeagueOnly, gem_score: gemScoreCell, sofascore_rating: ratingPill, minutes: (v, i) => fmt("minutes", v) + (rows[i].minutes_est_apps > 0 ? "*" : ""), player_name: (v, i) => html`<a href="./player?id=${rows[i].player_id}&team=${rows[i].team_id}">${v}</a>`,
 };
 ```
 

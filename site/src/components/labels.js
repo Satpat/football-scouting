@@ -101,12 +101,15 @@ export function formats(cols) { return Object.fromEntries(cols.map((c) => [c, (v
 const METRIC_GROUPS = [
   ["Playing time", ["apps", "starts", "sub_apps", "bench_unused", "minutes", "minutes_share_pct", "availability_pct", "start_rate_pct"]],
   ["Attack", ["goals", "goals_open_play", "goals_penalty", "own_goals", "goals_per90", "npg_per90", "team_goal_share_pct", "goals_equaliser", "goals_go_ahead", "goals_winner", "goals_late", "goals_consolation", "goals_away", "goals_vs_top_half", "goals_as_sub", "goals_per_sub_90"]],
+  ["Sofascore (Attack & xG)", ["sofascore_rating", "xg", "xg_p90", "xa", "xa_p90", "assists", "assists_p90", "goal_involvements", "goal_involvements_p90", "finishing_delta", "assist_delta", "shots_total", "shots_on_target", "shots_p90", "shot_acc_pct", "xg_per_shot"]],
+  ["Sofascore (Creation & Passing)", ["key_passes", "key_passes_p90", "big_chances_created", "big_chances_missed", "passes_total", "passes_acc", "passes_p90", "pass_acc_pct", "long_balls_total", "long_balls_acc", "long_balls_p90", "long_ball_acc_pct"]],
+  ["Sofascore (Duels & Defending)", ["duels_won", "duels_total", "duels_p90", "duel_win_pct", "aerials_won", "aerials_total", "aerials_p90", "aerial_win_pct", "tackles", "tackles_p90", "interceptions", "interceptions_p90", "recoveries", "recoveries_p90", "clearances", "clearances_p90", "defensive_actions", "defensive_actions_p90", "dribbles_won", "dribbles_total", "dribbles_p90", "dribble_success_pct", "touches", "touches_p90", "dispossessed"]],
   ["Defence", ["gf_on_pitch", "ga_on_pitch", "gd_on_pitch_per90", "gd_on_pitch_vs_team", "ga_on_pitch_per90", "ga_on_pitch_vs_team"]],
-  ["Goalkeeping", ["clean_sheets", "full_matches", "clean_sheet_pct"]],
+  ["Goalkeeping", ["clean_sheets", "full_matches", "clean_sheet_pct", "saves", "saves_p90", "saves_inside_box"]],
   ["Discipline", ["yellow_cards", "red_cards", "yellows_per90"]],
   ["Impact & votes", ["votes", "votes_3", "votes_per_app", "captain_apps", "borrowed_apps"]],
-  ["Team stats", ["ppg_when_playing", "ppg_start_diff", "team_ladder_pos", "team_ppg"]],
-  ["Career totals", ["sen_minutes", "res_minutes", "u18_minutes", "sen_apps", "n_teams", "borrowed_apps_all", "age"]],
+  ["Team stats", ["ppg_when_playing", "ppg_start_diff", "team_ladder_pos", "team_ppg", "team_xg_per_match", "team_xga_per_match", "team_xgd_per_match", "avg_possession_pct"]],
+  ["Career totals", ["sen_minutes", "res_minutes", "u18_minutes", "sen_apps", "n_teams", "borrowed_apps_all", "age", "height_cm"]],
 ];
 // {friendlyLabel: column} map for the metric dropdowns — same shape metricOptions used to return.
 export function metricOptions(cols) {

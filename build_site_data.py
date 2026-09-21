@@ -189,12 +189,108 @@ LABELS = {
     "borrowed_in_players": ("Borrowed-in players", "Borrowed players", "Distinct borrowed players", "int", None, True),
     "gf": ("Goals for", "GF", "Goals scored (all matches)", "int", True, False),
     "ga": ("Goals against", "GA", "Goals conceded (all matches)", "int", False, False),
+    # Sofascore enriched metrics
+    "sofascore_rating": ("Sofascore rating", "Rating", "Average Sofascore algorithmic match rating", "dec", True, True),
+    "assists": ("Assists", "A", "Goal assists recorded", "int", True, True),
+    "assists_p90": ("Assists / 90", "A/90", "Assists per 90 minutes", "dec", True, True),
+    "xg": ("Expected goals", "xG", "Expected goals (Sofascore)", "dec", True, True),
+    "xg_p90": ("xG / 90", "xG/90", "Expected goals per 90 minutes", "dec", True, True),
+    "xa": ("Expected assists", "xA", "Expected assists (Sofascore)", "dec", True, True),
+    "xa_p90": ("xA / 90", "xA/90", "Expected assists per 90 minutes", "dec", True, True),
+    "goal_involvements": ("Goal involvements", "G+A", "Goals plus assists", "int", True, True),
+    "goal_involvements_p90": ("G+A / 90", "G+A/90", "Goals plus assists per 90 minutes", "dec", True, True),
+    "finishing_delta": ("Finishing delta (Goals - xG)", "Goals - xG", "Goals scored minus expected goals (positive = overperforming xG)", "dec", True, True),
+    "assist_delta": ("Assist delta (Assists - xA)", "A - xA", "Assists minus expected assists", "dec", True, True),
+    "key_passes": ("Key passes", "Key passes", "Chances created / key passes", "int", True, True),
+    "key_passes_p90": ("Key passes / 90", "KP/90", "Key passes per 90 minutes", "dec", True, True),
+    "big_chances_created": ("Big chances created", "BCC", "Clear scoring opportunities created for teammates", "int", True, True),
+    "big_chances_missed": ("Big chances missed", "BCM", "Clear scoring opportunities missed", "int", False, True),
+    "passes_total": ("Total passes", "Passes", "Total passes attempted", "int", True, True),
+    "passes_acc": ("Accurate passes", "Acc. pass", "Passes completed to a teammate", "int", True, True),
+    "passes_p90": ("Passes / 90", "Passes/90", "Passes attempted per 90 minutes", "dec", True, True),
+    "pass_acc_pct": ("Pass accuracy", "Pass %", "Percentage of attempted passes completed", "pct", True, True),
+    "long_balls_total": ("Total long balls", "Long balls", "Total long passes attempted", "int", True, True),
+    "long_balls_acc": ("Accurate long balls", "Acc. long", "Accurate long passes completed", "int", True, True),
+    "long_balls_p90": ("Long balls / 90", "Long/90", "Long balls attempted per 90 minutes", "dec", True, True),
+    "long_ball_acc_pct": ("Long ball accuracy", "Long %", "Percentage of long balls completed", "pct", True, True),
+    "duels_won": ("Duels won", "Duels won", "Total duels won on the ground and in the air", "int", True, True),
+    "duels_total": ("Total duels", "Duels", "Total duels contested", "int", True, True),
+    "duels_p90": ("Duels / 90", "Duels/90", "Duels contested per 90 minutes", "dec", True, True),
+    "duel_win_pct": ("Duel win rate", "Duel %", "Percentage of duels won", "pct", True, True),
+    "aerials_won": ("Aerial duels won", "Aerials won", "Aerial duels won", "int", True, True),
+    "aerials_total": ("Total aerial duels", "Aerials", "Total aerial duels contested", "int", True, True),
+    "aerials_p90": ("Aerials / 90", "Aerials/90", "Aerial duels contested per 90 minutes", "dec", True, True),
+    "aerial_win_pct": ("Aerial duel win rate", "Aerial %", "Percentage of aerial duels won", "pct", True, True),
+    "tackles": ("Tackles", "Tackles", "Tackles won / attempted", "int", True, True),
+    "tackles_p90": ("Tackles / 90", "Tackles/90", "Tackles per 90 minutes", "dec", True, True),
+    "interceptions": ("Interceptions", "Int", "Interceptions made", "int", True, True),
+    "interceptions_p90": ("Interceptions / 90", "Int/90", "Interceptions per 90 minutes", "dec", True, True),
+    "recoveries": ("Ball recoveries", "Rec", "Loose ball recoveries", "int", True, True),
+    "recoveries_p90": ("Recoveries / 90", "Rec/90", "Ball recoveries per 90 minutes", "dec", True, True),
+    "clearances": ("Clearances", "Clear", "Defensive clearances made", "int", True, True),
+    "clearances_p90": ("Clearances / 90", "Clear/90", "Defensive clearances per 90 minutes", "dec", True, True),
+    "defensive_actions": ("Defensive actions", "Def actions", "Combined tackles and interceptions", "int", True, True),
+    "defensive_actions_p90": ("Defensive actions / 90", "Def act/90", "Combined tackles and interceptions per 90 minutes", "dec", True, True),
+    "dribbles_won": ("Dribbles completed", "Dribbles", "Successful dribbles past an opponent", "int", True, True),
+    "dribbles_total": ("Total dribbles", "Dribble att", "Total dribble contests", "int", True, True),
+    "dribbles_p90": ("Dribbles / 90", "Dribbles/90", "Successful dribbles per 90 minutes", "dec", True, True),
+    "dribble_success_pct": ("Dribble success rate", "Dribble %", "Percentage of dribbles completed", "pct", True, True),
+    "touches": ("Touches", "Touches", "Total touches on the ball", "int", True, True),
+    "touches_p90": ("Touches / 90", "Touches/90", "Touches per 90 minutes", "dec", True, True),
+    "dispossessed": ("Dispossessed", "Disposs", "Times lost possession to a tackle", "int", False, True),
+    "shots_total": ("Total shots", "Shots", "Total shots attempted", "int", True, True),
+    "shots_on_target": ("Shots on target", "On target", "Shots directed on goal", "int", True, True),
+    "shots_p90": ("Shots / 90", "Shots/90", "Total shots per 90 minutes", "dec", True, True),
+    "shot_acc_pct": ("Shot accuracy", "Shot %", "Percentage of shots on target", "pct", True, True),
+    "xg_per_shot": ("xG per shot", "xG/shot", "Average expected goal quality per shot", "dec", True, True),
+    "saves": ("Saves", "Saves", "Goalkeeper saves made", "int", True, True),
+    "saves_p90": ("Saves / 90", "Saves/90", "Goalkeeper saves per 90 minutes", "dec", True, True),
+    "saves_inside_box": ("Saves inside box", "Box saves", "Goalkeeper saves from shots inside the penalty box", "int", True, True),
+    "height_cm": ("Height (cm)", "Height", "Player height in centimeters", "int", None, True),
+    "date_of_birth": ("Date of birth", "DOB", "Player birth date", "str", None, False),
+    "position_sofa": ("Position (Sofascore)", "Pos", "Detailed position from Sofascore (G, D, M, F)", "str", None, False),
+    # Match and team level metrics
+    "home_possession": ("Home possession", "H poss", "Home team ball possession percentage", "pct", None, False),
+    "away_possession": ("Away possession", "A poss", "Away team ball possession percentage", "pct", None, False),
+    "home_xg": ("Home xG", "H xG", "Home team expected goals", "dec", True, False),
+    "away_xg": ("Away xG", "A xG", "Away team expected goals", "dec", True, False),
+    "home_shots": ("Home shots", "H shots", "Home team total shots", "int", True, False),
+    "away_shots": ("Away shots", "A shots", "Away team total shots", "int", True, False),
+    "home_shots_on_target": ("Home shots on target", "H on target", "Home team shots on target", "int", True, False),
+    "away_shots_on_target": ("Away shots on target", "A on target", "Away team shots on target", "int", True, False),
+    "home_corners": ("Home corners", "H corners", "Home team corner kicks", "int", True, False),
+    "away_corners": ("Away corners", "A corners", "Away team corner kicks", "int", True, False),
+    "home_fouls": ("Home fouls", "H fouls", "Home team fouls committed", "int", False, False),
+    "away_fouls": ("Away fouls", "A fouls", "Away team fouls committed", "int", False, False),
+    "home_passes": ("Home passes", "H passes", "Home team total passes", "int", True, False),
+    "away_passes": ("Away passes", "A passes", "Away team total passes", "int", True, False),
+    "home_accurate_passes": ("Home accurate passes", "H acc pass", "Home team completed passes", "int", True, False),
+    "away_accurate_passes": ("Away accurate passes", "A acc pass", "Away team completed passes", "int", True, False),
+    "team_xg_per_match": ("Team xG per match", "xG/match", "Expected goals created per match (regular season)", "dec", True, True),
+    "team_xga_per_match": ("Team xGA per match", "xGA/match", "Expected goals conceded per match (regular season)", "dec", False, True),
+    "team_xgd_per_match": ("Team xGD per match", "xGD/match", "Expected goal difference per match", "dec", True, True),
+    "avg_possession_pct": ("Average possession", "Possession %", "Average ball possession percentage (regular season)", "pct", True, True),
 }
 
 PLAYER_COLS = ["player_id", "player_name", "club", "team", "team_id", "league", "grade", "division", "role", "jersey",
                "apps", "starts", "sub_apps", "bench_unused", "squad_named", "minutes", "minutes_est_apps", "minutes_share_pct",
                "availability_pct", "start_rate_pct", "finals_apps",
                "goals", "goals_open_play", "goals_penalty", "own_goals", "goals_per90", "npg_per90", "team_goal_share_pct",
+               "assists", "assists_p90", "goal_involvements", "goal_involvements_p90",
+               "xg", "xg_p90", "xa", "xa_p90", "finishing_delta", "assist_delta",
+               "key_passes", "key_passes_p90", "big_chances_created", "big_chances_missed",
+               "passes_total", "passes_acc", "passes_p90", "pass_acc_pct",
+               "long_balls_total", "long_balls_acc", "long_balls_p90", "long_ball_acc_pct",
+               "duels_won", "duels_total", "duels_p90", "duel_win_pct",
+               "aerials_won", "aerials_total", "aerials_p90", "aerial_win_pct",
+               "tackles", "tackles_p90", "interceptions", "interceptions_p90",
+               "recoveries", "recoveries_p90", "clearances", "clearances_p90",
+               "defensive_actions", "defensive_actions_p90",
+               "dribbles_won", "dribbles_total", "dribbles_p90", "dribble_success_pct",
+               "touches", "touches_p90", "dispossessed",
+               "shots_total", "shots_on_target", "shots_p90", "shot_acc_pct", "xg_per_shot",
+               "saves", "saves_p90", "saves_inside_box",
+               "sofascore_rating",
                "goals_equaliser", "goals_go_ahead", "goals_winner", "goals_late", "goals_consolation", "goals_away",
                "goals_vs_top_half", "goals_as_sub", "goals_per_sub_90",
                "votes", "votes_3", "votes_per_app", "captain_apps", "borrowed_apps",
@@ -203,28 +299,44 @@ PLAYER_COLS = ["player_id", "player_name", "club", "team", "team_id", "league", 
                "ppg_when_playing", "ppg_start_diff", "team_ladder_pos", "ladder_teams", "team_ppg", "team_matches",
                "grades_played", "highest_grade", "u18_player", "hidden_gem", "sen_minutes", "res_minutes", "u18_minutes",
                "sen_apps", "n_teams", "borrowed_apps_all",
-               "age", "nationality", "flag", "headshot", "dribl_url", "club_slug", "club_color", "club_accent"]
+               "age", "nationality", "flag", "headshot", "height_cm", "date_of_birth", "position_sofa",
+               "dribl_url", "club_slug", "club_color", "club_accent"]
 CAREER_COLS = ["player_id", "season", "clubs", "leagues", "played", "started", "minutes", "goals", "yellow_cards", "red_cards",
                "votes", "clean_sheets", "was_goalkeeper"]
 MEMBER_MATCH_COLS = ["player_id", "date", "comp", "league", "full_round", "home_team", "away_team", "home_club", "away_club",
                      "home_score", "away_score", "score", "side", "result", "borrowed_side", "did_play", "starting", "minutes", "goals",
-                     "yellow_cards", "red_cards", "votes", "is_captain", "is_goalkeeper", "clean_sheet", "match_hash_id", "in_dataset"]
+                     "yellow_cards", "red_cards", "votes", "is_captain", "is_goalkeeper", "clean_sheet", "match_hash_id", "in_dataset",
+                     "sofascore_rating", "assists", "xg", "xa", "key_passes"]
 SHORTLIST_COLS = ["rank_in_role", "role", "player_id", "team_id", "player_name", "club", "team", "league", "grade", "division",
                   "u18_player", "highest_grade", "hidden_gem", "gem_score", "scout_score", "why_flagged", "age",
                   "apps", "starts", "minutes", "minutes_share_pct", "goals", "goals_open_play", "npg_per90", "npg_per90_adj",
                   "team_goal_share_pct", "goals_go_ahead", "goals_winner", "goals_late", "votes", "votes_per_app",
                   "votes_per_app_adj", "gd_on_pitch_vs_team", "ga_on_pitch_per90", "clean_sheets", "clean_sheet_pct",
-                  "yellow_cards", "red_cards", "sen_minutes", "borrowed_apps", "team_ladder_pos", "ladder_teams", "minutes_est_apps"]
+                  "yellow_cards", "red_cards", "sen_minutes", "borrowed_apps", "team_ladder_pos", "ladder_teams", "minutes_est_apps",
+                  "sofascore_rating", "xg", "xg_p90", "xa", "xa_p90", "key_passes_p90", "duel_win_pct"]
 APPEARANCE_COLS = ["player_id", "team_id", "match_hash_id", "date_local", "round", "league", "is_finals", "opponent", "home_away",
                    "result", "team_gf", "team_ga", "starting", "sub_on_min", "sub_off_min", "minutes", "minutes_estimated",
                    "goals", "goals_open_play", "goals_penalty", "own_goals", "votes", "yellow_cards", "red_cards", "borrowed",
-                   "is_captain", "is_goalkeeper", "gf_on_pitch", "ga_on_pitch", "clean_sheet"]
+                   "is_captain", "is_goalkeeper", "gf_on_pitch", "ga_on_pitch", "clean_sheet",
+                   "sofascore_rating", "assists", "xg", "xa", "key_passes",
+                   "passes_total", "passes_acc", "pass_acc_pct",
+                   "duels_won", "duels_total", "duel_win_pct",
+                   "aerials_won", "aerials_total", "aerial_win_pct",
+                   "tackles", "interceptions", "recoveries", "clearances", "defensive_actions",
+                   "dribbles_won", "dribbles_total", "dribble_success_pct",
+                   "touches", "dispossessed",
+                   "shots_total", "shots_on_target",
+                   "saves", "saves_inside_box"]
 MATCH_COLS = ["match_hash_id", "league", "grade", "division", "is_finals", "date_local", "round", "venue", "home_team", "away_team",
               "home_club", "away_club", "home_score", "away_score", "home_score_ht", "away_score_ht", "home_score_pens",
-              "away_score_pens", "win_status", "match_len"]
+              "away_score_pens", "win_status", "match_len",
+              "home_possession", "away_possession", "home_xg", "away_xg",
+              "home_shots", "away_shots", "home_shots_on_target", "away_shots_on_target",
+              "home_corners", "away_corners", "home_fouls", "away_fouls",
+              "home_passes", "away_passes", "home_accurate_passes", "away_accurate_passes"]
 TEAM_COLS = ["team_id", "team", "club", "primary_league", "grade", "division", "matches", "rr_matches", "ppg", "gf_per_match",
              "ga_per_match", "gd_per_match", "ladder_pos", "ladder_teams", "players_used", "borrowed_in_apps", "borrowed_in_players",
-             "gf", "ga"]
+             "gf", "ga", "avg_possession_pct", "team_xg_per_match", "team_xga_per_match", "team_xgd_per_match"]
 LADDER_COLS = ["league", "grade", "division", "is_finals", "position", "team_id", "team", "club", "played", "won", "drawn", "lost",
                "goals_for", "goals_against", "goal_difference", "points"]
 
@@ -349,7 +461,7 @@ def career_frame(careers: dict) -> pd.DataFrame:
     return pd.DataFrame(rows).sort_values(["player_id", "season"])
 
 
-def member_match_frame(member_matches: dict, known_matches: set, player_teams: dict, player_clubs: dict) -> pd.DataFrame:
+def member_match_frame(member_matches: dict, known_matches: set, player_teams: dict, player_clubs: dict, app_play: pd.DataFrame = None) -> pd.DataFrame:
     """player_teams/player_clubs: player_id -> set of team ids / club names from the SL dataset. DRIBL sets side='borrowed'
     for borrowed players, so the side is resolved from the player's known teams, then clubs."""
     rows = []
@@ -391,7 +503,17 @@ def member_match_frame(member_matches: dict, known_matches: set, player_teams: d
                          "red_cards": m.get("red_card_count"), "votes": m.get("votes"), "is_captain": bool(m.get("is_captain")),
                          "is_goalkeeper": bool(m.get("is_goalkeeper")), "clean_sheet": bool(m.get("clean_sheet")),
                          "match_hash_id": m.get("match_hash_id"), "in_dataset": m.get("match_hash_id") in known_matches})
-    return pd.DataFrame(rows).sort_values(["player_id", "date"])
+    df = pd.DataFrame(rows)
+    if not df.empty and app_play is not None and not app_play.empty:
+        sofa_cols = ["player_id", "match_hash_id", "sofascore_rating", "assists", "xg", "xa", "key_passes"]
+        avail_sofa = [c for c in sofa_cols if c in app_play.columns]
+        if len(avail_sofa) > 2:
+            sofa_subset = app_play[avail_sofa].drop_duplicates(subset=["player_id", "match_hash_id"])
+            df = df.merge(sofa_subset, on=["player_id", "match_hash_id"], how="left")
+    for c in ("sofascore_rating", "assists", "xg", "xa", "key_passes"):
+        if c not in df.columns:
+            df[c] = None
+    return df.sort_values(["player_id", "date"])
 
 
 def main():
@@ -433,7 +555,7 @@ def main():
     if member_matches:
         player_teams = app_play.groupby("player_id").team_id.agg(set).to_dict()
         player_clubs = app_play.groupby("player_id").club.agg(set).to_dict()
-        exports["member_matches.parquet"] = tidy(member_match_frame(member_matches, set(matches.match_hash_id), player_teams, player_clubs), MEMBER_MATCH_COLS, bool_as_text=False)
+        exports["member_matches.parquet"] = tidy(member_match_frame(member_matches, set(matches.match_hash_id), player_teams, player_clubs, app_play=app_play), MEMBER_MATCH_COLS, bool_as_text=False)
     for name, df in exports.items():
         missing = [c for c in df.columns if c not in LABELS]
         assert not missing, f"{name}: no LABELS entry for {missing}"

@@ -1222,5 +1222,637 @@
   "fmt": "int",
   "higher_is_better": false,
   "metric": false
+ },
+ "sofascore_rating": {
+  "label": "Sofascore rating",
+  "short": "Rating",
+  "desc": "Average Sofascore algorithmic match rating",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "assists": {
+  "label": "Assists",
+  "short": "A",
+  "desc": "Goal assists recorded",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "assists_p90": {
+  "label": "Assists / 90",
+  "short": "A/90",
+  "desc": "Assists per 90 minutes",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "xg": {
+  "label": "Expected goals",
+  "short": "xG",
+  "desc": "Expected goals (Sofascore)",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "xg_p90": {
+  "label": "xG / 90",
+  "short": "xG/90",
+  "desc": "Expected goals per 90 minutes",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "xa": {
+  "label": "Expected assists",
+  "short": "xA",
+  "desc": "Expected assists (Sofascore)",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "xa_p90": {
+  "label": "xA / 90",
+  "short": "xA/90",
+  "desc": "Expected assists per 90 minutes",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "goal_involvements": {
+  "label": "Goal involvements",
+  "short": "G+A",
+  "desc": "Goals plus assists",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "goal_involvements_p90": {
+  "label": "G+A / 90",
+  "short": "G+A/90",
+  "desc": "Goals plus assists per 90 minutes",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "finishing_delta": {
+  "label": "Finishing delta (Goals - xG)",
+  "short": "Goals - xG",
+  "desc": "Goals scored minus expected goals (positive = overperforming xG)",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "assist_delta": {
+  "label": "Assist delta (Assists - xA)",
+  "short": "A - xA",
+  "desc": "Assists minus expected assists",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "key_passes": {
+  "label": "Key passes",
+  "short": "Key passes",
+  "desc": "Chances created / key passes",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "key_passes_p90": {
+  "label": "Key passes / 90",
+  "short": "KP/90",
+  "desc": "Key passes per 90 minutes",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "big_chances_created": {
+  "label": "Big chances created",
+  "short": "BCC",
+  "desc": "Clear scoring opportunities created for teammates",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "big_chances_missed": {
+  "label": "Big chances missed",
+  "short": "BCM",
+  "desc": "Clear scoring opportunities missed",
+  "fmt": "int",
+  "higher_is_better": false,
+  "metric": true
+ },
+ "passes_total": {
+  "label": "Total passes",
+  "short": "Passes",
+  "desc": "Total passes attempted",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "passes_acc": {
+  "label": "Accurate passes",
+  "short": "Acc. pass",
+  "desc": "Passes completed to a teammate",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "passes_p90": {
+  "label": "Passes / 90",
+  "short": "Passes/90",
+  "desc": "Passes attempted per 90 minutes",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "pass_acc_pct": {
+  "label": "Pass accuracy",
+  "short": "Pass %",
+  "desc": "Percentage of attempted passes completed",
+  "fmt": "pct",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "long_balls_total": {
+  "label": "Total long balls",
+  "short": "Long balls",
+  "desc": "Total long passes attempted",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "long_balls_acc": {
+  "label": "Accurate long balls",
+  "short": "Acc. long",
+  "desc": "Accurate long passes completed",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "long_balls_p90": {
+  "label": "Long balls / 90",
+  "short": "Long/90",
+  "desc": "Long balls attempted per 90 minutes",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "long_ball_acc_pct": {
+  "label": "Long ball accuracy",
+  "short": "Long %",
+  "desc": "Percentage of long balls completed",
+  "fmt": "pct",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "duels_won": {
+  "label": "Duels won",
+  "short": "Duels won",
+  "desc": "Total duels won on the ground and in the air",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "duels_total": {
+  "label": "Total duels",
+  "short": "Duels",
+  "desc": "Total duels contested",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "duels_p90": {
+  "label": "Duels / 90",
+  "short": "Duels/90",
+  "desc": "Duels contested per 90 minutes",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "duel_win_pct": {
+  "label": "Duel win rate",
+  "short": "Duel %",
+  "desc": "Percentage of duels won",
+  "fmt": "pct",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "aerials_won": {
+  "label": "Aerial duels won",
+  "short": "Aerials won",
+  "desc": "Aerial duels won",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "aerials_total": {
+  "label": "Total aerial duels",
+  "short": "Aerials",
+  "desc": "Total aerial duels contested",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "aerials_p90": {
+  "label": "Aerials / 90",
+  "short": "Aerials/90",
+  "desc": "Aerial duels contested per 90 minutes",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "aerial_win_pct": {
+  "label": "Aerial duel win rate",
+  "short": "Aerial %",
+  "desc": "Percentage of aerial duels won",
+  "fmt": "pct",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "tackles": {
+  "label": "Tackles",
+  "short": "Tackles",
+  "desc": "Tackles won / attempted",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "tackles_p90": {
+  "label": "Tackles / 90",
+  "short": "Tackles/90",
+  "desc": "Tackles per 90 minutes",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "interceptions": {
+  "label": "Interceptions",
+  "short": "Int",
+  "desc": "Interceptions made",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "interceptions_p90": {
+  "label": "Interceptions / 90",
+  "short": "Int/90",
+  "desc": "Interceptions per 90 minutes",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "recoveries": {
+  "label": "Ball recoveries",
+  "short": "Rec",
+  "desc": "Loose ball recoveries",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "recoveries_p90": {
+  "label": "Recoveries / 90",
+  "short": "Rec/90",
+  "desc": "Ball recoveries per 90 minutes",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "clearances": {
+  "label": "Clearances",
+  "short": "Clear",
+  "desc": "Defensive clearances made",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "clearances_p90": {
+  "label": "Clearances / 90",
+  "short": "Clear/90",
+  "desc": "Defensive clearances per 90 minutes",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "defensive_actions": {
+  "label": "Defensive actions",
+  "short": "Def actions",
+  "desc": "Combined tackles and interceptions",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "defensive_actions_p90": {
+  "label": "Defensive actions / 90",
+  "short": "Def act/90",
+  "desc": "Combined tackles and interceptions per 90 minutes",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "dribbles_won": {
+  "label": "Dribbles completed",
+  "short": "Dribbles",
+  "desc": "Successful dribbles past an opponent",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "dribbles_total": {
+  "label": "Total dribbles",
+  "short": "Dribble att",
+  "desc": "Total dribble contests",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "dribbles_p90": {
+  "label": "Dribbles / 90",
+  "short": "Dribbles/90",
+  "desc": "Successful dribbles per 90 minutes",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "dribble_success_pct": {
+  "label": "Dribble success rate",
+  "short": "Dribble %",
+  "desc": "Percentage of dribbles completed",
+  "fmt": "pct",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "touches": {
+  "label": "Touches",
+  "short": "Touches",
+  "desc": "Total touches on the ball",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "touches_p90": {
+  "label": "Touches / 90",
+  "short": "Touches/90",
+  "desc": "Touches per 90 minutes",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "dispossessed": {
+  "label": "Dispossessed",
+  "short": "Disposs",
+  "desc": "Times lost possession to a tackle",
+  "fmt": "int",
+  "higher_is_better": false,
+  "metric": true
+ },
+ "shots_total": {
+  "label": "Total shots",
+  "short": "Shots",
+  "desc": "Total shots attempted",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "shots_on_target": {
+  "label": "Shots on target",
+  "short": "On target",
+  "desc": "Shots directed on goal",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "shots_p90": {
+  "label": "Shots / 90",
+  "short": "Shots/90",
+  "desc": "Total shots per 90 minutes",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "shot_acc_pct": {
+  "label": "Shot accuracy",
+  "short": "Shot %",
+  "desc": "Percentage of shots on target",
+  "fmt": "pct",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "xg_per_shot": {
+  "label": "xG per shot",
+  "short": "xG/shot",
+  "desc": "Average expected goal quality per shot",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "saves": {
+  "label": "Saves",
+  "short": "Saves",
+  "desc": "Goalkeeper saves made",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "saves_p90": {
+  "label": "Saves / 90",
+  "short": "Saves/90",
+  "desc": "Goalkeeper saves per 90 minutes",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "saves_inside_box": {
+  "label": "Saves inside box",
+  "short": "Box saves",
+  "desc": "Goalkeeper saves from shots inside the penalty box",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "height_cm": {
+  "label": "Height (cm)",
+  "short": "Height",
+  "desc": "Player height in centimeters",
+  "fmt": "int",
+  "higher_is_better": null,
+  "metric": true
+ },
+ "date_of_birth": {
+  "label": "Date of birth",
+  "short": "DOB",
+  "desc": "Player birth date",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "position_sofa": {
+  "label": "Position (Sofascore)",
+  "short": "Pos",
+  "desc": "Detailed position from Sofascore (G, D, M, F)",
+  "fmt": "str",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "home_possession": {
+  "label": "Home possession",
+  "short": "H poss",
+  "desc": "Home team ball possession percentage",
+  "fmt": "pct",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "away_possession": {
+  "label": "Away possession",
+  "short": "A poss",
+  "desc": "Away team ball possession percentage",
+  "fmt": "pct",
+  "higher_is_better": null,
+  "metric": false
+ },
+ "home_xg": {
+  "label": "Home xG",
+  "short": "H xG",
+  "desc": "Home team expected goals",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": false
+ },
+ "away_xg": {
+  "label": "Away xG",
+  "short": "A xG",
+  "desc": "Away team expected goals",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": false
+ },
+ "home_shots": {
+  "label": "Home shots",
+  "short": "H shots",
+  "desc": "Home team total shots",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": false
+ },
+ "away_shots": {
+  "label": "Away shots",
+  "short": "A shots",
+  "desc": "Away team total shots",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": false
+ },
+ "home_shots_on_target": {
+  "label": "Home shots on target",
+  "short": "H on target",
+  "desc": "Home team shots on target",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": false
+ },
+ "away_shots_on_target": {
+  "label": "Away shots on target",
+  "short": "A on target",
+  "desc": "Away team shots on target",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": false
+ },
+ "home_corners": {
+  "label": "Home corners",
+  "short": "H corners",
+  "desc": "Home team corner kicks",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": false
+ },
+ "away_corners": {
+  "label": "Away corners",
+  "short": "A corners",
+  "desc": "Away team corner kicks",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": false
+ },
+ "home_fouls": {
+  "label": "Home fouls",
+  "short": "H fouls",
+  "desc": "Home team fouls committed",
+  "fmt": "int",
+  "higher_is_better": false,
+  "metric": false
+ },
+ "away_fouls": {
+  "label": "Away fouls",
+  "short": "A fouls",
+  "desc": "Away team fouls committed",
+  "fmt": "int",
+  "higher_is_better": false,
+  "metric": false
+ },
+ "home_passes": {
+  "label": "Home passes",
+  "short": "H passes",
+  "desc": "Home team total passes",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": false
+ },
+ "away_passes": {
+  "label": "Away passes",
+  "short": "A passes",
+  "desc": "Away team total passes",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": false
+ },
+ "home_accurate_passes": {
+  "label": "Home accurate passes",
+  "short": "H acc pass",
+  "desc": "Home team completed passes",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": false
+ },
+ "away_accurate_passes": {
+  "label": "Away accurate passes",
+  "short": "A acc pass",
+  "desc": "Away team completed passes",
+  "fmt": "int",
+  "higher_is_better": true,
+  "metric": false
+ },
+ "team_xg_per_match": {
+  "label": "Team xG per match",
+  "short": "xG/match",
+  "desc": "Expected goals created per match (regular season)",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "team_xga_per_match": {
+  "label": "Team xGA per match",
+  "short": "xGA/match",
+  "desc": "Expected goals conceded per match (regular season)",
+  "fmt": "dec",
+  "higher_is_better": false,
+  "metric": true
+ },
+ "team_xgd_per_match": {
+  "label": "Team xGD per match",
+  "short": "xGD/match",
+  "desc": "Expected goal difference per match",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "avg_possession_pct": {
+  "label": "Average possession",
+  "short": "Possession %",
+  "desc": "Average ball possession percentage (regular season)",
+  "fmt": "pct",
+  "higher_is_better": true,
+  "metric": true
  }
 }
