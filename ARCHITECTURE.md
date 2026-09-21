@@ -33,28 +33,35 @@ Pages. The only moving server-side part is a tiny helper that answers chat quest
 ```mermaid
 flowchart TB
     subgraph build["🛠️ Build time (on your Mac)"]
-        dribl[("DRIBL match centres<br/>fsa.dribl.com + saasl.dribl.com")] -->|extract_browser.js<br/>extract_profiles.js| dumps[output/*.json]
-        sofa[("Sofascore<br/>sofascore.com")] -->|extract_sofascore.js| sofadumps[output/sofascore_raw_2026.json]
-        dumps & sofadumps -->|enrich_sofascore.py| enriched[output/sofascore_enriched_2026.json]
-        dumps & enriched -->|build_scouting.py| workbook[dribl_scouting_2026.xlsx]
-        dumps & enriched -->|build_site_data.py| sitedata[site/src/data/*.csv + .parquet<br/>+ labels.json]
+        dribl[("DRIBL match centres<br/>fsa.dribl.com + saasl.dribl.com")] -->|extract_browser.js<br/>extract_profiles.js| dumps["output/*.json<br/>matches & lineups"]
+        sofa[("Sofascore<br/>sofascore.com")] -->|extract_sofascore.js| sofadumps["output/sofascore_raw_2026.json<br/>events, ratings, bios & market values"]
+        dumps & sofadumps -->|enrich_sofascore.py| enriched["output/sofascore_enriched_2026.json<br/>reconciliation & profile URLs"]
+        dumps & enriched -->|build_scouting.py| workbook["dribl_scouting_2026.xlsx<br/>derived metrics & shortlist"]
+        dumps & enriched -->|build_site_data.py| sitedata["site/src/data/*.csv + .parquet<br/>+ labels.json & archetypes"]
     end
 
     subgraph pages["🌐 GitHub Pages (free hosting)"]
-        explorer["Explorer · Shortlist<br/>Player · Teams · About"]
+        explorer["Explorer · Shortlist<br/>Player · Teams · About<br/>Archetypes: 💎 Gem · ⚡ Emerging · 🎯 Undervalued"]
         chat["Ask the data"]
     end
 
     subgraph browser["💻 Visitor's browser"]
         duck[("DuckDB-WASM<br/>all tables, local")]
+        ui["Interactive UI<br/>scatter plots, dual radars, rating form"]
     end
 
     subgraph cloud["☁️ Cloudflare (the only backend)"]
         worker["football-chat Worker<br/>holds the OpenAI key"]
     end
 
+    subgraph external["🌍 External Live Profiles"]
+        sofalive[("Sofascore.com<br/>player profiles (↗)")]
+    end
+
     sitedata -->|committed to git| pages
     pages -->|loads| browser
+    browser --> ui
+    ui -.->|"deep links (↗)"| sofalive
     chat -->|"question + history"| worker
     worker -->|gpt-5.6-luna| openai[("OpenAI")]
     openai -->|"{action:query, sql}"| worker
@@ -131,9 +138,9 @@ Replaced with `isGradedLeague()` (`labels.js`), which checks league membership a
 
 #### Sofascore enrichment (Advanced stats, metrics & scouting badges)
 
-To complement DRIBL's basic match events, detailed match metrics (xG, xA, key passes, duels, passing accuracy, tackles, interceptions, clearances, dribbles, physical profiles, and ratings) are pulled from Sofascore:
+To complement DRIBL's basic match events, detailed match metrics (xG, xA, key passes, duels, passing accuracy, tackles, interceptions, clearances, dribbles, physical profiles, market values, and ratings) are pulled from Sofascore:
 
-1. **Extraction (`extract_sofascore.js`)**: Runs directly in the browser DevTools session to bypass Cloudflare TLS fingerprinting and rate limits. Scrapes tournament schedules, finished match events, detailed lineups, and incidents across 7 South Australian tournaments:
+1. **Extraction (`extract_sofascore.js`)**: Runs directly in the browser DevTools session to bypass Cloudflare TLS fingerprinting and rate limits. Scrapes tournament schedules, finished match events, detailed lineups, incidents, and player profiles across 7 South Australian tournaments:
    - RAA NPL South Australia (`1258`, season `88847`)
    - State League 1 (`26016`, season `88849`)
    - State League 2 (`32070`, season `88894`)
@@ -141,12 +148,13 @@ To complement DRIBL's basic match events, detailed match metrics (xG, xA, key pa
    - State League 2 South (`27357`, season `76898`)
    - Saturday Division 2 (`34182`, season `93152`)
    - Saturday Premier A (`32825`, season `91200`)
-   Outputs raw event data to `output/sofascore_raw_2026.json`.
+   Outputs raw event data to `output/sofascore_raw_2026.json`. Also provides `__sofa.players()` to extract individual player bios, preferred foot, and attribute overviews.
 
 2. **Reconciliation (`enrich_sofascore.py`)**:
    - Reconciles matches by fixture date, home/away club alias normalization, and competition grade.
    - Resolves individual player lineups against DRIBL member profiles using name normalization and DRIBL's `user_hash_id`.
-   - Ingests physical attributes (date of birth, height in cm, Sofascore player ID, headshots).
+   - Ingests physical attributes (date of birth, height in cm, Sofascore player ID, slug, headshots, market values).
+   - Generates direct live profile links (`sofascore_url`: `https://www.sofascore.com/football/player/${slug}/${id}`).
    - Generates `output/sofascore_enriched_2026.json` mapping DRIBL match hashes and player appearance IDs to Sofascore metrics.
 
 3. **Pipeline Ingestion & Metric Derivation (`build_scouting.py`)**:
@@ -157,24 +165,26 @@ To complement DRIBL's basic match events, detailed match metrics (xG, xA, key pa
      - *Duels & Defending*: `duels_p90`, `duel_win_pct`, `aerials_p90`, `aerial_win_pct`, `tackles_p90`, `interceptions_p90`, `recoveries_p90`, `clearances_p90`, `defensive_actions_p90`.
      - *Carrying & Involvement*: `dribbles_p90`, `dribble_success_pct`, `touches_p90`.
      - *Goalkeeping*: `saves`, `saves_p90`, `saves_inside_box`.
+     - *Valuation & Profile*: `market_value_eur`, `sofascore_url`, `sofascore_id`.
    - **Team Context**: Regular season `team_xg_per_match`, `team_xga_per_match`, `team_xgd_per_match`, and `avg_possession_pct`.
    - **Null Integrity**: Players in non-tracked leagues (SL2, SAASL) cleanly preserve `np.nan` / `null` rather than filling with 0, preventing distortion of percentiles or false clustering at the chart origin.
 
 4. **Scouting Archetypes & Tags (`build_site_data.py`)**:
    - **Emerging Senior (⚡)**: U21 players (`age <= 21` or `u18_player`) playing Senior NPL (`grade == 'SEN'` & `division == 'NPL'`) who demonstrate top-tier impact via:
      $$\text{Sofascore Rating} \ge 7.0 \quad \text{OR} \quad (xG/90 + xA/90) \ge 0.40$$
-     *(Surfaces young players proving themselves at the highest state level).*
-   - **Undervalued Performer (🎯)**: Players on bottom-half teams ($\text{ladder\_pos} > \text{teams} / 2$, min 450 minutes) who excel in possession or defensive phases:
+     *(Surfaces young players proving themselves at the highest state level; 32 players tagged).*
+   - **Undervalued Performer (🎯)**: Players on bottom-half **NPL** teams (`division == 'NPL'`, $\text{ladder\_pos} > \text{teams} / 2$, min 450 minutes) who excel in possession or defensive phases:
      $$\text{Duel Win Rate} \ge 60\% \quad \text{OR} \quad \text{Pass Accuracy} \ge 80\%$$
-     *(Identifies quality players whose stats may be masked by a struggling team).*
+     *(Identifies quality players whose stats may be masked by a struggling NPL team; 27 players tagged).*
    - **Universal Hidden Gem (💎)**: Unpromoted Reserves/U18 players with zero senior minutes all season.
-   - Populates plain-English explanations directly into `why_flagged` on the shortlist (e.g. *"Emerging Senior (U21 standout in Senior NPL)"*, *"Undervalued Performer on #7 team"*).
+   - Populates plain-English explanations directly into `why_flagged` on the shortlist (e.g. *"Emerging Senior (U21 standout in Senior NPL)"*, *"Undervalued Performer on #7 NPL team"*).
 
 5. **Static Site Integration**:
-   - **Explorer (`site/src/index.md`)**: Preset buttons (Finishing, Creation, Ball Winning, Duels, Retention), tag filters (`Emerging seniors only`, `Undervalued only`), detail card badges, and table badge glyphs (`⚡`, `🎯`).
-   - **Player Profile (`site/src/player.md`)**: Physical bio strip, advanced stats grid, percentile radar toggle (*Standard Traits* vs *Sofascore Advanced Traits*), color-coded match rating badges, and match xG.
+   - **Explorer (`site/src/index.md`)**: Promoted archetype toggles with native hover tooltips; preset buttons (Finishing, Creation, Ball Winning, Duels, Retention); detail card badges and direct Sofascore profile link; market value indicator; table external link icons (`↗`).
+   - **Player Profile (`site/src/player.md`)**: Physical bio strip (DOB, height, market value); sky-blue "Sofascore profile ↗" hero action button; clickable Sofascore fact link; advanced stats grid; percentile radar toggle (*Standard Traits* vs *Sofascore Advanced Traits*); interactive Sofascore rating trend bar chart with 7.0 benchmark line; color-coded match rating badges; match xG.
    - **Teams & Ladders (`site/src/teams.md`)**: Actual Goals vs Expected Goals (xG vs xGA) scatter plot toggle and average possession % in the ladder table.
-   - **Shortlist (`site/src/shortlist.md`)**: Sort by Gem score, Sofascore rating, or xG/90; filter by emerging seniors or undervalued performers; table badges with explanatory tooltips.
+   - **Shortlist (`site/src/shortlist.md`)**: Promoted archetype toggles with hover descriptions; automatic hiding of blank Sofascore columns when Hidden Gems is selected; optional market value column; Sort by Gem score, Sofascore rating, or xG/90; table badges with explanatory tooltips and external Sofascore link icons (`↗`).
+   - **About (`site/src/about.md`)**: Side-by-side 2-column layout comparing DRIBL administrative baseline vs Sofascore advanced event tracking.
 
 ### 2. The site (Observable Framework → GitHub Pages)
 
@@ -237,7 +247,7 @@ The **browser owns the loop** (max 3 queries); the Worker is single-shot and sta
 | Extraction runs in a browser tab | Cloudflare blocks server-side clients (both on DRIBL and Sofascore). |
 | Sofascore browser extraction & reconciliation | Cloudflare WAF on Sofascore blocks headless scraping; browser extraction dumps raw JSON. Offline Python reconciliation uses fuzzy name matching and DRIBL `user_hash_id` to cleanly bridge the two data silos without an external database. |
 | Preserving nulls for unmeasured leagues | Lower divisions (SL2, SAASL) lack Sofascore event tracking. Keeping these as `null` / `np.nan` instead of filling with zeros prevents distorted league-wide percentiles and false clusters at the chart origin. |
-| Multi-archetype scouting tags | Rather than overloading `hidden_gem` (which specifically isolates unpromoted Reserves/U18 talent), `emerging_senior` (U21 standouts in Senior NPL) and `undervalued_performer` (performers on bottom-half sides) provide orthogonal scouting lenses without altering core `gem_score`. |
+| Multi-archetype scouting tags | Rather than overloading `hidden_gem` (which specifically isolates unpromoted Reserves/U18 talent), `emerging_senior` (U21 standouts in Senior NPL) and `undervalued_performer` (performers on bottom-half NPL sides) provide orthogonal scouting lenses without altering core `gem_score`. |
 | `labels.json` as one source of truth | Axis menus, headers and the AI schema prompt all agree. |
 | Chat answers must come from SQL | A wrong stat is worse than no answer; the query is the receipt. |
 | Schema prompt built in the browser | Tuning the prompt is a page edit, not a Worker redeploy. |
@@ -349,7 +359,7 @@ flowchart LR
     push --> gha["GitHub Actions<br/>rebuilds Pages"]
     which -->|"Worker: model, origins"| deploy["npm run deploy"]
     deploy --> cf["Cloudflare<br/>updates instantly"]
-    which -->|"data"| py["python build_site_data.py"]
+    which -->|"data refresh"| py["enrich & build pipeline<br/>(enrich, build_scouting, build_site_data)"]
     py --> push
 ```
 
@@ -382,4 +392,5 @@ anything else → the deployed one. No build-time configuration.
 - **Season 2026:** 3,139 matches · 7,007 players · 11,683 player-seasons · 331 teams ·
   39 leagues across 4 divisions (SL1, SL2, NPL, SAASL)
 - **Sofascore enrichment:** 880 matches and 131 event lineups reconciled across 622 DRIBL matches;
-  354 players enriched with physical bios; 32 Emerging Seniors and 33 Undervalued Performers tagged.
+  354 players enriched with physical bios, market values, and direct Sofascore profile links;
+  32 Emerging Seniors and 27 Undervalued Performers tagged.
