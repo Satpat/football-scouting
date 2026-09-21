@@ -70,9 +70,35 @@ export default {
     if (request.method !== "POST") return reply({ error: "Method not allowed" }, 405, origin);
     if (!allowed) return reply({ error: "Origin not allowed" }, 403, origin);
 
+    const ip = request.headers.get("CF-Connecting-IP") || "unknown";
+    if (rateLimited(ip)) {
+      return reply({ error: "Too many requests — slow down and try again shortly." }, 429, origin);
+    }
+
     return handleChat(request, env, origin);
   },
 };
+
+// ── rate limiting ────────────────────────────────────────────────────────────
+// Best-effort, not a hard guarantee: this Map lives in one Worker isolate and resets
+// whenever Cloudflare recycles it, so it won't stop a determined or distributed abuser.
+// It's here to blunt a stray script looping on this endpoint — the origin allowlist
+// above is the only other gate, and it's forgeable. For real production traffic, add a
+// Cloudflare rate-limiting rule in front of this instead (see README "Security notes").
+const RATE_LIMIT_WINDOW_MS = 60_000;
+const RATE_LIMIT_MAX = 12; // requests per IP per window
+const rateLimitHits = new Map(); // ip -> recent request timestamps
+
+function rateLimited(ip) {
+  const now = Date.now();
+  const hits = (rateLimitHits.get(ip) ?? []).filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
+  hits.push(now);
+  rateLimitHits.set(ip, hits);
+  // Cap how many distinct IPs we track so a spray of one-off callers can't grow this
+  // map without bound between isolate recycles.
+  if (rateLimitHits.size > 5000) rateLimitHits.clear();
+  return hits.length > RATE_LIMIT_MAX;
+}
 
 // ── /chat — one step of the question -> SQL -> answer loop ───────────────────
 async function handleChat(request, env, origin) {
@@ -206,8 +232,9 @@ function str(v) {
 
 // ── mock (CHAT_MOCK=1): exercises the full browser loop with no OpenAI spend ──
 // First call asks for a query; once a result has come back, it answers. That is
-// the same two-phase shape the real model produces, so the page's loop, SQL
-// guard, table rendering and deep links can all be tested offline.
+// the same two-phase shape the real model produces — including a `usage` figure,
+// so the page's loop, SQL guard, table rendering, deep links and cost display can
+// all be tested offline.
 function mockStep(messages) {
   const sawResult = messages.some((m) => m.role === "user" && m.content.includes("Query result"));
   if (sawResult) {
@@ -216,12 +243,14 @@ function mockStep(messages) {
       sql: null,
       answer: "**Mock answer.** The loop ran end to end: the page sent a question, got SQL back, executed it in DuckDB, and returned here with the rows.",
       note: "mock",
+      usage: { input_tokens: 420, output_tokens: 65 },
     };
   }
   return {
     action: "query",
     sql: "SELECT player_id, team_id, player_name, club, league, goals\nFROM players\nORDER BY goals DESC\nLIMIT 5",
     note: "mock: top scorers",
+    usage: { input_tokens: 380, output_tokens: 40 },
   };
 }
 
@@ -234,9 +263,12 @@ function originAllowed(origin) {
   }
   return false;
 }
+// Only ever reflects an Origin that's actually on the allowlist — a disallowed origin gets
+// "null" here, not its own value, so the response headers can't be misread as granting an
+// origin they were sent to reject.
 function cors(origin) {
   return {
-    "Access-Control-Allow-Origin": origin || "*",
+    "Access-Control-Allow-Origin": originAllowed(origin) ? (origin || "*") : "null",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type",
     Vary: "Origin",

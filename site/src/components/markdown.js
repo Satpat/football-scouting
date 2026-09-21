@@ -9,7 +9,8 @@
 // to the escaped string. Nothing the model writes can become markup it didn't earn,
 // and link hrefs are restricted to http(s) and same-site relative paths.
 
-const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+  .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 
 // Applied to already-escaped text, innermost first so a link label can hold bold.
 function inline(s) {

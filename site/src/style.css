@@ -285,6 +285,7 @@ details summary { cursor: pointer; margin: 0.5rem 0; }
 .chat-step { margin-top: 0.25rem; }
 .chat-err { color: var(--theme-foreground-muted); font-size: 13px; }
 .chat-pending { color: var(--theme-foreground-muted); font-size: 13px; font-style: italic; }
+.chat-usage { color: var(--theme-foreground-muted); font-size: 12px; margin-top: -0.25rem; }
 
 /* The SQL is the receipt for every number above it: always present, never in the way. */
 .chat-sql summary {

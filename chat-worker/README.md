@@ -86,8 +86,12 @@ Everything tunable is a const at the top of `worker.js`:
 
 - The key is a Cloudflare secret; it is never in source and never returned to the browser.
 - The origin allowlist is a **light deterrent**, not authentication — an `Origin` header can
-  be forged with `curl`. Anyone who does so can spend your OpenAI credit. If that ever
-  matters, add a shared token or Cloudflare rate limiting.
+  be forged with `curl`. Anyone who does so can spend your OpenAI credit.
+- There's a soft per-IP rate limit (`RATE_LIMIT_MAX` in `worker.js`) to blunt a stray script
+  looping on the endpoint. It lives in a single Worker isolate's memory and resets whenever
+  Cloudflare recycles it, so it is **not** a guarantee against a determined or distributed
+  abuser. If this ever gets real traffic, add a shared token or a proper Cloudflare
+  rate-limiting rule in front of it instead.
 - The SQL guard lives browser-side in `chat-agent.js`, next to the DuckDB connection that
   has to run the query. It is not a security boundary — all of this data is public and
   already in the visitor's browser — it stops a stray statement corrupting the session.

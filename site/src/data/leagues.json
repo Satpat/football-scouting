@@ -293,7 +293,7 @@
   "grade": "SEN",
   "region": "",
   "is_finals": true,
-  "short": "SL2 (Seniors) Finals"
+  "short": "SL2 Finals"
  },
  {
   "league": "HPG Homes State League 2 (Reserves) Final Series",
@@ -301,7 +301,7 @@
   "grade": "RES",
   "region": "",
   "is_finals": true,
-  "short": "SL2 (Res) Finals"
+  "short": "SL2 Res Finals"
  },
  {
   "league": "HPG Homes State League 2 (18s) Final Series",
@@ -309,6 +309,6 @@
   "grade": "U18",
   "region": "",
   "is_finals": true,
-  "short": "SL2 (18s) Finals"
+  "short": "SL2 U18 Finals"
  }
 ]

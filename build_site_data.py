@@ -9,6 +9,7 @@ labels.json (friendly column names), leagues.json (toggle order) and notes.json.
 Every exported column must have a LABELS entry; the script asserts it.
 """
 import json
+import re
 from pathlib import Path
 
 import numpy as np
@@ -250,17 +251,33 @@ def tidy(df: pd.DataFrame, cols: list, bool_as_text: bool = True) -> pd.DataFram
     return out
 
 
+# Port of `shortLeague()` in site/src/components/labels.js — keep the two in sync; this one
+# builds leagues.json's "short" field, the JS one builds the same short form for table cells
+# rendered straight off the raw league name. If you add a sponsor or suffix pattern to one,
+# add it to the other too.
+def short_league_name(name: str) -> str:
+    s = str(name or "")
+    s = re.sub(r"^(HPG Homes|Nova|RAA|Hahn|Sportal|Guardian Insurance)\s+", "", s)
+    s = re.sub(r"Carl['’]s (?:Jr\.?|Junior)\s*", "", s, flags=re.IGNORECASE)
+    s = s.replace("State League ", "SL").replace(" - ", " ")
+    s = re.sub(r"\((\d+)s\)", r"U\1", s)
+    s = re.sub(r"Under (\d+)'?s?", r"U\1", s)
+    s = re.sub(r"\bU(\d+)'s\b", r"U\1", s)
+    s = s.replace("(Seniors)", "").replace("(Reserves)", "Res").replace("Reserves", "Res")
+    s = s.replace("Finals Series", "Finals").replace("Final Series", "Finals")
+    s = s.replace("Federation Cup", "Fed Cup")
+    s = re.sub(r"Senior Men'?s\s*", "", s)
+    s = s.replace("Trial Matches", "Trials")
+    return re.sub(r"\s+", " ", s).strip()
+
+
 def league_order(leagues: pd.DataFrame) -> list:
     rows = []
     for _, r in leagues.iterrows():
         name = r["league"]
         region = "North" if "North" in name else "South" if "South" in name else ""
         rows.append({"league": name, "division": r["division"], "grade": r["grade"], "region": region,
-                     "is_finals": bool(r["is_finals"]),
-                     "short": name.replace("HPG Homes State League ", "SL").replace("RAA ", "").replace("Sportal ", "")
-                                  .replace("Guardian Insurance ", "").replace(" - ", " ")
-                                  .replace("Under 18's", "U18").replace("Reserves", "Res")
-                                  .replace("Finals Series", "Finals").replace("Final Series", "Finals")})
+                     "is_finals": bool(r["is_finals"]), "short": short_league_name(name)})
     rows.sort(key=lambda r: (r["is_finals"], r["division"], r["region"], GRADE_ORDER[r["grade"]]))
     return rows
 
@@ -299,7 +316,6 @@ def flag_of(nationality) -> str:
 
 
 def slugify(name: str) -> str:
-    import re
     return re.sub(r"[^a-z0-9]+", "-", str(name).lower()).strip("-")
 
 

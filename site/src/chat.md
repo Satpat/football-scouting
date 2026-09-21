@@ -176,6 +176,10 @@ function turnEl(turn) {
   if (turn.error) wrap.append(html`<p class="chat-err">${turn.error}</p>`);
   (turn.steps ?? []).forEach((s, i) => wrap.append(stepEl(s, i)));
   if (turn.pending) wrap.append(html`<p class="chat-pending">${turn.pending}</p>`);
+  const u = turn.usage;
+  if (u && (u.input_tokens || u.output_tokens)) {
+    wrap.append(html`<p class="chat-usage">${u.input_tokens.toLocaleString()} in · ${u.output_tokens.toLocaleString()} out tokens</p>`);
+  }
   return wrap;
 }
 ```

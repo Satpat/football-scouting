@@ -140,6 +140,10 @@ export function groupMetricSelect(form) {
 // and Carl's Jr./Junior all appear in the real data, and the same competition shows up both
 // with and without its sponsor) and normalises every "Under N's" / "UN's" spelling to "UN" so
 // it lines up with the Grade column's own values.
+// Port of `short_league_name()` in build_site_data.py — keep the two in sync; that one builds
+// leagues.json's "short" field, this one builds the same short form for table cells rendered
+// straight off the raw league name. If you add a sponsor or suffix pattern to one, add it to
+// the other too.
 export function shortLeague(name) {
   return String(name ?? "")
     .replace(/^(HPG Homes|Nova|RAA|Hahn|Sportal|Guardian Insurance)\s+/, "")

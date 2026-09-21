@@ -9,6 +9,13 @@
 const MAX_ROWS = 500;
 const MODEL_ROWS = 50;
 
+// How long the page waits on a query before giving up on it. DuckDB-WASM has no
+// cancellation hook reachable from here, so a runaway query (a big cross join, a
+// runaway recursive CTE) keeps burning CPU in the worker thread regardless — this
+// only stops the *page* waiting on it forever, so the loop can report the failure
+// and the visitor can try a narrower question instead of reloading the tab.
+const QUERY_TIMEOUT_MS = 20000;
+
 // ── SQL guard ────────────────────────────────────────────────────────────────
 // Not a security boundary: every byte of this data is public and already sitting in
 // the visitor's browser. It is here so a stray statement can't corrupt the DuckDB
@@ -43,7 +50,9 @@ function plain(v) {
 export async function runSql(query, sql) {
   // Wrap rather than trusting the model to limit: one forgotten LIMIT over
   // member_matches is 42,308 rows into the page.
-  const result = await query(`SELECT * FROM (${sql}) AS _q LIMIT ${MAX_ROWS + 1}`);
+  const timeout = new Promise((_, reject) =>
+    setTimeout(() => reject(new Error(`Query took longer than ${QUERY_TIMEOUT_MS / 1000}s — try a narrower question`)), QUERY_TIMEOUT_MS));
+  const result = await Promise.race([query(`SELECT * FROM (${sql}) AS _q LIMIT ${MAX_ROWS + 1}`), timeout]);
   const columns = result.schema.fields.map((f) => f.name);
   const all = result.toArray().map((r) => {
     const o = r.toJSON();

@@ -1,6 +1,6 @@
 # SA State League Scouting 2026
 
-Player and team statistics for Football SA's **HPG Homes State League 1 and 2** (Seniors, Reserves, Under 18s and finals), extracted from the DRIBL match centre and turned into a scouting workbook and an interactive site.
+Player and team statistics for Football SA's **State League 1, State League 2 and NPL**, and the **SAASL** (Seniors, Reserves, Under 18s and finals), extracted from the DRIBL match centre and turned into a scouting workbook and an interactive site.
 
 **Live site:** https://satpat.github.io/football-scouting/
 
