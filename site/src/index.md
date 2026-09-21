@@ -23,9 +23,15 @@ const playerCols = Object.keys(players[0]);
 
 ```js
 const role = view(Inputs.radio(["All", "Outfield", "GK"], {value: "All", label: "Role"}));
-const gemsOnly = view(Inputs.toggle({label: "Hidden gems only", value: false}));
+const gemsOnly = view(Inputs.toggle({label: "💎 Hidden gems only", value: false}));
+const emergingOnly = view(Inputs.toggle({label: "⚡ Emerging seniors only", value: false}));
+const undervaluedOnly = view(Inputs.toggle({label: "🎯 Undervalued only", value: false}));
 ```
-  <p class="muted">Hidden gem = Reserves/U18 player with no senior minutes all season.</p>
+  <p class="muted" style="margin-top: 6px; font-size: 12px; line-height: 1.45;">
+    <b>💎 Gem:</b> Reserves/U18, 0 senior mins.<br>
+    <b>⚡ Emerging:</b> U21 in Senior NPL, rating &ge; 7.0 or (xG+xA)/90 &ge; 0.40.<br>
+    <b>🎯 Undervalued:</b> Bottom-half team, min 450 mins, &ge;60% duels or &ge;80% passes.
+  </p>
   </div>
   <div>
 
@@ -88,18 +94,24 @@ const defenseMetric = view(Inputs.radio(new Map([["Clean sheets", "clean_sheets"
 const clubs = ["(none)", ...new Set(players.map((d) => d.club).sort())];
 const club = view(Inputs.select(clubs, {value: "(none)", label: "Highlight club"}));
 const labelTop = view(Inputs.range([0, 30], {value: 8, step: 1, label: "Label top N on Y"}));
-const emergingOnly = view(Inputs.toggle({label: "Emerging seniors only", value: false}));
-const undervaluedOnly = view(Inputs.toggle({label: "Undervalued only", value: false}));
 ```
   </div>
 </div>
 </details>
 
 ```js
+const matchesArchetype = (d) => {
+  const anyActive = gemsOnly || emergingOnly || undervaluedOnly;
+  if (!anyActive) return true;
+  return (gemsOnly && d.hidden_gem) ||
+         (emergingOnly && d.emerging_senior) ||
+         (undervaluedOnly && d.undervalued_performer);
+};
+
 const filtered = players.filter((d) =>
   division.includes(d.division) && gradeSel.includes(d.grade) && leagueSel.includes(d.league) &&
   (role === "All" || d.role === role) && d.minutes >= minMinutes && d.apps >= minApps &&
-  (!gemsOnly || d.hidden_gem) && (!emergingOnly || d.emerging_senior) && (!undervaluedOnly || d.undervalued_performer)
+  matchesArchetype(d)
 );
 const xs = preset !== "custom" ? PRESETS[preset].x : (defenseView ? "minutes" : xMetric);
 const ys = preset !== "custom" ? PRESETS[preset].y : (defenseView ? defenseMetric : yMetric);

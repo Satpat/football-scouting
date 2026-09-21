@@ -12,22 +12,30 @@ const leagues = await FileAttachment("./data/leagues.json").json();
 const notes = await FileAttachment("./data/notes.json").json();
 ```
 
-<p class="muted">Players with at least 450 minutes and 5 appearances, ranked within role by <b>gem score</b> — a league-adjusted composite of non-penalty goals per 90, best-on-ground votes, on-pitch goal difference, and share of team goals and minutes.</p>
-<p class="muted">Bonus for no senior minutes and for being a U18 player. Rates are shrunk toward the league average so short bursts don't dominate — details on the <a href="./about">About</a> page.</p>
+<p class="muted">Curated talent shortlist of players with at least 450 minutes and 5 appearances, ranked within role by <b>gem score</b>, <b>Sofascore rating</b>, or <b>xG / 90</b>.</p>
+<p class="muted">Filter by scouting archetypes: <b>💎 Hidden gems</b> (unpromoted Reserves/U18), <b>⚡ Emerging seniors</b> (U21 standouts in Senior NPL), and <b>🎯 Undervalued performers</b> (efficiency on bottom-half sides). Rates are shrunk toward the league average so short bursts don't dominate — details on the <a href="./about">About</a> page.</p>
 
 <div class="section">
   <div>
 
 ```js
 const role = view(Inputs.radio(["Outfield", "GK"], {value: "Outfield", label: "Role"}));
-const gemsOnly = view(Inputs.toggle({label: "Hidden gems only", value: true}));
+const gemsOnly = view(Inputs.toggle({label: "💎 Hidden gems only", value: true}));
+const emergingOnly = view(Inputs.toggle({label: "⚡ Emerging seniors only", value: false}));
+const undervaluedOnly = view(Inputs.toggle({label: "🎯 Undervalued only", value: false}));
 const u18Only = view(Inputs.toggle({label: "U18 players only", value: false}));
 ```
+  <p class="muted" style="margin-top: 6px; font-size: 12px; line-height: 1.45;">
+    <b>💎 Gem:</b> Reserves/U18, 0 senior mins.<br>
+    <b>⚡ Emerging:</b> U21 in Senior NPL, rating &ge; 7.0 or (xG+xA)/90 &ge; 0.40.<br>
+    <b>🎯 Undervalued:</b> Bottom-half team, min 450 mins, &ge;60% duels or &ge;80% passes.
+  </p>
   </div>
   <div>
 
 ```js
-const sortOptions = (!gemsOnly || emergingOnly) ? ["Gem score", "Sofascore rating", "xG / 90"] : ["Gem score"];
+const allowSofaRank = !gemsOnly || emergingOnly || undervaluedOnly;
+const sortOptions = allowSofaRank ? ["Gem score", "Sofascore rating", "xG / 90"] : ["Gem score"];
 const sortBy = view(Inputs.radio(sortOptions, {value: "Gem score", label: "Rank by"}));
 const topN = view(Inputs.range([10, 400], {value: 50, step: 10, label: "Show top N"}));
 ```
@@ -56,18 +64,24 @@ const leagueSel = view(Inputs.select(leagueChoices, {multiple: true, size: Math.
 ```js
 const clubs = ["(all)", ...new Set(shortlist.map((d) => d.club).sort())];
 const club = view(Inputs.select(clubs, {value: "(all)", label: "Club"}));
-const emergingOnly = view(Inputs.toggle({label: "Emerging seniors only", value: false}));
-const undervaluedOnly = view(Inputs.toggle({label: "Undervalued only", value: false}));
 ```
   </div>
 </div>
 </details>
 
 ```js
+const matchesArchetype = (d) => {
+  const anyActive = gemsOnly || emergingOnly || undervaluedOnly;
+  if (!anyActive) return true;
+  return (gemsOnly && d.hidden_gem) ||
+         (emergingOnly && d.emerging_senior) ||
+         (undervaluedOnly && d.undervalued_performer);
+};
+
 const sortKey = sortBy === "Sofascore rating" ? "sofascore_rating" : sortBy === "xG / 90" ? "xg_p90" : "gem_score";
 const rows = shortlist.filter((d) => d.role === role && division.includes(d.division) && gradeSel.includes(d.grade) && leagueSel.includes(d.league) &&
-  (!gemsOnly || d.hidden_gem || emergingOnly || undervaluedOnly) && (!emergingOnly || d.emerging_senior) && (!undervaluedOnly || d.undervalued_performer) &&
-  (!u18Only || d.u18_player) && (club === "(all)" || d.club === club) && (sortKey === "gem_score" || (d[sortKey] != null && d[sortKey] > 0)))
+  matchesArchetype(d) && (!u18Only || d.u18_player) && (club === "(all)" || d.club === club) &&
+  (sortKey === "gem_score" || (d[sortKey] != null && d[sortKey] > 0)))
   .sort((a, b) => d3.descending(a[sortKey] ?? -999, b[sortKey] ?? -999)).slice(0, topN).map((d, i) => ({...d, shown_rank: i + 1}));
 ```
 
@@ -120,6 +134,9 @@ const fmts = {...formats(cols), shown_rank: (v) => v, league: shortLeagueOnly, g
 </div>
 
 <div class="card">
-  <h2>How the score is built</h2>
-  <div class="notes-cols">${notes.filter((n) => ["Shortlist score", "Pathway", "Votes", "Borrowed", "Minutes estimated"].includes(n.topic)).map((n) => html`<p><b>${n.topic}.</b> ${n.note}</p>`)}</div>
+  <h2>How the scores and archetypes are built</h2>
+  <div class="notes-cols">${notes.filter((n) => ["Shortlist score", "Pathway", "Emerging Senior", "Undervalued Performer", "Votes", "Borrowed", "Minutes estimated"].includes(n.topic)).map((n) => {
+    const title = n.topic === "Pathway" ? "💎 Hidden gems (Pathway)" : n.topic === "Emerging Senior" ? "⚡ Emerging Senior" : n.topic === "Undervalued Performer" ? "🎯 Undervalued Performer" : n.topic;
+    return html`<p><b>${title}.</b> ${n.note}</p>`;
+  })}</div>
 </div>
