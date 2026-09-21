@@ -1,11 +1,15 @@
 [
  {
   "topic": "Source",
-  "note": "DRIBL match centre API, 2026 season: Football SA (fsa.dribl.com) SL1 + SL2 + NPL (men's) all grades, and SAASL (saasl.dribl.com) Home and Away all grades. Extracted with extract_browser.js."
+  "note": "DRIBL match centres (Football SA SL1/SL2/NPL and SAASL) merged with detailed event-level tracking and physical bios from Sofascore across 7 South Australian tournaments."
  },
  {
   "topic": "Positions",
-  "note": "DRIBL does not record positions or formations for these leagues (1 player of ~530 sampled). Only GK vs outfield is known."
+  "note": "DRIBL does not record tactical positions or formations. Player positions (e.g. Center Back, Winger) and physical bios (DOB, height) are enriched from Sofascore profiles where available."
+ },
+ {
+  "topic": "Sofascore stats",
+  "note": "Advanced event metrics (xG, xA, key passes, duels, passing accuracy, tackles, interceptions, and ratings) cover Senior NPL and tracked leagues. Unmeasured leagues cleanly retain null so rankings remain unbiased."
  },
  {
   "topic": "Minutes",

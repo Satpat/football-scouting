@@ -813,9 +813,9 @@ def build_shortlist(season: pd.DataFrame) -> pd.DataFrame:
 # ---------------------------------------------------------------------------
 
 NOTES = [
-    ("Source", "DRIBL match centre API, 2026 season: Football SA (fsa.dribl.com) SL1 + SL2 + NPL (men's) all grades, "
-               "and SAASL (saasl.dribl.com) Home and Away all grades. Extracted with extract_browser.js."),
-    ("Positions", "DRIBL does not record positions or formations for these leagues (1 player of ~530 sampled). Only GK vs outfield is known."),
+    ("Source", "DRIBL match centres (Football SA SL1/SL2/NPL and SAASL) merged with detailed event-level tracking and physical bios from Sofascore across 7 South Australian tournaments."),
+    ("Positions", "DRIBL does not record tactical positions or formations. Player positions (e.g. Center Back, Winger) and physical bios (DOB, height) are enriched from Sofascore profiles where available."),
+    ("Sofascore stats", "Advanced event metrics (xG, xA, key passes, duels, passing accuracy, tackles, interceptions, and ratings) cover Senior NPL and tracked leagues. Unmeasured leagues cleanly retain null so rankings remain unbiased."),
     ("Minutes", "Starters: sub-off minute (or red card) else match length. Subs: match length minus sub-on minute. Bench unused: 0."),
     ("Minutes estimated", "U18 leagues rarely record sub minutes. When missing, we assume a sub came on at 70', and a starter on a "
                           "side with no recorded subs played the full match. Flagged in minutes_estimated / minutes_est_apps."),
