@@ -10,7 +10,6 @@ sql:
 ```js
 import {labels, label, short, describe, fmt, iconHeaders, formats, metricOptions, groupMetricSelect, crest, clubCell, shortLeague, shortLeagueOnly, GRADES, GRADE_NAME, GRADE_COLORS, withTooltip} from "./components/labels.js";
 import {gemMark} from "./components/icons.js";
-import {dataTable} from "./components/data-table.js";
 const players = await FileAttachment("./data/players.csv").csv({typed: true});
 const leagues = await FileAttachment("./data/leagues.json").json();
 const meta = await FileAttachment("./data/meta.json").json();

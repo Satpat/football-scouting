@@ -496,7 +496,7 @@ def build_player_season(app: pd.DataFrame, ctx: pd.DataFrame, matches: pd.DataFr
         gf_on_pitch=("gf_on_pitch", "sum"), ga_on_pitch=("ga_on_pitch", "sum"), clean_sheets=("clean_sheet", "sum"),
         yellow_cards=("yellow_cards", "sum"), red_cards=("red_cards", "sum"), ban_apps=("has_ban", "sum"),
         wins=("points", lambda x: int((x == 3).sum())), points_when_playing=("points", "sum"),
-        team_goals_in_apps=("team_gf", "sum"), team_ga_in_apps=("team_ga", "sum"),
+        team_goals_in_apps=("team_gf", "sum"), team_ga_in_apps=("team_ga", "sum"), possible_minutes_in_apps=("match_len", "sum"),
         assists=("assists", "sum"),
         xg=("xg", "sum"),
         xa=("xa", "sum"),
@@ -624,6 +624,21 @@ def build_player_season(app: pd.DataFrame, ctx: pd.DataFrame, matches: pd.DataFr
     season["team_gd_per90"] = season.team_gd_per_match       # matches are ~90 min
     season["gd_on_pitch_vs_team"] = season.gd_on_pitch_per90 - season.team_gd_per90
     season["ga_on_pitch_vs_team"] = season.ga_on_pitch_per90 - season.team_ga_per_match
+
+    # off-pitch GD: the same matches' goals/minutes, minus the on-pitch slice already computed
+    # above — a same-match plus/minus rather than a comparison against the team's full-season
+    # baseline (gd_on_pitch_vs_team), which is diluted by the player's own minutes and by
+    # matches/opponents they never faced. Hard NaN-out below MIN_MINUTES off-pitch, mirroring
+    # ppg_start_diff's min-3-each guard — off-pitch sample size depends on substitution timing,
+    # not total minutes played, so this floor is independent of the player's own minutes/apps.
+    season["gf_off_pitch"] = season.team_goals_in_apps - season.gf_on_pitch
+    season["ga_off_pitch"] = season.team_ga_in_apps - season.ga_on_pitch
+    season["minutes_off"] = season.possible_minutes_in_apps - season.minutes
+    season["gf_off_pitch_per90"] = np.where(season.minutes_off >= MIN_MINUTES, season.gf_off_pitch / season.minutes_off * 90, np.nan)
+    season["ga_off_pitch_per90"] = np.where(season.minutes_off >= MIN_MINUTES, season.ga_off_pitch / season.minutes_off * 90, np.nan)
+    season["gd_off_pitch_per90"] = season.gf_off_pitch_per90 - season.ga_off_pitch_per90
+    season["gd_on_off_diff"] = season.gd_on_pitch_per90 - season.gd_off_pitch_per90
+
     season["clean_sheet_pct"] = np.where(season.full_matches > 0, season.clean_sheets / season.full_matches * 100, np.nan)
     season["ppg_when_playing"] = np.where(season.apps > 0, season.points_when_playing / season.apps, np.nan)
 
@@ -692,6 +707,7 @@ def build_player_season(app: pd.DataFrame, ctx: pd.DataFrame, matches: pd.DataFr
                   "goals_vs_top_half", "goals_as_sub", "goals_per_sub_90", "avg_sub_off",
                   "votes", "votes_3", "votes_per_app", "captain_apps", "borrowed_apps",
                   "gf_on_pitch", "ga_on_pitch", "gd_on_pitch_per90", "gd_on_pitch_vs_team", "ga_on_pitch_per90", "ga_on_pitch_vs_team",
+                  "gf_off_pitch", "ga_off_pitch", "minutes_off", "gd_off_pitch_per90", "gd_on_off_diff",
                   "clean_sheets", "full_matches", "clean_sheet_pct",
                   "yellow_cards", "red_cards", "yellows_per90", "ban_apps",
                   "ppg_when_playing", "ppg_when_starts", "ppg_when_not_starting", "ppg_start_diff",

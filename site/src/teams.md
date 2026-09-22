@@ -61,7 +61,7 @@ const tipChannels = useXg
   <div class="card ladder">
     <h2>${selected?.short ?? `${comp} ${GRADE_NAME[grade]}`} ladder</h2>
     ${enrichedLadder.length
-      ? dataTable(enrichedLadder, {columns: ladderCols, header: shortHeaders(ladderCols), format: {...formats(ladderCols), team: teamFmt}})
+      ? dataTable(enrichedLadder, {columns: ladderCols, header: shortHeaders(ladderCols), format: {...formats(ladderCols), team: teamFmt}, exportFilename: `ladder-${selected?.short ?? comp}-${grade}`.replace(/\s+/g, "-")})
       : html`<p class="muted">No ladder recorded for ${comp} ${GRADE_NAME[grade]}.</p>`}
   </div>
 

@@ -711,6 +711,22 @@
   "higher_is_better": false,
   "metric": true
  },
+ "gd_off_pitch_per90": {
+  "label": "Team goal difference per 90 off pitch",
+  "short": "GD/90 off",
+  "desc": "Team goal difference per 90 in matches the player appeared in, for the minutes they weren't on the field (min 450 such minutes)",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
+ "gd_on_off_diff": {
+  "label": "On-pitch vs off-pitch goal difference",
+  "short": "On/off GD",
+  "desc": "On-pitch GD/90 minus off-pitch GD/90, in the same matches the player appeared in (min 450 off-pitch minutes)",
+  "fmt": "dec",
+  "higher_is_better": true,
+  "metric": true
+ },
  "clean_sheets": {
   "label": "Clean sheets",
   "short": "Clean sheets",

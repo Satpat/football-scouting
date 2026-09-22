@@ -83,19 +83,25 @@ const rows = shortlist.filter((d) => d.role === role && division.includes(d.divi
 ```js
 const showSofa = (!gemsOnly || emergingOnly || undervaluedOnly) && rows.some((d) => d.sofascore_rating != null || d.xg_p90 != null);
 const hasMarketValue = showSofa && rows.some((d) => d.market_value_eur != null);
+// Logical order, matching the player-detail card's own hierarchy: identity → score →
+// playing time → core output → advanced (Sofascore) → on-pitch impact → recognition → context.
 const outfieldCols = [
   "shown_rank", "player_name", "club", "league", "grade", "age", "gem_score",
+  "apps", "minutes",
+  "npg_per90", "team_goal_share_pct", "goals_go_ahead", "goals_winner",
   ...(showSofa ? ["sofascore_rating", "xg_p90", "xa_p90", "duel_win_pct"] : []),
   ...(hasMarketValue ? ["market_value_eur"] : []),
-  "apps", "minutes", "npg_per90", "team_goal_share_pct", "goals_go_ahead", "goals_winner",
-  "votes_per_app", "gd_on_pitch_vs_team", "borrowed_apps", "team_ladder_pos"
+  "gd_on_pitch_vs_team", "votes_per_app",
+  "borrowed_apps", "team_ladder_pos"
 ];
 const gkCols = [
   "shown_rank", "player_name", "club", "league", "grade", "age", "gem_score",
+  "apps", "minutes",
+  "ga_on_pitch_per90", "clean_sheets", "clean_sheet_pct",
   ...(showSofa ? ["sofascore_rating"] : []),
   ...(hasMarketValue ? ["market_value_eur"] : []),
-  "apps", "minutes", "ga_on_pitch_per90", "clean_sheets", "clean_sheet_pct",
-  "votes_per_app", "borrowed_apps", "team_ladder_pos"
+  "votes_per_app",
+  "borrowed_apps", "team_ladder_pos"
 ];
 const cols = role === "GK" ? gkCols : outfieldCols;
 const hdr = {...iconHeaders(cols), shown_rank: "#"};
@@ -123,11 +129,15 @@ const ratingPill = (v) => v != null && v > 0
   : "–";
 const fmts = {...formats(cols), shown_rank: (v) => v, league: shortLeagueOnly, gem_score: gemScoreCell, sofascore_rating: ratingPill, minutes: (v, row) => fmt("minutes", v) + (row.minutes_est_apps > 0 ? "*" : ""), player_name: (v, row) => html`<a href="./player?id=${row.player_id}&team=${row.team_id}">${v}</a>${row.emerging_senior ? html` <span title="Emerging Senior">⚡</span>` : ""}${row.undervalued_performer ? html` <span title="Undervalued Performer">🎯</span>` : ""}${row.sofascore_url ? html` <a href="${row.sofascore_url}" target="_blank" rel="noopener" title="Open Sofascore profile" style="text-decoration:none;font-size:11px;color:#0284c7;">↗</a>` : ""}`,
 };
+const links = {
+  player_name: (row) => `./player?id=${row.player_id}&team=${row.team_id}`,
+  sofascore_rating: (row) => row.sofascore_url || null,
+};
 ```
 
 <div class="card">
   <h2>${role === "GK" ? "Goalkeepers" : "Outfield players"} <span class="muted">— ${rows.length} shown</span></h2>
-  ${dataTable(rows, {columns: cols, header: hdr, format: fmts, width: {player_name: 140, club: 120}, pin: ["player_name"], columnVisibility: true})}
+  ${dataTable(rows, {columns: cols, header: hdr, format: fmts, links, width: {player_name: 140, club: 120}, pin: ["shown_rank", "player_name"], columnVisibility: true, exportFilename: role === "GK" ? "goalkeeper-shortlist" : "outfield-shortlist"})}
   <p class="muted">Tap or click a name to open the player's profile. Tap or hover the gem score for why they're flagged. * marks estimated minutes — sub minutes weren't recorded for that player, mostly U18.</p>
 </div>
 

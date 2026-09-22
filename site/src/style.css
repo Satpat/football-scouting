@@ -253,16 +253,22 @@ details summary { cursor: pointer; margin: 0.5rem 0; }
 .data-table th[data-sort="desc"] .dt-caret::after { content: "▼"; }
 .dt-caret[data-priority]::before { content: attr(data-priority); font-size: 9px; vertical-align: super; margin-right: 1px; }
 
-/* Column-visibility menu: same hover/focus popover pattern as .gem-tip-pop, anchored to a
-   small pill button styled like .mbtn. */
-.dt-colmenu { position: relative; display: inline-block; margin-bottom: 0.5rem; }
-.dt-colmenu-btn { background: var(--theme-background-alt); color: var(--theme-foreground); border: 1px solid var(--theme-foreground-faintest); border-radius: 999px; padding: 4px 12px; font: inherit; font-size: 12px; cursor: pointer; }
-.dt-colmenu-btn:hover { border-color: var(--accent); }
-.dt-colmenu-pop { display: none; position: absolute; z-index: 20; left: 0; top: 100%; margin-top: 6px; min-width: 160px; max-height: 300px; overflow-y: auto;
+/* Toolbar row holding the column-visibility and export menus side by side. */
+.dt-toolbar { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem; }
+
+/* Column-visibility and export menus: same hover/focus popover pattern as .gem-tip-pop,
+   anchored to a small pill button styled like .mbtn. */
+.dt-colmenu, .dt-exportmenu { position: relative; display: inline-block; }
+.dt-colmenu-btn, .dt-exportmenu-btn { background: var(--theme-background-alt); color: var(--theme-foreground); border: 1px solid var(--theme-foreground-faintest); border-radius: 999px; padding: 4px 12px; font: inherit; font-size: 12px; cursor: pointer; }
+.dt-colmenu-btn:hover, .dt-exportmenu-btn:hover { border-color: var(--accent); }
+.dt-colmenu-pop, .dt-exportmenu-pop { display: none; position: absolute; z-index: 20; left: 0; top: 100%; margin-top: 6px; min-width: 160px; max-height: 300px; overflow-y: auto;
   background: var(--theme-background-alt); border: 1px solid var(--theme-foreground-faintest); border-radius: 8px; padding: 8px 10px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35); font-size: 13px; }
-.dt-colmenu-pop.open { display: block; }
+.dt-colmenu-pop.open, .dt-exportmenu-pop.open { display: block; }
 .dt-colmenu-pop label { display: flex; align-items: center; gap: 6px; padding: 3px 0; white-space: nowrap; cursor: pointer; }
+.dt-exportmenu-pop { min-width: 200px; padding: 4px; }
+.dt-exportmenu-item { display: block; width: 100%; text-align: left; background: none; border: none; border-radius: 4px; padding: 7px 8px; font: inherit; font-size: 13px; color: var(--theme-foreground); cursor: pointer; white-space: nowrap; }
+.dt-exportmenu-item:hover { background: var(--theme-background); }
 
 /* Pagination bar: same button styling as .mbtn elsewhere on the site. */
 .dt-pager { display: flex; align-items: center; gap: 0.75rem; margin-top: 0.5rem; font-size: 13px; color: var(--theme-foreground-muted); }
@@ -373,6 +379,8 @@ details summary { cursor: pointer; margin: 0.5rem 0; }
 .chat-err { color: var(--theme-foreground-muted); font-size: 13px; }
 .chat-pending { color: var(--theme-foreground-muted); font-size: 13px; font-style: italic; }
 .chat-usage { color: var(--theme-foreground-muted); font-size: 12px; margin-top: -0.25rem; }
+.chat-export-bar { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
+.chat-export-bar .mbtn { font-size: 12px; padding: 4px 12px; }
 
 /* The SQL is the receipt for every number above it: always present, never in the way. */
 .chat-sql summary {
@@ -541,8 +549,9 @@ details summary { cursor: pointer; margin: 0.5rem 0; }
    viewport (tablet/foldable landscape) still gets it, and mouse/trackpad users on
    a narrow window don't get oversized buttons they don't need. */
 @media (hover: none) {
-  .mbtn, .tab-btn, .chat-chip, .dt-colmenu-btn { min-height: 44px; }
-  .mbtn, .chat-chip, .dt-colmenu-btn { padding: 10px 16px; }
+  .mbtn, .tab-btn, .chat-chip, .dt-colmenu-btn, .dt-exportmenu-btn { min-height: 44px; }
+  .mbtn, .chat-chip, .dt-colmenu-btn, .dt-exportmenu-btn { padding: 10px 16px; }
+  .dt-exportmenu-item { min-height: 44px; display: flex; align-items: center; }
   .tab-btn { padding: 12px 0.1rem; }
 }
 

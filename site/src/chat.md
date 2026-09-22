@@ -18,6 +18,7 @@ sql:
 ```js
 import {labels, fmt, formats, iconHeaders, clubCell, shortLeagueOnly} from "./components/labels.js";
 import {dataTable} from "./components/data-table.js";
+import {htmlToBlocks, dataTableBlock, copyBlocks, blocksToPdf} from "./components/chat-export.js";
 import {buildSchemaPrompt} from "./components/schema-prompt.js";
 import {ask} from "./components/chat-agent.js";
 import {renderMarkdown} from "./components/markdown.js";
@@ -151,22 +152,32 @@ function cellFormats(cols) {
   return base;
 }
 
-function resultTable(step) {
-  if (!step.rows?.length) return html`<p class="muted">No rows matched.</p>`;
+// Shared by the live on-page table and the copy/PDF export blocks, so the two can't drift
+// out of sync with each other.
+function stepTableOptions(step) {
   // player_id / team_id are requested so rows can be linked, but they're hashes — keep
   // them out of the visible table.
   const cols = step.columns.filter((c) => c !== "player_id" && c !== "team_id");
   const f = cellFormats(cols);
+  const links = {};
   if (cols.includes("player_name") && step.columns.includes("player_id")) {
     f.player_name = (v, row) => html`<a href="./player?id=${row.player_id}&team=${row.team_id ?? ""}">${v}</a>`;
+    links.player_name = (row) => `./player?id=${row.player_id}&team=${row.team_id ?? ""}`;
   }
   if (cols.includes("club")) f.club = (v) => clubCell(v, 16);
   if (cols.includes("league")) f.league = shortLeagueOnly;
+  if (cols.includes("sofascore_rating")) links.sofascore_rating = (row) => row.sofascore_url || null;
+  return {columns: cols, header: iconHeaders(cols), format: f, links};
+}
+
+function resultTable(step) {
+  if (!step.rows?.length) return html`<p class="muted">No rows matched.</p>`;
   return dataTable(step.rows, {
-    columns: cols, header: iconHeaders(cols), format: f,
+    ...stepTableOptions(step),
     width: {player_name: 170, club: 150, league: 150},
     pageSize: 12,
-    columnVisibility: cols.length > 6,
+    columnVisibility: step.columns.length > 6,
+    exportFilename: "chat-query-result",
   });
 }
 
@@ -182,6 +193,43 @@ function stepEl(step, i) {
   return wrap;
 }
 
+// Blocks for one turn: question, then the answer's markdown (reduced to heading/paragraph/
+// list blocks — see htmlToBlocks), then each step's result table. Shared by the per-turn
+// copy/PDF buttons and the whole-transcript export, so both stay in sync with what's on screen.
+// Deliberately excludes the SQL detail — that's a live-verification aid, not part of the
+// answer someone would want to save or share.
+function turnBlocks(turn) {
+  const blocks = [{type: "heading", text: turn.question}];
+  if (turn.answer) blocks.push(...htmlToBlocks(renderMarkdown(turn.answer)));
+  if (turn.error) blocks.push({type: "paragraph", text: turn.error});
+  for (const step of turn.steps ?? []) {
+    if (step.error || !step.rows?.length) continue;
+    const opts = stepTableOptions(step);
+    blocks.push(dataTableBlock(step.rows, opts.columns, opts));
+  }
+  return blocks;
+}
+
+function exportBar(label, getBlocks, filename) {
+  const bar = html`<div class="chat-export-bar"></div>`;
+  const copyBtn = html`<button class="mbtn" type="button">Copy ${label}</button>`;
+  const pdfBtn = html`<button class="mbtn" type="button">Download PDF</button>`;
+  copyBtn.onclick = async () => {
+    const original = copyBtn.textContent;
+    try {
+      await copyBlocks(getBlocks());
+      copyBtn.textContent = "Copied ✓";
+    } catch (e) {
+      console.error("Copy failed:", e);
+      copyBtn.textContent = "Couldn't copy";
+    }
+    setTimeout(() => (copyBtn.textContent = original), 1600);
+  };
+  pdfBtn.onclick = () => blocksToPdf(getBlocks(), filename);
+  bar.append(copyBtn, pdfBtn);
+  return bar;
+}
+
 function turnEl(turn) {
   const wrap = html`<div class="chat-turn"></div>`;
   wrap.append(html`<div class="chat-q">${turn.question}</div>`);
@@ -192,6 +240,9 @@ function turnEl(turn) {
   }
   if (turn.error) wrap.append(html`<p class="chat-err">${turn.error}</p>`);
   (turn.steps ?? []).forEach((s, i) => wrap.append(stepEl(s, i)));
+  if (turn.answer && !turn.pending) {
+    wrap.append(exportBar("answer", () => turnBlocks(turn), "chat-answer.pdf"));
+  }
   if (turn.pending) wrap.append(html`<p class="chat-pending">${turn.pending}</p>`);
   const u = turn.usage;
   if (u && (u.input_tokens || u.output_tokens)) {
@@ -218,6 +269,11 @@ function turnEl(turn) {
       chips.append(c);
     }
     out.append(html`<p class="muted">Ask a question in plain English. Every answer shows the SQL it came from, so you can check it.</p>`, chips);
+  } else {
+    const finished = log.filter((t) => t.answer && !t.pending);
+    if (finished.length) {
+      out.append(exportBar("conversation", () => finished.flatMap((t) => turnBlocks(t)), "chat-conversation.pdf"));
+    }
   }
   for (const t of log) out.append(turnEl(t));
   display(out);
