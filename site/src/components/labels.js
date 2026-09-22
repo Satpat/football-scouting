@@ -105,11 +105,27 @@ const ICON_EXEMPT = new Set(["age"]);
 // so every player-stats table in the app reads the same way. Everything else falls back to text.
 export function iconHeaders(cols) { return Object.fromEntries(cols.map((c) => [c, COL_ICONS[c] && isNumericCol(c) && !ICON_EXEMPT.has(c) ? iconHeader(c, label(c)) : label(c)])); }
 export function formats(cols) { return Object.fromEntries(cols.map((c) => [c, (v) => fmt(c, v)])); }
+// Reuses the .gem-tip/.gem-tip-pop pattern (style.css) that's already touch/keyboard
+// accessible (:hover on pointer devices that support it, :focus/:focus-within on tap
+// or Tab) — a bare `title` attribute has no equivalent on touch, so toggle labels need
+// a visible affordance, not just a hover-only attribute.
 export function withTooltip(inputElement, text) {
   if (!inputElement || !text) return inputElement;
-  inputElement.title = text;
   const lbl = inputElement.querySelector?.("label");
-  if (lbl) lbl.title = text;
+  if (!lbl) { inputElement.title = text; return inputElement; }
+  const trigger = document.createElement("span");
+  trigger.className = "gem-tip";
+  trigger.tabIndex = 0;
+  trigger.append(" ⓘ");
+  // The trigger sits inside the toggle's own <label>, so a click on it would otherwise
+  // also forward to the associated checkbox (native label behavior) and flip the filter
+  // while the reader was just trying to read the tooltip.
+  trigger.addEventListener("click", (e) => e.preventDefault());
+  const pop = document.createElement("div");
+  pop.className = "gem-tip-pop";
+  pop.textContent = text;
+  trigger.append(pop);
+  lbl.append(trigger);
   return inputElement;
 }
 
