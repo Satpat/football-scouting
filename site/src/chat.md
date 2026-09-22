@@ -73,14 +73,27 @@ const EXAMPLES = [
   "Which teams concede the fewest goals per match?",
 ];
 
-const box = html`<textarea class="chat-input" rows="2" placeholder="Ask about players, teams or form…"></textarea>`;
+const box = html`<textarea class="chat-input" rows="1" placeholder="Ask about players, teams or form…"></textarea>`;
 const sendBtn = html`<button class="mbtn" type="button">Ask</button>`;
+const cancelBtn = html`<button class="mbtn" type="button" hidden>Cancel</button>`;
+
+const autoresize = () => {
+  box.style.height = "auto";
+  box.style.height = `${Math.min(box.scrollHeight, 200)}px`;
+};
+box.addEventListener("input", autoresize);
 
 async function send(text) {
   const question = String(text ?? "").trim();
   if (!question || sendBtn.disabled) return;
   box.value = "";
+  autoresize();
+  box.disabled = true;
   sendBtn.disabled = true;
+
+  const controller = new AbortController();
+  cancelBtn.hidden = false;
+  cancelBtn.onclick = () => controller.abort();
 
   const turn = {question, steps: [], pending: "Thinking…"};
   log.push(turn);
@@ -95,7 +108,7 @@ async function send(text) {
     ]).slice(-6);
 
     const {answer, steps, usage} = await ask({
-      question, history, system, model: modelSel.value, query, endpoint: ENDPOINT,
+      question, history, system, model: modelSel.value, query, endpoint: ENDPOINT, signal: controller.signal,
       onStep: (s) => {
         turn.pending = s.phase === "running" ? `Running query ${s.attempt}…`
           : s.phase === "failed" ? `Query ${s.attempt} failed, retrying…`
@@ -106,9 +119,12 @@ async function send(text) {
     });
     Object.assign(turn, {answer, steps, usage, pending: null});
   } catch (e) {
-    Object.assign(turn, {error: String(e.message ?? e), pending: null});
+    Object.assign(turn, {error: e.name === "AbortError" ? "Cancelled." : String(e.message ?? e), pending: null});
   } finally {
+    box.disabled = false;
     sendBtn.disabled = false;
+    cancelBtn.hidden = true;
+    box.focus();
     bump();
   }
 }
@@ -189,6 +205,9 @@ function turnEl(turn) {
 ```js
 {
   version; // re-render whenever a turn changes
+  // Capture BEFORE appending new content — after appending, the page is always
+  // taller, so checking "near bottom" post-render would almost always read false.
+  const nearBottom = document.documentElement.scrollHeight - window.scrollY - window.innerHeight < 150;
   const out = html`<div class="chat-log"></div>`;
   if (!log.length) {
     const chips = html`<div class="chat-chips"></div>`;
@@ -201,11 +220,15 @@ function turnEl(turn) {
   }
   for (const t of log) out.append(turnEl(t));
   display(out);
+  if (nearBottom && log.length) {
+    requestAnimationFrame(() => window.scrollTo({top: document.documentElement.scrollHeight, behavior: "smooth"}));
+  }
 }
 ```
 
 ```js
-display(html`<div class="chat-composer">${box}${sendBtn}</div>`);
+display(html`<div class="chat-composer">${box}${sendBtn}${cancelBtn}</div>`);
+box.focus();
 ```
 
 </div>
