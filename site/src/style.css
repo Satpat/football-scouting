@@ -120,6 +120,14 @@ p.muted, .notes-cols p,
 /* a dropdown/checkbox control sitting directly above a table needs room to breathe */
 form[class*="inputs"] { max-width: 100%; margin-bottom: 1rem; }
 
+/* Every Inputs.table() renders <table> inside a <form> — this one rule gives every such
+   table horizontal scroll instead of clipping/compressing, without needing a per-page
+   wrapper div or depending on Observable's hashed class names (same structural-selector
+   trick as the `form table thead th` rule above). Hand-built <table> elements (table.stats,
+   table.kv) aren't inside a <form>, so they're unaffected — they keep using the .table-scroll
+   wrapper div, which is already applied consistently to every one of them. */
+form:has(table) { overflow-x: auto; }
+
 /* hidden-gem mark: a diamond, not a word */
 .gem-mark { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; background: #b8860b; color: #fff; vertical-align: middle; cursor: help; }
 .gem-mark svg { width: 14px; height: 14px; }
@@ -135,6 +143,14 @@ form[class*="inputs"] { max-width: 100%; margin-bottom: 1rem; }
 
 /* centred stat columns: header icon and value share the same axis */
 th .ico-hdr { width: 100%; justify-content: center; }
+/* Inputs.table right-aligns numeric data cells automatically (both header and body,
+   via its own text-align rule — see node_modules/@observablehq/inputs/src/table.js
+   alignof()/the #id tr>:nth-child() style block). Our .ico-hdr flexbox centering above
+   overrides that for the header specifically, so icon headers end up centered over
+   right-aligned numbers. Match the data columns instead — scoped to form-wrapped
+   (i.e. Inputs.table) headers only, so table.stats/table.kv's own fully-centered
+   convention (below) is untouched. */
+form th .ico-hdr { justify-content: flex-end; }
 table.stats th, table.stats td { text-align: center; }
 table.stats th:first-child, table.stats td:first-child, table.stats th:nth-child(2), table.stats td:nth-child(2), table.stats th:nth-child(3), table.stats td:nth-child(3) { text-align: left; }
 
@@ -276,7 +292,6 @@ details summary { cursor: pointer; margin: 0.5rem 0; }
 @container (min-width: 640px) {
   .grid.grid-ladder { grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr); }
 }
-.ladder form { overflow-x: auto; }
 .ladder form table { font-size: 14px; }
 .ladder form table td, .ladder form table th { padding-top: 8px; padding-bottom: 8px; }
 /* Observable gives every cell a 13px horizontal gutter, which across eleven columns is 140px of
@@ -357,7 +372,12 @@ details summary { cursor: pointer; margin: 0.5rem 0; }
   align-items: flex-end;
   margin-top: 1.25rem;
   padding-top: 1rem;
+  padding-bottom: 1rem;
   border-top: 1px solid var(--theme-foreground-faintest);
+  position: sticky;
+  bottom: 0;
+  background: var(--theme-background);
+  z-index: 5;
 }
 .chat-input {
   flex: 1 1 auto;
@@ -367,8 +387,10 @@ details summary { cursor: pointer; margin: 0.5rem 0; }
   border-radius: 6px;
   background: var(--theme-background);
   color: inherit;
-  resize: vertical;
+  resize: none;
   min-height: 2.6rem;
+  max-height: 200px;
+  overflow-y: auto;
 }
 .chat-input:focus-visible { outline: 2px solid var(--accent); border-color: var(--accent); }
 @media (max-width: 640px) {
@@ -379,7 +401,6 @@ details summary { cursor: pointer; margin: 0.5rem 0; }
    Inputs.table compresses them all into the card width until headers collide. Let the
    table take its natural width and scroll inside the step instead — the same treatment
    .ladder gets, and the rule .table-scroll applies to plain tables. */
-.chat-step form { overflow-x: auto; }
 .chat-step form table { width: auto; min-width: 100%; }
 
 /* ── Mobile-responsive enhancements ──────────────────────────────────────────
@@ -391,10 +412,10 @@ details summary { cursor: pointer; margin: 0.5rem 0; }
 /* Scroll affordance: a sticky gradient fade on the right edge of horizontally
    scrollable containers signals that more content is available. Purely
    decorative — does not block clicks. */
-.table-scroll, .mlist, .chat-step form {
+.table-scroll, .mlist, form:has(table) {
   position: relative;
 }
-.table-scroll::after, .mlist::after, .chat-step form::after {
+.table-scroll::after, .mlist::after, form:has(table)::after {
   content: '';
   position: absolute;
   right: 0;
@@ -475,9 +496,14 @@ details summary { cursor: pointer; margin: 0.5rem 0; }
   .tab-btn { white-space: nowrap; font-size: 0.95rem; padding: 0.35rem 0.1rem 0.5rem; }
 }
 
-/* ── Chat send button: min 44×44px touch target per WCAG 2.5.5 ───────────── */
-@media (max-width: 640px) {
-  .chat-composer button { min-height: 44px; min-width: 44px; }
+/* ── Comfortable tap size on touch devices, per WCAG 2.5.5 (44×44px) ──────
+   Gated on touch capability, not viewport width, so a touch device with a wide
+   viewport (tablet/foldable landscape) still gets it, and mouse/trackpad users on
+   a narrow window don't get oversized buttons they don't need. */
+@media (hover: none) {
+  .mbtn, .tab-btn, .chat-chip { min-height: 44px; }
+  .mbtn, .chat-chip { padding: 10px 16px; }
+  .tab-btn { padding: 12px 0.1rem; }
 }
 
 /* ── Radio/checkbox controls: allow wrapping on narrow screens ─────────── */
