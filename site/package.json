@@ -5,6 +5,7 @@
   "scripts": {
     "clean": "rimraf src/.observablehq/cache",
     "build": "observable build",
+    "postbuild": "node scripts/patch-viewport.mjs",
     "dev": "observable preview",
     "observable": "observable"
   },
