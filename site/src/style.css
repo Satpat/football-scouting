@@ -576,3 +576,160 @@ details summary { cursor: pointer; margin: 0.5rem 0; }
   /* Match navigation */
   .mnav { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap; }
 }
+
+.player-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.player-header h2 {
+  margin: 0;
+}
+
+.player-links {
+  margin: 10px 0 14px;
+}
+
+.stat-section {
+  margin-top: 10px;
+}
+
+.stat-grid {
+  display: grid;
+  gap: 4px;
+}
+
+.stat-grid.primary {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.stat-grid.secondary {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.stat-grid.advanced {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.stat {
+  text-align: center;
+  padding: 7px 3px;
+}
+
+.stat .v {
+  font-size: 1.45rem;
+  font-weight: 600;
+  line-height: 1.05;
+}
+
+.stat .l {
+  margin-top: 3px;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.6;
+}
+
+.primary .stat {
+  padding: 8px 3px;
+}
+
+.primary .stat .v {
+  font-size: 1.55rem;
+}
+
+.secondary-section {
+  border-top: 1px solid var(--theme-foreground-faintest);
+}
+
+.secondary .stat {
+  padding: 5px 2px;
+}
+
+.secondary .stat .v {
+  font-size: 1.05rem;
+}
+
+.secondary .stat .l {
+  font-size: 0.62rem;
+}
+
+.advanced-section {
+  margin-top: 10px;
+  padding: 8px 8px 5px;
+  background: color-mix(in srgb, #0284c7 6%, transparent);
+  border: 1px solid color-mix(in srgb, #0284c7 20%, transparent);
+  border-radius: 6px;
+}
+
+.section-label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.55;
+  margin-bottom: 2px;
+}
+
+.advanced .stat .v {
+  font-size: 1rem;
+}
+
+.advanced .stat .l {
+  font-size: 0.6rem;
+}
+
+.player-context {
+  margin-top: 12px;
+  font-size: 0.75rem;
+  color: var(--theme-foreground-muted);
+}
+
+.context-row {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 5px;
+}
+
+.event-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  line-height: 1.4;
+}
+
+.ppg-stat {
+  margin-top: 6px;
+}
+
+.ppg-stat strong {
+  color: var(--theme-foreground);
+}
+
+.event-stats span {
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--theme-background-alt);
+}
+
+.badge.emerging { background: #0284c7; color: white; }
+.badge.undervalued { background: #7c3aed; color: white; }
+/* a.sofascore-link, not .sofascore-link: Observable's own default.css sets a link color via
+   `a[href]` (element + attribute selector), which outranks a bare class selector — same
+   specificity fight as the .ico-hdr one elsewhere in this file. Matching its element+selector
+   specificity here, combined with this rule loading later, is enough to win without !important. */
+a.sofascore-link { color: #0284c7; font-weight: 600; }
+
+@container (max-width: 500px) {
+  .stat-grid.secondary,
+  .stat-grid.advanced {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@container (max-width: 360px) {
+  .stat-grid.primary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

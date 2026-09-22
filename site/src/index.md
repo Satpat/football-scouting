@@ -8,7 +8,7 @@ sql:
 # Player explorer
 
 ```js
-import {labels, label, short, describe, fmt, fmtDate, iconHeaders, formats, metricOptions, groupMetricSelect, crest, clubCell, shortLeague, shortLeagueOnly, GRADES, GRADE_NAME, GRADE_COLORS, withTooltip} from "./components/labels.js";
+import {labels, label, short, describe, fmt, iconHeaders, formats, metricOptions, groupMetricSelect, crest, clubCell, shortLeague, shortLeagueOnly, GRADES, GRADE_NAME, GRADE_COLORS, withTooltip} from "./components/labels.js";
 import {gemMark} from "./components/icons.js";
 import {dataTable} from "./components/data-table.js";
 const players = await FileAttachment("./data/players.csv").csv({typed: true});
@@ -171,79 +171,137 @@ function chart(width) {
 
 ```js
 function detail(d) {
-  const k = (col) => html`<div><div class="v">${fmt(col, d[col])}</div><div class="l">${short(col)}</div></div>`;
+  const k = (col) => html`
+    <div class="stat">
+      <div class="v">${fmt(col, d[col])}</div>
+      <div class="l">${short(col)}</div>
+    </div>
+  `;
+
   const gk = d.role === "GK";
-  const hasSofa = d.sofascore_rating != null || d.xg > 0 || d.passes_total > 0;
-  return html`<h2 style="display:flex;align-items:center;gap:8px">${crest(d.club, 28)} <a href="./player?id=${d.player_id}&team=${d.team_id}">${d.player_name}</a></h2>
-  <div class="badges">
-    <span class="badge grade">${GRADE_NAME[d.grade]} · ${d.division}</span>
-    ${d.hidden_gem ? gemMark() : ""}
-    ${d.emerging_senior ? html`<span class="badge" style="background:#0284c7;color:white;" title="${describe('emerging_senior')}">⚡ Emerging Senior</span>` : ""}
-    ${d.undervalued_performer ? html`<span class="badge" style="background:#7c3aed;color:white;" title="${describe('undervalued_performer')}">🎯 Undervalued</span>` : ""}
-    ${d.u18_player ? html`<span class="badge grade">U18 player</span>` : ""}
-    ${d.minutes_est_apps > 0 ? html`<span class="badge est" title="${describe("minutes_est_apps")}">${d.minutes_est_apps} apps est. minutes</span>` : ""}
-  </div>
-  <p><a href="./player?id=${d.player_id}&team=${d.team_id}"><b>Open full profile →</b></a> · <a href="${d.dribl_url}" target="_blank" rel="noopener">DRIBL ↗</a>${d.sofascore_url ? html` · <a href="${d.sofascore_url}" target="_blank" rel="noopener" style="color:#0284c7;font-weight:600;">Sofascore ↗</a>` : ""}</p>
-  <div class="kpi">${k("age")}${k("apps")}${k("starts")}${k("minutes")}${gk ? k("clean_sheets") : k("goals")}${gk ? k("ga_on_pitch_per90") : k("npg_per90")}${k("votes")}${k("team_goal_share_pct")}${k("gd_on_pitch_vs_team")}${k("yellow_cards")}${k("captain_apps")}${k("borrowed_apps")}${k("sen_minutes")}</div>
-  ${hasSofa ? html`<div class="kpi" style="margin-top:0.5rem;background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.2);border-radius:6px;padding:6px 8px;">
-    ${d.sofascore_rating ? k("sofascore_rating") : ""}${d.market_value_eur ? k("market_value_eur") : ""}${d.xg > 0 ? k("xg_p90") : ""}${d.xa > 0 ? k("xa_p90") : ""}${d.key_passes_p90 > 0 ? k("key_passes_p90") : ""}${d.pass_acc_pct > 0 ? k("pass_acc_pct") : ""}${d.duel_win_pct > 0 ? k("duel_win_pct") : ""}
-  </div>` : ""}
-  <p class="muted" style="margin-top:0.75rem">Grades played: ${d.grades_played} · highest: ${GRADE_NAME[d.highest_grade]} · ${d.n_teams} team${d.n_teams === 1 ? "" : "s"} · team finished ${d.team_ladder_pos ?? "–"}/${d.ladder_teams ?? "–"} (${fmt("team_ppg", d.team_ppg)} PPG)</p>
-  <p class="muted">${d.goals_go_ahead} go-ahead · ${d.goals_winner} winners · ${d.goals_equaliser} equalisers · ${d.goals_late} late goals · ${d.goals_penalty} pens · team PPG when starting vs not: ${fmt("ppg_start_diff", d.ppg_start_diff)}</p>`;
+  const hasSofa = d.sofascore_rating != null || d.market_value_eur != null || d.xg > 0 || d.xa > 0 || d.key_passes_p90 > 0 || d.pass_acc_pct > 0 || d.duel_win_pct > 0;
+
+  return html`
+    <div class="player-header">
+      ${crest(d.club, 28)}
+      <div>
+        <h2>
+          <a href="./player?id=${d.player_id}&team=${d.team_id}">
+            ${d.player_name}
+          </a>
+        </h2>
+      </div>
+    </div>
+
+    <div class="badges">
+      <span class="badge grade">${GRADE_NAME[d.grade]} · ${d.division}</span>
+      ${d.hidden_gem ? gemMark() : ""}
+      ${d.emerging_senior ? html`
+        <span class="badge emerging"
+          title="${describe('emerging_senior')}">
+          ⚡ Emerging Senior
+        </span>
+      ` : ""}
+      ${d.undervalued_performer ? html`
+        <span class="badge undervalued"
+          title="${describe('undervalued_performer')}">
+          🎯 Undervalued
+        </span>
+      ` : ""}
+      ${d.u18_player ? html`
+        <span class="badge grade">U18 player</span>
+      ` : ""}
+      ${d.minutes_est_apps > 0 ? html`
+        <span class="badge est"
+          title="${describe("minutes_est_apps")}">
+          ${d.minutes_est_apps} apps est. minutes
+        </span>
+      ` : ""}
+    </div>
+
+    <div class="player-links">
+      <a href="./player?id=${d.player_id}&team=${d.team_id}">
+        <b>Open full profile →</b>
+      </a>
+      ·
+      <a href="${d.dribl_url}" target="_blank" rel="noopener">
+        DRIBL ↗
+      </a>
+      ${d.sofascore_url ? html`
+        ·
+        <a href="${d.sofascore_url}"
+           target="_blank"
+           rel="noopener"
+           class="sofascore-link">
+          Sofascore ↗
+        </a>
+      ` : ""}
+    </div>
+
+    <!--primary stats-->
+    <div class="stat-section">
+      <div class="stat-grid primary">
+        ${k("age")}
+        ${k("apps")}
+        ${k("starts")}
+        ${k("minutes")}
+        ${gk ? k("clean_sheets") : k("goals")}
+        ${gk ? k("ga_on_pitch_per90") : k("npg_per90")}
+      </div>
+    </div>
+
+    <!--secondary stats-->
+    <div class="stat-section secondary-section">
+      <div class="stat-grid secondary">
+        ${k("votes")}
+        ${k("team_goal_share_pct")}
+        ${k("gd_on_pitch_vs_team")}
+        ${k("yellow_cards")}
+        ${k("captain_apps")}
+        ${k("borrowed_apps")}
+        ${k("sen_minutes")}
+      </div>
+    </div>
+
+    <!--advanced stats-->
+    ${hasSofa ? html`
+      <div class="advanced-section">
+        <div class="section-label">Advanced</div>
+
+        <div class="stat-grid advanced">
+          ${d.sofascore_rating ? k("sofascore_rating") : ""}
+          ${d.market_value_eur ? k("market_value_eur") : ""}
+          ${d.xg > 0 ? k("xg_p90") : ""}
+          ${d.xa > 0 ? k("xa_p90") : ""}
+          ${d.key_passes_p90 > 0 ? k("key_passes_p90") : ""}
+          ${d.pass_acc_pct > 0 ? k("pass_acc_pct") : ""}
+          ${d.duel_win_pct > 0 ? k("duel_win_pct") : ""}
+        </div>
+      </div>
+    ` : ""}
+
+    <!--context-->
+    <div class="player-context">
+      <div class="context-row">
+        <span>Grades played</span>
+        <strong>${d.grades_played}</strong>
+      </div>
+
+      <div class="muted" style="margin-top:0.75rem">
+        <div>${d.goals_go_ahead} go-ahead</div>
+        <div>${d.goals_winner} winners</div>
+        <div>${d.goals_equaliser} equalisers</div>
+        <div>${d.goals_late} late goals</div>
+        <div>${d.goals_penalty} pens</div>
+      </div>
+
+      <div class="ppg-stat">
+        Team PPG when starting vs not:
+        <strong>${fmt("ppg_start_diff", d.ppg_start_diff)}</strong>
+      </div>
+    </div>
+  `;
 }
-```
-
-```js
-const matchRows = selected
-  ? (await sql`SELECT date_local, round, league, opponent, home_away, result, team_gf, team_ga, starting, sub_on_min, sub_off_min, minutes, minutes_estimated, goals, assists, sofascore_rating, xg, xa, key_passes, goals_penalty, votes, yellow_cards, red_cards, clean_sheet
-       FROM appearances WHERE player_id = ${selected.player_id} AND team_id = ${selected.team_id} ORDER BY date_local`).toArray().map((r) => r.toJSON())
-  : [];
-```
-
-```js
-const matchCols = ["date_local", "round", "opponent", "home_away", "result", "team_gf", "team_ga", "starting", "minutes", "goals", "assists", "sofascore_rating", "xg", "xa", "key_passes", "votes", "yellow_cards", "red_cards", "clean_sheet"];
-```
-
-<div class="grid explorer-detail" style="grid-auto-rows: auto;">
-  <div class="card">
-    <h2>${selected ? `${selected.player_name} — match by match` : "Match by match"}</h2>
-    ${selected ? dataTable(matchRows, {columns: matchCols, header: iconHeaders(matchCols), format: {...formats(matchCols), date_local: fmtDate}, width: {opponent: 220}}) : html`<p class="muted">Select a player to see every appearance, queried live with SQL from the appearances file.</p>`}
-  </div>
-  <div class="card">
-    <h2>Season so far</h2>
-    ${selected && matchRows.length ? resize((width) => {
-      let g = 0, m = 0;
-      const cum = matchRows.map((r, i) => ({i: i + 1, date: fmtDate(r.date_local), goals: (g += r.goals), minutes: (m += r.minutes), opp: r.opponent, result: r.result}));
-      return Plot.plot({width, height: 220, marginLeft: 50, marginBottom: 40, x: {label: "Appearance →", labelAnchor: "center", labelOffset: 28}, y: {label: "Cumulative goals →", grid: true, labelAnchor: "center", labelOffset: 38},
-        marks: [Plot.lineY(cum, {x: "i", y: "goals", stroke: "#e6550d", curve: "step-after"}),
-                Plot.dot(cum, {x: "i", y: () => 0, fill: (d) => d.result === "W" ? "#2ca02c" : d.result === "D" ? "#999" : "#d62728", r: 4,
-                  channels: {Date: "date", Opponent: "opp", Result: "result", Minutes: "minutes"}, tip: {format: {x: false, y: false}}})]});
-    }) : html`<p class="muted">Cumulative goals by appearance; dots show W/D/L.</p>`}
-  </div>
-</div>
-
-## Players shown
-
-```js
-const tableCols = ["player_name", "club", "league", "grade", "age", "role", "apps", "starts", "minutes", "goals", "npg_per90", "sofascore_rating", "xg_p90", "xa_p90", "duel_win_pct", "pass_acc_pct", "votes", "votes_per_app", "gd_on_pitch_vs_team", "clean_sheets"];
-const searched = view(Inputs.search(filtered, {placeholder: "Search player, club or team…", columns: ["player_name", "club", "team"]}));
-```
-
-```js
-display(dataTable(searched, {
-  columns: tableCols, header: iconHeaders(tableCols),
-  format: {
-    ...formats(tableCols),
-    player_name: (v, row) => html`<a href="./player?id=${row.player_id}&team=${row.team_id}">${v}</a>${row.hidden_gem ? html` <span title="Hidden gem: no senior minutes this season">💎</span>` : ""}${row.emerging_senior ? html` <span title="Emerging Senior">⚡</span>` : ""}${row.undervalued_performer ? html` <span title="Undervalued Performer">🎯</span>` : ""}${row.sofascore_url ? html` <a href="${row.sofascore_url}" target="_blank" rel="noopener" title="Open Sofascore profile" style="text-decoration:none;font-size:11px;color:#0284c7;">↗</a>` : ""}`,
-    club: (v) => clubCell(v, 16),
-    league: shortLeagueOnly,
-  },
-  pageSize: 50,
-  sort: ys, sortDesc: labels[ys]?.higher_is_better !== false,
-  pin: ["player_name"],
-  width: {player_name: 180, club: 150, league: 170},
-  columnVisibility: true,
-}));
 ```
 
 ```js
