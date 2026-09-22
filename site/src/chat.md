@@ -17,6 +17,7 @@ sql:
 
 ```js
 import {labels, fmt, formats, iconHeaders, clubCell, shortLeagueOnly} from "./components/labels.js";
+import {dataTable} from "./components/data-table.js";
 import {buildSchemaPrompt} from "./components/schema-prompt.js";
 import {ask} from "./components/chat-agent.js";
 import {renderMarkdown} from "./components/markdown.js";
@@ -157,15 +158,15 @@ function resultTable(step) {
   const cols = step.columns.filter((c) => c !== "player_id" && c !== "team_id");
   const f = cellFormats(cols);
   if (cols.includes("player_name") && step.columns.includes("player_id")) {
-    f.player_name = (v, i) => html`<a href="./player?id=${step.rows[i].player_id}&team=${step.rows[i].team_id ?? ""}">${v}</a>`;
+    f.player_name = (v, row) => html`<a href="./player?id=${row.player_id}&team=${row.team_id ?? ""}">${v}</a>`;
   }
   if (cols.includes("club")) f.club = (v) => clubCell(v, 16);
   if (cols.includes("league")) f.league = shortLeagueOnly;
-  return Inputs.table(step.rows, {
+  return dataTable(step.rows, {
     columns: cols, header: iconHeaders(cols), format: f,
-    // +0.5 because Inputs.table sizes the scroller in rows and an exact count leaves the
-    // last row half-clipped under the header; the same trick as its own 11.5 default.
-    rows: Math.min(step.rows.length + 0.5, 12.5), width: {player_name: 170, club: 150, league: 150},
+    width: {player_name: 170, club: 150, league: 150},
+    pageSize: 12,
+    columnVisibility: cols.length > 6,
   });
 }
 

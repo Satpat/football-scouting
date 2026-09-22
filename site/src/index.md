@@ -10,6 +10,7 @@ sql:
 ```js
 import {labels, label, short, describe, fmt, fmtDate, iconHeaders, formats, metricOptions, groupMetricSelect, crest, clubCell, shortLeague, shortLeagueOnly, GRADES, GRADE_NAME, GRADE_COLORS, withTooltip} from "./components/labels.js";
 import {gemMark} from "./components/icons.js";
+import {dataTable} from "./components/data-table.js";
 const players = await FileAttachment("./data/players.csv").csv({typed: true});
 const leagues = await FileAttachment("./data/leagues.json").json();
 const meta = await FileAttachment("./data/meta.json").json();
@@ -206,7 +207,7 @@ const matchCols = ["date_local", "round", "opponent", "home_away", "result", "te
 <div class="grid explorer-detail" style="grid-auto-rows: auto;">
   <div class="card">
     <h2>${selected ? `${selected.player_name} — match by match` : "Match by match"}</h2>
-    <div class="table-scroll">${selected ? Inputs.table(matchRows, {columns: matchCols, header: iconHeaders(matchCols), format: {...formats(matchCols), date_local: fmtDate}, rows: 12, select: false, width: {opponent: 220}}) : html`<p class="muted">Select a player to see every appearance, queried live with SQL from the appearances file.</p>`}</div>
+    ${selected ? dataTable(matchRows, {columns: matchCols, header: iconHeaders(matchCols), format: {...formats(matchCols), date_local: fmtDate}, width: {opponent: 220}}) : html`<p class="muted">Select a player to see every appearance, queried live with SQL from the appearances file.</p>`}
   </div>
   <div class="card">
     <h2>Season so far</h2>
@@ -229,12 +230,20 @@ const searched = view(Inputs.search(filtered, {placeholder: "Search player, club
 ```
 
 ```js
-const picked = view(Inputs.table(searched, {columns: tableCols, header: iconHeaders(tableCols), format: {...formats(tableCols), player_name: (v, i) => html`<a href="./player?id=${searched[i].player_id}&team=${searched[i].team_id}">${v}</a>${searched[i].hidden_gem ? html` <span title="Hidden gem: no senior minutes this season">💎</span>` : ""}${searched[i].emerging_senior ? html` <span title="Emerging Senior">⚡</span>` : ""}${searched[i].undervalued_performer ? html` <span title="Undervalued Performer">🎯</span>` : ""}${searched[i].sofascore_url ? html` <a href="${searched[i].sofascore_url}" target="_blank" rel="noopener" title="Open Sofascore profile" style="text-decoration:none;font-size:11px;color:#0284c7;">↗</a>` : ""}`, club: (v) => clubCell(v, 16), league: shortLeagueOnly}, rows: 18, multiple: false,
-  sort: ys, reverse: labels[ys]?.higher_is_better !== false, width: {player_name: 180, club: 150, league: 170}}));
-```
-
-```js
-if (picked) setSelected(picked);
+display(dataTable(searched, {
+  columns: tableCols, header: iconHeaders(tableCols),
+  format: {
+    ...formats(tableCols),
+    player_name: (v, row) => html`<a href="./player?id=${row.player_id}&team=${row.team_id}">${v}</a>${row.hidden_gem ? html` <span title="Hidden gem: no senior minutes this season">💎</span>` : ""}${row.emerging_senior ? html` <span title="Emerging Senior">⚡</span>` : ""}${row.undervalued_performer ? html` <span title="Undervalued Performer">🎯</span>` : ""}${row.sofascore_url ? html` <a href="${row.sofascore_url}" target="_blank" rel="noopener" title="Open Sofascore profile" style="text-decoration:none;font-size:11px;color:#0284c7;">↗</a>` : ""}`,
+    club: (v) => clubCell(v, 16),
+    league: shortLeagueOnly,
+  },
+  pageSize: 50,
+  sort: ys, sortDesc: labels[ys]?.higher_is_better !== false,
+  pin: ["player_name"],
+  width: {player_name: 180, club: 150, league: 170},
+  columnVisibility: true,
+}));
 ```
 
 ```js

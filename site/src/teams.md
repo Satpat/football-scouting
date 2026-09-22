@@ -8,7 +8,8 @@ toc: false
 ```js
 import {shortHeaders, formats, clubCell, clubInfo, GRADES, GRADE_NAME} from "./components/labels.js";
 import {crestHref} from "./components/crests.js";
-const teamFmt = (v, i, rows) => clubCell(rows[i].club, 18);
+import {dataTable} from "./components/data-table.js";
+const teamFmt = (v, row) => clubCell(row.club, 18);
 const teams = await FileAttachment("./data/teams.csv").csv({typed: true});
 const ladders = await FileAttachment("./data/ladders.csv").csv({typed: true});
 const leagues = await FileAttachment("./data/leagues.json").json();
@@ -60,7 +61,7 @@ const tipChannels = useXg
   <div class="card ladder">
     <h2>${selected?.short ?? `${comp} ${GRADE_NAME[grade]}`} ladder</h2>
     ${enrichedLadder.length
-      ? Inputs.table(enrichedLadder, {columns: ladderCols, header: shortHeaders(ladderCols), format: {...formats(ladderCols), team: teamFmt}, rows: 20, select: false, layout: "auto"})
+      ? dataTable(enrichedLadder, {columns: ladderCols, header: shortHeaders(ladderCols), format: {...formats(ladderCols), team: teamFmt}})
       : html`<p class="muted">No ladder recorded for ${comp} ${GRADE_NAME[grade]}.</p>`}
   </div>
 

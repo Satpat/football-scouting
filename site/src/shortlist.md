@@ -7,6 +7,7 @@ toc: false
 
 ```js
 import {fmt, iconHeaders, formats, shortLeagueOnly, GRADES, withTooltip} from "./components/labels.js";
+import {dataTable} from "./components/data-table.js";
 const shortlist = await FileAttachment("./data/shortlist.csv").csv({typed: true});
 const leagues = await FileAttachment("./data/leagues.json").json();
 const notes = await FileAttachment("./data/notes.json").json();
@@ -98,12 +99,12 @@ const gkCols = [
 ];
 const cols = role === "GK" ? gkCols : outfieldCols;
 const hdr = {...iconHeaders(cols), shown_rank: "#"};
-const gemScoreCell = (v, i) => {
+const gemScoreCell = (v, row) => {
   const wrap = document.createElement("span");
   wrap.className = "gem-tip";
   wrap.tabIndex = 0;
   wrap.append(fmt("gem_score", v));
-  const clauses = String(rows[i].why_flagged ?? "").split("; ").filter(Boolean);
+  const clauses = String(row.why_flagged ?? "").split("; ").filter(Boolean);
   if (clauses.length) {
     const pop = document.createElement("div");
     pop.className = "gem-tip-pop";
@@ -120,13 +121,13 @@ const gemScoreCell = (v, i) => {
 const ratingPill = (v) => v != null && v > 0
   ? html`<span class="rating-badge ${v >= 7.5 ? 'hi' : v >= 6.8 ? 'mid' : 'low'}">${v.toFixed(1)}</span>`
   : "–";
-const fmts = {...formats(cols), shown_rank: (v) => v, league: shortLeagueOnly, gem_score: gemScoreCell, sofascore_rating: ratingPill, minutes: (v, i) => fmt("minutes", v) + (rows[i].minutes_est_apps > 0 ? "*" : ""), player_name: (v, i) => html`<a href="./player?id=${rows[i].player_id}&team=${rows[i].team_id}">${v}</a>${rows[i].emerging_senior ? html` <span title="Emerging Senior">⚡</span>` : ""}${rows[i].undervalued_performer ? html` <span title="Undervalued Performer">🎯</span>` : ""}${rows[i].sofascore_url ? html` <a href="${rows[i].sofascore_url}" target="_blank" rel="noopener" title="Open Sofascore profile" style="text-decoration:none;font-size:11px;color:#0284c7;">↗</a>` : ""}`,
+const fmts = {...formats(cols), shown_rank: (v) => v, league: shortLeagueOnly, gem_score: gemScoreCell, sofascore_rating: ratingPill, minutes: (v, row) => fmt("minutes", v) + (row.minutes_est_apps > 0 ? "*" : ""), player_name: (v, row) => html`<a href="./player?id=${row.player_id}&team=${row.team_id}">${v}</a>${row.emerging_senior ? html` <span title="Emerging Senior">⚡</span>` : ""}${row.undervalued_performer ? html` <span title="Undervalued Performer">🎯</span>` : ""}${row.sofascore_url ? html` <a href="${row.sofascore_url}" target="_blank" rel="noopener" title="Open Sofascore profile" style="text-decoration:none;font-size:11px;color:#0284c7;">↗</a>` : ""}`,
 };
 ```
 
 <div class="card">
   <h2>${role === "GK" ? "Goalkeepers" : "Outfield players"} <span class="muted">— ${rows.length} shown</span></h2>
-  <div class="table-scroll">${Inputs.table(rows, {columns: cols, header: hdr, format: fmts, rows: 25, select: false, width: {player_name: 140, club: 120}, layout: "auto"})}</div>
+  ${dataTable(rows, {columns: cols, header: hdr, format: fmts, width: {player_name: 140, club: 120}, pin: ["player_name"], columnVisibility: true})}
   <p class="muted">Tap or click a name to open the player's profile. Tap or hover the gem score for why they're flagged. * marks estimated minutes — sub minutes weren't recorded for that player, mostly U18.</p>
 </div>
 
