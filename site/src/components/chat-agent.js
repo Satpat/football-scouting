@@ -64,15 +64,17 @@ export async function runSql(query, sql) {
 }
 
 // ── the Worker call ──────────────────────────────────────────────────────────
-async function step(endpoint, system, messages, model) {
+async function step(endpoint, system, messages, model, signal) {
   let res;
   try {
     res = await fetch(endpoint, {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({system, messages, model}),
+      signal,
     });
-  } catch {
+  } catch (e) {
+    if (e.name === "AbortError") throw e;
     throw new Error("Couldn't reach the chat service. Check your connection and try again.");
   }
   const data = await res.json().catch(() => ({}));
@@ -83,7 +85,11 @@ async function step(endpoint, system, messages, model) {
 // ── the loop ─────────────────────────────────────────────────────────────────
 // Returns {answer, steps, usage}. `steps` is what the page renders under the answer:
 // one entry per query attempt, each with its SQL and either rows or a failure.
-export async function ask({question, history = [], system, model, query, endpoint, onStep, maxQueries = 3}) {
+// `signal` (an AbortSignal, optional) cancels the in-flight fetch to the Worker if the
+// user clicks Cancel. It only cancels the network request — if abort happens while a
+// query is running locally in DuckDB-WASM (runSql, below), that query keeps running;
+// there's no cancellation hook for it, same limitation as the timeout above.
+export async function ask({question, history = [], system, model, query, endpoint, onStep, maxQueries = 3, signal}) {
   const messages = [...history, {role: "user", content: question}];
   const steps = [];
   const usage = {input_tokens: 0, output_tokens: 0};
@@ -98,7 +104,7 @@ export async function ask({question, history = [], system, model, query, endpoin
     }
 
     onStep?.({phase: "thinking", attempt: i + 1});
-    const out = await step(endpoint, system, messages, model);
+    const out = await step(endpoint, system, messages, model, signal);
     if (out.usage) {
       usage.input_tokens += out.usage.input_tokens ?? 0;
       usage.output_tokens += out.usage.output_tokens ?? 0;
