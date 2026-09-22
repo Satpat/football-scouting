@@ -180,8 +180,8 @@ const traitsCard = () => p ? html`<div class="card">
   <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
     <h2 style="margin:0;">Player traits</h2>
     ${hasSofaTraits ? html`<div style="display:flex; gap:4px;">
-      <button class="mbtn ${radarMode === 'Standard' ? 'active' : ''}" style="padding:3px 10px; font-size:11px;" onclick=${() => setRadarMode("Standard")}>Standard</button>
-      <button class="mbtn ${radarMode === 'Advanced' ? 'active' : ''}" style="padding:3px 10px; font-size:11px;" onclick=${() => setRadarMode("Advanced")}>Sofascore Advanced</button>
+      <button class="mbtn ${radarMode === 'Standard' ? 'active' : ''}" onclick=${() => setRadarMode("Standard")}>Standard</button>
+      <button class="mbtn ${radarMode === 'Advanced' ? 'active' : ''}" onclick=${() => setRadarMode("Advanced")}>Sofascore Advanced</button>
     </div>` : ""}
   </div>
   <p class="muted" style="margin-top:-0.25rem">Percentile vs ${advPeers.length} ${p.role === "GK" ? "goalkeepers" : "outfield players"} in this league with 450+ minutes${isAdv ? " and Sofascore data" : ""}. Cards and goals conceded are inverted.</p>
@@ -281,8 +281,8 @@ const seasonChartCard = () => {
     <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
       <h2 style="margin:0;">${activeMode === "sofa" ? "Sofascore rating trend" : "Season so far"}</h2>
       ${showSofaOption ? html`<div style="display:flex; gap:4px;">
-        <button class="mbtn ${activeMode === 'goals' ? 'active' : ''}" style="padding:3px 10px; font-size:11px;" onclick=${() => setChartMode("goals")}>Cumulative goals</button>
-        <button class="mbtn ${activeMode === 'sofa' ? 'active' : ''}" style="padding:3px 10px; font-size:11px;" onclick=${() => setChartMode("sofa")}>Sofascore ratings</button>
+        <button class="mbtn ${activeMode === 'goals' ? 'active' : ''}" onclick=${() => setChartMode("goals")}>Cumulative goals</button>
+        <button class="mbtn ${activeMode === 'sofa' ? 'active' : ''}" onclick=${() => setChartMode("sofa")}>Sofascore ratings</button>
       </div>` : ""}
     </div>
     ${activeMode === "sofa" ? html`
