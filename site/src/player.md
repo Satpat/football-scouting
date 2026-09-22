@@ -299,9 +299,9 @@ const seasonChartCard = () => {
         }));
         const avg = d3.mean(rated, (d) => d.rating) || 7.0;
         return Plot.plot({
-          width, height: 280, marginLeft: 40,
-          y: {domain: [5.0, 9.5], label: "↑ Match rating", grid: true},
-          x: {label: "Rated match →"},
+          width, height: 280, marginLeft: 50, marginBottom: 40,
+          y: {domain: [5.0, 9.5], label: "Match rating →", grid: true, labelAnchor: "center", labelOffset: 38},
+          x: {label: "Rated match →", labelAnchor: "center", labelOffset: 28},
           marks: [
             Plot.ruleY([7.0], {stroke: "#22c55e", strokeDasharray: "3,3"}),
             Plot.ruleY([avg], {stroke: "#3b82f6", strokeDasharray: "2,2"}),
@@ -321,7 +321,7 @@ const seasonChartCard = () => {
       ${seasonRows.length ? html`<div style="min-height: 280px">${resize((width) => {
         let g = 0, m = 0;
         const cum = seasonRows.map((r, i) => ({i: i + 1, date: r.date, goals: (g += r.goals ?? 0), minutes: (m += r.minutes ?? 0), opp: r.side === "home" ? r.away_team : r.home_team, result: r.result, comp: r.league}));
-        return Plot.plot({width, height: 280, marginLeft: 40, x: {label: "Appearance (all competitions) →"}, y: {label: "↑ Cumulative goals", grid: true},
+        return Plot.plot({width, height: 280, marginLeft: 50, marginBottom: 40, x: {label: "Appearance (all competitions) →", labelAnchor: "center", labelOffset: 28}, y: {label: "Cumulative goals →", grid: true, labelAnchor: "center", labelOffset: 38},
           marks: [Plot.lineY(cum, {x: "i", y: "goals", stroke: accent, curve: "step-after", strokeWidth: 2}),
                   Plot.dot(cum, {x: "i", y: "goals", fill: (d) => d.result === "W" ? "#2ca02c" : d.result === "D" ? "#999" : "#d62728", r: 4,
                     channels: {Date: (d) => fmtDate(d.date), Opponent: "opp", Result: "result", Competition: "comp", Minutes: "minutes"}, tip: {format: {x: false, y: true}}})]});

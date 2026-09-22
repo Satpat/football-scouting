@@ -28,7 +28,7 @@ const emergingOnly = view(withTooltip(Inputs.toggle({label: "⚡ Emerging senior
 const undervaluedOnly = view(withTooltip(Inputs.toggle({label: "🎯 Undervalued only", value: false}), "Players on bottom-half NPL teams (min 450 minutes) with duel win rate ≥ 60% or passing accuracy ≥ 80%."));
 ```
   </div>
-  <div>
+  <div class="preset-stack">
 
 ```js
 const PRESETS = {
@@ -131,10 +131,10 @@ const tipFormat = {x: (v) => fmt(xs, v), y: (v) => fmt(ys, v), fill: (g) => GRAD
   Rating: (v) => fmt("sofascore_rating", v), xG: (v) => fmt("xg", v), xA: (v) => fmt("xa", v)};
 function chart(width) {
   const p = Plot.plot({
-    width, height: 560, grid: true, inset: 12, marginLeft: 50,
+    width, height: 560, grid: true, inset: 12, marginLeft: 60, marginBottom: 50,
     style: {fontSize: "12px"},
-    x: {label: `${label(xs)} →`, nice: true},
-    y: {label: `${yReversed ? "↓" : "↑"} ${label(ys)}`, nice: true, reverse: yReversed},
+    x: {label: `${label(xs)} →`, nice: true, labelAnchor: "center", labelOffset: 32},
+    y: {label: `${label(ys)} ${yReversed ? "←" : "→"}`, nice: true, reverse: yReversed, labelAnchor: "center", labelOffset: 42},
     color: {...GRADE_COLORS, legend: true, tickFormat: (g) => GRADE_NAME[g]},
     marks: [
       Plot.ruleX([d3.median(withXY, (d) => d[xs])], {stroke: "#bbb", strokeDasharray: "3,3"}),
@@ -213,7 +213,7 @@ const matchCols = ["date_local", "round", "opponent", "home_away", "result", "te
     ${selected && matchRows.length ? resize((width) => {
       let g = 0, m = 0;
       const cum = matchRows.map((r, i) => ({i: i + 1, date: fmtDate(r.date_local), goals: (g += r.goals), minutes: (m += r.minutes), opp: r.opponent, result: r.result}));
-      return Plot.plot({width, height: 220, marginLeft: 40, x: {label: "Appearance →"}, y: {label: "↑ Cumulative goals", grid: true},
+      return Plot.plot({width, height: 220, marginLeft: 50, marginBottom: 40, x: {label: "Appearance →", labelAnchor: "center", labelOffset: 28}, y: {label: "Cumulative goals →", grid: true, labelAnchor: "center", labelOffset: 38},
         marks: [Plot.lineY(cum, {x: "i", y: "goals", stroke: "#e6550d", curve: "step-after"}),
                 Plot.dot(cum, {x: "i", y: () => 0, fill: (d) => d.result === "W" ? "#2ca02c" : d.result === "D" ? "#999" : "#d62728", r: 4,
                   channels: {Date: "date", Opponent: "opp", Result: "result", Minutes: "minutes"}, tip: {format: {x: false, y: false}}})]});
@@ -224,12 +224,12 @@ const matchCols = ["date_local", "round", "opponent", "home_away", "result", "te
 ## Players shown
 
 ```js
-const tableCols = ["player_name", "club", "league", "grade", "age", "role", "apps", "starts", "minutes", "goals", "npg_per90", "sofascore_rating", "xg_p90", "xa_p90", "duel_win_pct", "pass_acc_pct", "votes", "votes_per_app", "gd_on_pitch_vs_team", "clean_sheets", "hidden_gem"];
+const tableCols = ["player_name", "club", "league", "grade", "age", "role", "apps", "starts", "minutes", "goals", "npg_per90", "sofascore_rating", "xg_p90", "xa_p90", "duel_win_pct", "pass_acc_pct", "votes", "votes_per_app", "gd_on_pitch_vs_team", "clean_sheets"];
 const searched = view(Inputs.search(filtered, {placeholder: "Search player, club or team…", columns: ["player_name", "club", "team"]}));
 ```
 
 ```js
-const picked = view(Inputs.table(searched, {columns: tableCols, header: iconHeaders(tableCols), format: {...formats(tableCols), player_name: (v, i) => html`<a href="./player?id=${searched[i].player_id}&team=${searched[i].team_id}">${v}</a>${searched[i].emerging_senior ? html` <span title="Emerging Senior">⚡</span>` : ""}${searched[i].undervalued_performer ? html` <span title="Undervalued Performer">🎯</span>` : ""}${searched[i].sofascore_url ? html` <a href="${searched[i].sofascore_url}" target="_blank" rel="noopener" title="Open Sofascore profile" style="text-decoration:none;font-size:11px;color:#0284c7;">↗</a>` : ""}`, club: (v) => clubCell(v, 16), league: shortLeagueOnly}, rows: 18, multiple: false,
+const picked = view(Inputs.table(searched, {columns: tableCols, header: iconHeaders(tableCols), format: {...formats(tableCols), player_name: (v, i) => html`<a href="./player?id=${searched[i].player_id}&team=${searched[i].team_id}">${v}</a>${searched[i].hidden_gem ? html` <span title="Hidden gem: no senior minutes this season">💎</span>` : ""}${searched[i].emerging_senior ? html` <span title="Emerging Senior">⚡</span>` : ""}${searched[i].undervalued_performer ? html` <span title="Undervalued Performer">🎯</span>` : ""}${searched[i].sofascore_url ? html` <a href="${searched[i].sofascore_url}" target="_blank" rel="noopener" title="Open Sofascore profile" style="text-decoration:none;font-size:11px;color:#0284c7;">↗</a>` : ""}`, club: (v) => clubCell(v, 16), league: shortLeagueOnly}, rows: 18, multiple: false,
   sort: ys, reverse: labels[ys]?.higher_is_better !== false, width: {player_name: 180, club: 150, league: 170}}));
 ```
 

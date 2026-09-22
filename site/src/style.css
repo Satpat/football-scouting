@@ -85,7 +85,15 @@ table.stats tr.sel td { background: var(--theme-background-alt); font-weight: 60
 /* block, not flex: the child is an Observable resize() div that needs a definite width to measure via ResizeObserver */
 .radar-wrap svg { display: block; margin: 0 auto; max-width: 100%; }
 .ico { vertical-align: -3px; }
-.ico-hdr { display: inline-flex; align-items: center; justify-content: center; cursor: help; color: var(--theme-foreground-muted); }
+/* Observable's own inputs.css styles the *empty* sort-caret placeholder span Inputs.table
+   renders as <th><span></span>{our header}</th> — `.inputs-*-table thead th span
+   {display:inline-block; width:0.5em; margin-left:-0.5em}`. Its bare `span` selector also
+   matches our .ico-hdr span (also a span inside thead th), squashing it to a fixed ~6.5px
+   box regardless of its actual icon+suffix content, which then overflows into the next
+   column. That rule's specificity (class + 3 types) beats ours and it loads after our
+   stylesheet, so !important is required to win — same situation as the sticky-header
+   override below. */
+.ico-hdr { display: inline-flex !important; width: auto !important; margin-left: 0 !important; align-items: center; justify-content: center; cursor: help; color: var(--theme-foreground-muted); }
 .ico-hdr:hover { color: var(--theme-foreground); }
 .ico-label { display: inline-flex; align-items: center; gap: 6px; }
 .ico-label .ico { color: var(--theme-foreground-muted); }
@@ -120,6 +128,12 @@ p.muted, .notes-cols p,
 /* a dropdown/checkbox control sitting directly above a table needs room to breathe */
 form[class*="inputs"] { max-width: 100%; margin-bottom: 1rem; }
 
+/* Preset radio: one option per line instead of wrapping into a ragged flow whose line
+   breaks land mid-thought (e.g. "Ball Winning (Int vs" / "Tackles/90)"). Inputs.radio's
+   own class is "-checkbox" (radio and checkbox share it), not "-radio". */
+.preset-stack form[class*="-checkbox"] > div { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; }
+.preset-stack form[class*="-checkbox"] label { margin-right: 0; }
+
 /* Every Inputs.table() renders <table> inside a <form> — this one rule gives every such
    table horizontal scroll instead of clipping/compressing, without needing a per-page
    wrapper div or depending on Observable's hashed class names (same structural-selector
@@ -141,21 +155,24 @@ form:has(table) { overflow-x: auto; }
 .badges { align-items: center; }
 .badges .gem-mark { height: 22px; width: 22px; }
 
-/* centred stat columns: header icon and value share the same axis */
-th .ico-hdr { width: 100%; justify-content: center; }
-/* Inputs.table right-aligns numeric data cells automatically (both header and body,
-   via its own text-align rule — see node_modules/@observablehq/inputs/src/table.js
-   alignof()/the #id tr>:nth-child() style block). Our .ico-hdr flexbox centering above
-   overrides that for the header specifically, so icon headers end up centered over
-   right-aligned numbers. Match the data columns instead — scoped to form-wrapped
-   (i.e. Inputs.table) headers only, so table.stats/table.kv's own fully-centered
-   convention (below) is untouched. */
-form th .ico-hdr { justify-content: flex-end; }
+/* Icon headers position via the <th>'s own text-align, not a width:100% flex box on
+   .ico-hdr (removed) — percentage widths on a child don't reliably resolve inside an
+   auto-layout table cell before the cell's own size is determined, so the child ended up
+   sized to a stale/too-small box and its content rendered past the th's real, later-computed
+   edge, overlapping the next column. table.stats' <th> is text-align:center (below) so icon
+   headers there center automatically; Inputs.table sets text-align:right on numeric <th>s
+   itself, so icon headers there right-align to match the right-aligned data in the same
+   column — no per-context override needed. */
 table.stats th, table.stats td { text-align: center; }
 table.stats th:first-child, table.stats td:first-child, table.stats th:nth-child(2), table.stats td:nth-child(2), table.stats th:nth-child(3), table.stats td:nth-child(3) { text-align: left; }
 
 /* icon headers must never be ellipsised by the table's narrow numeric columns */
 form table th { overflow: visible !important; text-overflow: clip !important; min-width: 2.2em; }
+/* An icon header with a suffix (e.g. the gauge icon + "NP/90") needs more room than a
+   bare icon — 2.2em isn't enough, so the suffix text renders past this th's own right
+   edge and visually collides with the next column's header. th:has(.ico-q) only matches
+   headers that actually carry a suffix, so plain icon columns keep the tighter width. */
+form table th:has(.ico-q) { min-width: 5.5em; }
 th .ico-hdr svg { flex: none; }
 /* Observable's Inputs table sticks its header row (position:sticky) inside a scrolling form
    that sits inside our rounded-corner .card — Safari clips sticky descendants when overflow

@@ -102,8 +102,10 @@ export function isNumericCol(col) { return ["int", "dec", "pct"].includes(labels
 // Identity attributes read better as words even when their fmt is numeric — a person's age isn't a "stat" to compress.
 const ICON_EXEMPT = new Set(["age"]);
 // Numeric stat columns with a known icon (COL_ICONS) get the icon-only header used by the match/season tables,
-// so every player-stats table in the app reads the same way. Everything else falls back to text.
-export function iconHeaders(cols) { return Object.fromEntries(cols.map((c) => [c, COL_ICONS[c] && isNumericCol(c) && !ICON_EXEMPT.has(c) ? iconHeader(c, label(c)) : label(c)])); }
+// so every player-stats table in the app reads the same way. Everything else falls back to the short
+// label (e.g. "xG/90", "Duel %") — the full label ("Expected goals per 90 minutes") is wider than the
+// numbers it sits above and crowds/overlaps neighbouring icon columns.
+export function iconHeaders(cols) { return Object.fromEntries(cols.map((c) => [c, COL_ICONS[c] && isNumericCol(c) && !ICON_EXEMPT.has(c) ? iconHeader(c, label(c)) : short(c)])); }
 export function formats(cols) { return Object.fromEntries(cols.map((c) => [c, (v) => fmt(c, v)])); }
 // Reuses the .gem-tip/.gem-tip-pop pattern (style.css) that's already touch/keyboard
 // accessible (:hover on pointer devices that support it, :focus/:focus-within on tap
@@ -116,7 +118,11 @@ export function withTooltip(inputElement, text) {
   const trigger = document.createElement("span");
   trigger.className = "gem-tip";
   trigger.tabIndex = 0;
-  trigger.append(" ⓘ");
+  // margin-left rather than a leading space character: reliable spacing regardless of
+  // how the label's own trailing whitespace collapses, and doesn't affect .gem-tip's
+  // other use (the shortlist gem-score cell, which isn't appended after label text).
+  trigger.style.marginLeft = "6px";
+  trigger.append("ⓘ");
   // The trigger sits inside the toggle's own <label>, so a click on it would otherwise
   // also forward to the associated checkbox (native label behavior) and flip the filter
   // while the reader was just trying to read the tooltip.

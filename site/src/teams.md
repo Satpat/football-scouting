@@ -50,7 +50,7 @@ const useXg = hasXg && chartMode === "Expected (xG vs xGA)";
 const xCol = useXg ? "team_xga_per_match" : "ga_per_match";
 const yCol = useXg ? "team_xg_per_match" : "gf_per_match";
 const xLabel = useXg ? "Expected goals against (xGA) per match ←" : "Goals against per match ←";
-const yLabel = useXg ? "↑ Expected goals for (xG) per match" : "↑ Goals for per match";
+const yLabel = useXg ? "Expected goals for (xG) per match →" : "Goals for per match →";
 const tipChannels = useXg
   ? {Team: "team", "xG/match": "team_xg_per_match", "xGA/match": "team_xga_per_match", "xGD/match": "team_xgd_per_match", "Possession %": "avg_possession_pct", PPG: "ppg", Position: "ladder_pos"}
   : {Team: "team", PPG: "ppg", Position: "ladder_pos", "Players used": "players_used", "Borrowed in": "borrowed_in_apps"};
@@ -67,8 +67,8 @@ const tipChannels = useXg
   <div class="card">
     <h2>Attack vs defence (regular season)</h2>
     <p class="muted">${useXg ? "Expected goals created vs expected goals conceded per match (Sofascore data). Top-right is good." : "Goals for per match vs goals against per match. Top-right is good."}</p>
-    <div style="min-height: 420px">${resize((width) => Plot.plot({width, height: 420, grid: true, inset: 24,
-      x: {label: xLabel, reverse: true}, y: {label: yLabel},
+    <div style="min-height: 420px">${resize((width) => Plot.plot({width, height: 420, grid: true, inset: 24, marginLeft: 60, marginBottom: 50,
+      x: {label: xLabel, reverse: true, labelAnchor: "center", labelOffset: 32}, y: {label: yLabel, labelAnchor: "center", labelOffset: 42},
       marks: [
         Plot.dot(teamRows, {x: xCol, y: yCol, r: 14, fillOpacity: 0, channels: tipChannels, tip: true}),
         Plot.image(teamRows.filter((d) => d.crestHref), {x: xCol, y: yCol, src: "crestHref", width: 26, height: 26}),
