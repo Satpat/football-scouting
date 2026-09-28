@@ -290,7 +290,6 @@ The **browser owns the loop** (max 3 queries); the Worker is single-shot and sta
 | --- | --- |
 | `site/src/data/*` (all 13 files) | `build_site_data.py` |
 | `site/src/components/crests.js` | `download_crests.py` |
-| `site/src/fonts.css` | `build_fonts.py` |
 | `output/dribl_*.json` | `merge_dumps.py` |
 | `output/sofascore_raw_2026.json` | `extract_sofascore.js` |
 | `output/sofascore_enriched_2026.json` | `enrich_sofascore.py` |

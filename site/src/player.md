@@ -66,7 +66,7 @@ const primary = p?.club_color || "#ffffff";
 </div>` : ""}</div>
 
 ```js
-const fact = (labelText, value) => html`<div class="fact"><div class="fv">${value ?? "–"}</div><div class="fl">${labelText}</div></div>`;
+const fact = (labelText, value, numeric = false) => html`<div class="fact"><div class="fv ${numeric ? "fv-num" : ""}">${value ?? "–"}</div><div class="fl">${labelText}</div></div>`;
 const tile = (col, value, extra) => html`<div class="tile"><div class="tv">${extra ?? ""}${fmt(col, value)}</div><div class="tl">${label(col)}</div></div>`;
 const cardGlyph = (kind) => html`<span class="card-glyph ${kind}"></span>`;
 const seasonCols = ["apps", "starts", "minutes", "goals", "votes", "yellow_cards", "red_cards", "clean_sheets"];
@@ -77,23 +77,23 @@ const profileCard = () => p ? html`<div class="card">
     <div class="col">
     <h2>Profile</h2>
     <div class="facts2">
-      ${fact("Age", p.age)}
+      ${fact("Age", p.age, true)}
       ${p.date_of_birth ? fact("Born", fmtDate(p.date_of_birth)) : ""}
-      ${p.height_cm ? fact("Height", `${p.height_cm} cm`) : ""}
+      ${p.height_cm ? fact("Height", `${p.height_cm} cm`, true) : ""}
       ${p.position_sofa ? fact("Position", p.position_sofa) : ""}
-      ${p.market_value_eur ? fact("Market value", fmt("market_value_eur", p.market_value_eur)) : ""}
+      ${p.market_value_eur ? fact("Market value", fmt("market_value_eur", p.market_value_eur), true) : ""}
       ${fact("Nationality", p.flag ? html`<span class="flag" title="${p.nationality}">${p.flag}</span> ${p.nationality}` : p.nationality)}
       ${p.sofascore_url ? fact("Sofascore", html`<a href="${p.sofascore_url}" target="_blank" rel="noopener" style="color:#0284c7;font-weight:600;">Profile ↗</a>`) : ""}
-      ${fact("Shirt", p.jersey)}
+      ${fact("Shirt", p.jersey, true)}
       ${fact("Role", p.role)}
       ${fact("Grade", GRADE_NAME[p.grade])}
       ${fact("League", shortLeagueOnly(p.league))}
-      ${fact("Grades played", p.grades_played)}
+      ${fact("Grades played", p.grades_played, true)}
       ${fact("Highest grade", GRADE_NAME[p.highest_grade])}
-      ${fact("Senior minutes", fmt("sen_minutes", p.sen_minutes))}
-      ${fact("Team finished", p.team_ladder_pos ? `${p.team_ladder_pos} of ${p.ladder_teams}` : "–")}
-      ${fact("Team points per game", fmt("team_ppg", p.team_ppg))}
-      ${fact("Teams this season", p.n_teams)}
+      ${fact("Senior minutes", fmt("sen_minutes", p.sen_minutes), true)}
+      ${fact("Team finished", p.team_ladder_pos ? `${p.team_ladder_pos} of ${p.ladder_teams}` : "–", true)}
+      ${fact("Team points per game", fmt("team_ppg", p.team_ppg), true)}
+      ${fact("Teams this season", p.n_teams, true)}
     </div>
     </div>
     <div class="col">

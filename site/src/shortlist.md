@@ -105,11 +105,23 @@ const gkCols = [
 ];
 const cols = role === "GK" ? gkCols : outfieldCols;
 const hdr = {...iconHeaders(cols), shown_rank: "#"};
+// Bar width scales to the best score among the rows currently shown, so the column reads as
+// a mini leaderboard chart (top of the list = full bar) rather than a fixed, list-independent scale.
+const maxGemScore = d3.max(rows, (d) => d.gem_score) || 1;
 const gemScoreCell = (v, row) => {
   const wrap = document.createElement("span");
   wrap.className = "gem-tip";
   wrap.tabIndex = 0;
-  wrap.append(fmt("gem_score", v));
+  const bar = document.createElement("span");
+  bar.className = "gem-bar";
+  const fill = document.createElement("span");
+  fill.className = "gem-bar-fill";
+  fill.style.width = `${Math.max(0, Math.min(100, ((v ?? 0) / maxGemScore) * 100))}%`;
+  const val = document.createElement("span");
+  val.className = "gem-bar-val";
+  val.append(fmt("gem_score", v));
+  bar.append(fill, val);
+  wrap.append(bar);
   const clauses = String(row.why_flagged ?? "").split("; ").filter(Boolean);
   if (clauses.length) {
     const pop = document.createElement("div");

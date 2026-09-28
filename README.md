@@ -20,6 +20,8 @@ New here? [ARCHITECTURE.md](ARCHITECTURE.md) explains how the pieces fit, what i
 | `site/` | [Observable Framework](https://observablehq.com/framework/) project: Explorer (any-metric scatter with league/grade toggles and a SQL-backed match-by-match view), Shortlist, Player profile (FotMob-style, `player?id=…`), Teams & ladders, Ask the data (natural-language chat), About. |
 | `chat-worker/` | Stateless Cloudflare Worker behind the **Ask the data** page: holds the OpenAI key, turns questions into DuckDB SQL. Deploys to Cloudflare, not Pages — see [chat-worker/README.md](chat-worker/README.md). |
 | `SESSION_LOG.md` | Full working notes: API discovery, the `hash_id`/`match_hash_id` trap, pagination, what DRIBL does and doesn't record. |
+| `CV_PIPELINE_ARCHITECTURE.md` | Complete architecture, mathematics, hardware acceleration (Apple Silicon MPS), and dependency documentation for the broadcast computer vision tracking & analytics engine. |
+| `PIPELINE_HANDOFF.md` | Comprehensive operational handoff guide for running the video slicing, tracking, Hungarian roster attribution, and 90-minute match reporting. |
 
 `output/` (raw dumps, workbook) is git-ignored; only the small site data files are committed.
 
@@ -39,16 +41,7 @@ python build_site_data.py
 # 3. Commit site/src/data and push — GitHub Actions rebuilds the site.
 ```
 
-Python deps: `pip install pandas openpyxl requests pyarrow fonttools brotli`.
-
-`fonttools`/`brotli` are only needed by `build_fonts.py`, which regenerates the subsetted
-Aptos webfont in `site/src/fonts.css` from a local Microsoft Office install. The generated
-file is committed, so you only need this if the headings font changes:
-
-```bash
-source .venv/bin/activate
-python build_fonts.py
-```
+Python deps: `pip install pandas openpyxl requests pyarrow`.
 
 ## Run the site locally
 
